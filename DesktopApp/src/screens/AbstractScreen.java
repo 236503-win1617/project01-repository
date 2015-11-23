@@ -9,19 +9,27 @@ public abstract class AbstractScreen extends JFrame
 {
     protected JPanel contentPane;
 
+    //TODO: remove this the the class managing the dynamic size should also be called on window change
     protected static Integer SCREEN_WIDTH;
     protected static Integer SCREEN_HEIGHT;
 
     protected static Integer X_SCREEN_START_FROM = 20;
     protected static Integer Y_SCREEN_START_FROM = 20;
 
-
     public AbstractScreen()
     {
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
         setDynamicBounds();
-        setContentPane();
+        setFrameContent();
+
+        //TODO: use this code for resizing of a window
+//        frame.addComponentListener(new ComponentListener() {
+//            public void componentResized(ComponentEvent e) {
+//                // do stuff
+//            }
+//        });
+
 
 // call onExit() when cross is clicked
         addWindowListener(new WindowAdapter()
@@ -33,7 +41,7 @@ public abstract class AbstractScreen extends JFrame
         });
     }
 
-    private void onClosingApp()
+    protected void onClosingApp()
     {
         if (isDataSaved())
         {
@@ -49,9 +57,10 @@ public abstract class AbstractScreen extends JFrame
         }
     }
 
-    private void setContentPane()
+    protected abstract void setFrameContent();
+
+    protected void setBasicFrameContent()
     {
-        contentPane = new JPanel();
         contentPane.setLayout(null);
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setBackground(SystemColor.menu);
@@ -63,6 +72,7 @@ public abstract class AbstractScreen extends JFrame
         return true;
     }
 
+    //TODO: create a class responsible for screens size
     private void setDynamicBounds()
     {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

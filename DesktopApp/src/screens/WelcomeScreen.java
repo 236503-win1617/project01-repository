@@ -22,16 +22,18 @@ public class WelcomeScreen extends AbstractScreen
         setExitButton();
     }
 
+    @Override
+    protected void setFrameContent()
+    {
+        setBasicFrameContent();
+    }
+
     private void setCreateButton()
     {
         JButton createButton = ComponentsFactory.createDefaultButton(CREATE_LESSON, 100, 100);
-        createButton.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                Screens.CreateLessonScreen.setVisible(true);
-            }
+        createButton.addActionListener(e -> {
+            Screens.CreateLessonScreen.setVisible(true);
+            Screens.WelcomeScreen.setVisible(false);
         });
         contentPane.add(createButton);
     }
@@ -39,30 +41,17 @@ public class WelcomeScreen extends AbstractScreen
     private void setModifyButton()
     {
         JButton modifyButton = ComponentsFactory.createDefaultButton(MODIFY_LESSON, 100, 200);
-        modifyButton.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                Screens.WelcomeScreen.setVisible(false);
-                Screens.ModifyLessonScreen.setVisible(true);
-            }
+        modifyButton.addActionListener(e -> {
+            Screens.WelcomeScreen.setVisible(false);
+            Screens.ModifyLessonScreen.setVisible(true);
         });
         contentPane.add(modifyButton);
     }
 
-
     private void setExitButton()
     {
         JButton exitButton = ComponentsFactory.createDefaultButton(EXIT, 100, 300);
-        exitButton.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                onExit();
-            }
-        });
+        exitButton.addActionListener(e -> onClosingApp());
         contentPane.add(exitButton);
     }
 }
