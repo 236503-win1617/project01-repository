@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Anyone Can</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_game_numbers">GameNumbers</string>
+    <string name="title_activity_game_colors">GameColors</string>
+    <string name="title_activity_game_animals">GameAnimals</string>
+
+</resources>
