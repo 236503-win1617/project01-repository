@@ -11,7 +11,9 @@ import java.awt.*;
 public class CreateLessonScreen extends AbstractScreen
 {
     protected JPanel currentSlidePanel;
+    protected JPanel soundsPanel;
     protected JPanel slidesListPanel;
+    protected JPanel willSeePanel;
 
     public CreateLessonScreen()
     {
@@ -19,38 +21,34 @@ public class CreateLessonScreen extends AbstractScreen
     }
 
     @Override
-    protected void setFrameContent()
+    protected void setPanels()
     {
-        setLayout(new GridBagLayout());
-
         currentSlidePanel = new JPanel();
+        soundsPanel = new JPanel();
         slidesListPanel = new JPanel();
-        contentPane = new JPanel();
+        mainPanel = new JPanel();
+        willSeePanel = new JPanel();
+    }
 
-        //TODO: remove this
-        currentSlidePanel.setBackground(Color.green);
-        slidesListPanel.setBackground(Color.blue);
+    @Override
+    protected void setPanelsContent()
+    {
+        setPanel(slidesListPanel, Color.blue, SCREEN_WIDTH, SCREEN_HEIGHT / 6, BorderLayout.SOUTH);
+        setPanel(currentSlidePanel, Color.black, (SCREEN_WIDTH * 4) / 6, (SCREEN_HEIGHT * 4) / 6, BorderLayout.CENTER);
+        setPanel(soundsPanel, Color.YELLOW, SCREEN_WIDTH / 6, (SCREEN_HEIGHT * 4) / 6, BorderLayout.WEST);
+        setPanel(mainPanel, Color.RED, SCREEN_WIDTH, SCREEN_HEIGHT / 6, BorderLayout.NORTH);
+        setPanel(willSeePanel, Color.GREEN, SCREEN_WIDTH / 6, (SCREEN_HEIGHT * 4) / 6, BorderLayout.EAST);
 
-        GridBagConstraints constraints = new GridBagConstraints();
+        pack();
+    }
 
-        // we want the layout to stretch the components in both directions
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.weightx = 10;
-
-        // Vertical space is divided in proportion to the Y weights of the components
-        constraints.weighty = 0.2;
-        constraints.gridy = 0;
-        add(contentPane, constraints);
-
-
-        // It's fine to reuse the constraints object; add makes a copy.
-        constraints.weighty = 0.6;
-        constraints.gridy = 1;
-        add(currentSlidePanel, constraints);
-
-        constraints.weighty = 0.2;
-        constraints.gridy = 2;
-        add(slidesListPanel, constraints);
+    private void setPanel(JPanel panel, Color color, int width, int height, String location)
+    {
+        panel.setBackground(color); //TODO: Delete this line when everything is working
+        panel.setLayout(new GridBagLayout());
+        Dimension dimensions = new Dimension(width, height);
+        panel.setPreferredSize(dimensions);
+        getContentPane().add(panel, location);
     }
 
     private void setBackButton()
@@ -61,6 +59,6 @@ public class CreateLessonScreen extends AbstractScreen
             Screens.WelcomeScreen.setVisible(true);
         });
 
-        contentPane.add(backButton);
+        mainPanel.add(backButton);
     }
 }

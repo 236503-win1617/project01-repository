@@ -3,8 +3,6 @@ package screens;
 import Factories.ComponentsFactory;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Created by Evgeniy on 11/21/2015.
@@ -17,7 +15,7 @@ public class ModifyLessonScreen extends AbstractScreen
     }
 
     @Override
-    protected void setFrameContent()
+    protected void setPanelsContent()
     {
         setBasicFrameContent();
     }
@@ -29,6 +27,6 @@ public class ModifyLessonScreen extends AbstractScreen
             Screens.ModifyLessonScreen.setVisible(false);
             Screens.WelcomeScreen.setVisible(true);
         });
-        contentPane.add(backButton);
+        mainPanel.add(backButton);
     }
 }

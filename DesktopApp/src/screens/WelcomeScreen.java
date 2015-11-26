@@ -3,8 +3,6 @@ package screens;
 import Factories.ComponentsFactory;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Created by Evgeniy on 11/21/2015.
@@ -23,7 +21,7 @@ public class WelcomeScreen extends AbstractScreen
     }
 
     @Override
-    protected void setFrameContent()
+    protected void setPanelsContent()
     {
         setBasicFrameContent();
     }
@@ -35,7 +33,7 @@ public class WelcomeScreen extends AbstractScreen
             Screens.CreateLessonScreen.setVisible(true);
             Screens.WelcomeScreen.setVisible(false);
         });
-        contentPane.add(createButton);
+        mainPanel.add(createButton);
     }
 
     private void setModifyButton()
@@ -45,13 +43,13 @@ public class WelcomeScreen extends AbstractScreen
             Screens.WelcomeScreen.setVisible(false);
             Screens.ModifyLessonScreen.setVisible(true);
         });
-        contentPane.add(modifyButton);
+        mainPanel.add(modifyButton);
     }
 
     private void setExitButton()
     {
         JButton exitButton = ComponentsFactory.createDefaultButton(EXIT, 100, 300);
         exitButton.addActionListener(e -> onClosingApp());
-        contentPane.add(exitButton);
+        mainPanel.add(exitButton);
     }
 }

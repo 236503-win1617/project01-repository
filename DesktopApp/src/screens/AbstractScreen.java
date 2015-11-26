@@ -7,7 +7,7 @@ import java.awt.event.*;
 
 public abstract class AbstractScreen extends JFrame
 {
-    protected JPanel contentPane;
+    protected JPanel mainPanel;
 
     //TODO: remove this the the class managing the dynamic size should also be called on window change
     protected static Integer SCREEN_WIDTH;
@@ -21,7 +21,8 @@ public abstract class AbstractScreen extends JFrame
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
         setDynamicBounds();
-        setFrameContent();
+        setPanels();
+        setPanelsContent();
 
         //TODO: use this code for resizing of a window
 //        frame.addComponentListener(new ComponentListener() {
@@ -41,6 +42,10 @@ public abstract class AbstractScreen extends JFrame
         });
     }
 
+    protected void setPanels(){
+
+    }
+
     protected void onClosingApp()
     {
         if (isDataSaved())
@@ -57,14 +62,14 @@ public abstract class AbstractScreen extends JFrame
         }
     }
 
-    protected abstract void setFrameContent();
+    protected abstract void setPanelsContent();
 
     protected void setBasicFrameContent()
     {
-        contentPane.setLayout(null);
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        contentPane.setBackground(SystemColor.menu);
-        setContentPane(contentPane);
+        mainPanel.setLayout(null);
+        mainPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        mainPanel.setBackground(SystemColor.menu);
+        setContentPane(mainPanel);
     }
 
     protected boolean isDataSaved()
