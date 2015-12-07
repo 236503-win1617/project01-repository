@@ -17,6 +17,11 @@ public class WelcomeScreen extends AbstractScreen
     {
         setCreateButton();
         setModifyButton();
+
+//        TODO: implement
+//        setSettingsButton();
+//        setAboutButton();
+
         setExitButton();
     }
 
@@ -33,7 +38,7 @@ public class WelcomeScreen extends AbstractScreen
             Screens.CreateLessonScreen.setVisible(true);
             Screens.WelcomeScreen.setVisible(false);
         });
-        mainPanel.add(createButton);
+        screenMenuPanel.add(createButton);
     }
 
     private void setModifyButton()
@@ -43,13 +48,13 @@ public class WelcomeScreen extends AbstractScreen
             Screens.WelcomeScreen.setVisible(false);
             Screens.ModifyLessonScreen.setVisible(true);
         });
-        mainPanel.add(modifyButton);
+        screenMenuPanel.add(modifyButton);
     }
 
     private void setExitButton()
     {
         JButton exitButton = ComponentsFactory.createDefaultButton(EXIT, 100, 300);
         exitButton.addActionListener(e -> onClosingApp());
-        mainPanel.add(exitButton);
+        screenMenuPanel.add(exitButton);
     }
 }

@@ -3,11 +3,14 @@ package screens;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public abstract class AbstractScreen extends JFrame
 {
-    protected JPanel mainPanel;
+    protected static GridBagConstraints _constraints = new GridBagConstraints();
+
+    protected JPanel screenMenuPanel;
 
     //TODO: remove this the the class managing the dynamic size should also be called on window change
     protected static Integer SCREEN_WIDTH;
@@ -18,10 +21,12 @@ public abstract class AbstractScreen extends JFrame
 
     public AbstractScreen()
     {
+        _constraints.fill = GridBagConstraints.BOTH;
+
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
         setDynamicBounds();
-        setPanels();
+        setScreenPanels();
         setPanelsContent();
 
         //TODO: use this code for resizing of a window
@@ -42,7 +47,8 @@ public abstract class AbstractScreen extends JFrame
         });
     }
 
-    protected void setPanels(){
+    protected void setScreenPanels()
+    {
 
     }
 
@@ -66,10 +72,10 @@ public abstract class AbstractScreen extends JFrame
 
     protected void setBasicFrameContent()
     {
-        mainPanel.setLayout(null);
-        mainPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-        mainPanel.setBackground(SystemColor.menu);
-        setContentPane(mainPanel);
+        screenMenuPanel.setLayout(null);
+        screenMenuPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        screenMenuPanel.setBackground(SystemColor.menu);
+        setContentPane(screenMenuPanel);
     }
 
     protected boolean isDataSaved()
@@ -99,6 +105,20 @@ public abstract class AbstractScreen extends JFrame
         showInformationMessage("exiting");
         dispose();
         System.exit(0);
+    }
+
+
+    protected void setConstraints(int grid_x, int grid_y, double weight_x, double weight_y)
+    {
+        _constraints.weightx = weight_x;
+        _constraints.weighty = weight_y;
+        _constraints.gridx = grid_x;
+        _constraints.gridy = grid_y;
+    }
+
+    protected void setSquareInsests(int value)
+    {
+        _constraints.insets = new Insets(value, value, value, value);
     }
 
     protected void showErrorMessage(String message)

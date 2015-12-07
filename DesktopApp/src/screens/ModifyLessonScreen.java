@@ -27,6 +27,6 @@ public class ModifyLessonScreen extends AbstractScreen
             Screens.ModifyLessonScreen.setVisible(false);
             Screens.WelcomeScreen.setVisible(true);
         });
-        mainPanel.add(backButton);
+        screenMenuPanel.add(backButton);
     }
 }
