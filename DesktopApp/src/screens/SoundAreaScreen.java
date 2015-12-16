@@ -40,7 +40,6 @@ public class SoundAreaScreen extends AbstractEmptyScreen
     {
         super();
 
-        setAlwaysOnTop(true);
         setDefaultCloseOperation(HIDE_ON_CLOSE);
         setLayout(new GridBagLayout());
         setSize(new Dimension(550, 550));
@@ -69,7 +68,7 @@ public class SoundAreaScreen extends AbstractEmptyScreen
             public void focusLost(FocusEvent e)
             {
                 String input = ((JTextField) e.getSource()).getText();
-                onTextFieldFocusLost(input, _start_x);
+                _start_x = getIntValue(input);
             }
         });
 
@@ -84,7 +83,7 @@ public class SoundAreaScreen extends AbstractEmptyScreen
             public void focusLost(FocusEvent e)
             {
                 String input = ((JTextField) e.getSource()).getText();
-                onTextFieldFocusLost(input, _start_y);
+                _start_y = getIntValue(input);
             }
         });
 
@@ -99,7 +98,7 @@ public class SoundAreaScreen extends AbstractEmptyScreen
             public void focusLost(FocusEvent e)
             {
                 String input = ((JTextField) e.getSource()).getText();
-                onTextFieldFocusLost(input, _width);
+                _width = getIntValue(input);
             }
         });
 
@@ -114,7 +113,7 @@ public class SoundAreaScreen extends AbstractEmptyScreen
             public void focusLost(FocusEvent e)
             {
                 String input = ((JTextField) e.getSource()).getText();
-                onTextFieldFocusLost(input, _height);
+                _height = getIntValue(input);
             }
         });
 
@@ -225,6 +224,8 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 
             Screens.CreateLessonScreen.addSoundElementToCurrentSlide(soundElement);
 
+            //TODO: change this for using the same screen for multiple lessons
+
             hideFrame();
         }
         else
@@ -261,25 +262,27 @@ public class SoundAreaScreen extends AbstractEmptyScreen
         setVisible(false);
     }
 
-    private void onTextFieldFocusLost(String input, Integer target)
+    private Integer getIntValue(String input)
     {
         if (input == null || input.isEmpty())
         {
-            target = null;
-            return;
+            return null;
         }
 
         input = input.trim();
+        Integer tmp;
 
         try
         {
-            target = Integer.valueOf(input);
+            tmp = Integer.valueOf(input);
         }
         catch (Exception ex)
         {
-            target = null;
+            tmp = null;
             showErrorMessage(input + " isn't a supported integer value" + "\n" + ex.getMessage());
         }
+
+        return tmp;
     }
 
     private boolean allValuesNotNull()

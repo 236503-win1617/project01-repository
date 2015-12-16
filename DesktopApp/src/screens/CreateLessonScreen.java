@@ -35,7 +35,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen
     private ArrayList<IndexedButton> _slidesButtons;
     private ArrayList<AbstractSlide> _slides;
 
-    private Integer currentSlideIndex = 0;
+    private Integer currentSlideIndex = -1;
     private JScrollPane _scrollPane;
 
     public CreateLessonScreen()
@@ -82,7 +82,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen
 
     private void addSoundToSlide()
     {
-        if (currentSlideIndex == 0)
+        if (currentSlideIndex < 0)
         {
             showErrorMessage(DEFAULT_NO_SLIDE_ERROR);
             return;
@@ -108,7 +108,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen
 
     private void choosePicture()
     {
-        if (currentSlideIndex == 0)
+        if (currentSlideIndex < 0)
         {
             showErrorMessage(DEFAULT_NO_SLIDE_ERROR);
             return;
@@ -155,13 +155,15 @@ public class CreateLessonScreen extends AbstractApplicationScreen
 
         if (result == JOptionPane.YES_OPTION)
         {
-            currentSlideIndex--;
             JButton button = _slidesButtons.get(currentSlideIndex);
             lessonSlidesPanel.remove(button);
+
             removeIndexFromContainers(currentSlideIndex);
 
             lessonSlidesPanel.revalidate();
             lessonSlidesPanel.repaint();
+
+            currentSlideIndex--;
         }
     }
 
@@ -269,17 +271,17 @@ public class CreateLessonScreen extends AbstractApplicationScreen
         });
 
         //TODO: maybe change to the dimension of the panel
-        Dimension buttonSize = new Dimension(70, 70);
+        Dimension buttonSize = new Dimension(80, 80);
         newSlideButton.setPreferredSize(buttonSize);
         newSlideButton.setMaximumSize(buttonSize);
         newSlideButton.setMinimumSize(buttonSize);
 
-        PictureSlide newSlide = new PictureSlide();
+        PictureSlide newPictureSlide = new PictureSlide();
 
-        addToContainers(currentSlideIndex - 1, newSlideButton, newSlide);
+        addToContainers(currentSlideIndex, newSlideButton, newPictureSlide);
 
         _constraints.anchor = GridBagConstraints.FIRST_LINE_START;
-        setConstraints(currentSlideIndex - 1, 0, 0, 0);
+        setConstraints(currentSlideIndex, 0, 0, 0);
         lessonSlidesPanel.add(newSlideButton, _constraints);
         lessonSlidesPanel.revalidate();
     }
