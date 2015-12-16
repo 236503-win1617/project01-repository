@@ -1,6 +1,7 @@
 package screens;
 
 import AdditionalClasses.IndexedButton;
+import AdditionalClasses.SoundElement;
 import Factories.ComponentsFactory;
 import SlideObjects.AbstractSlide;
 import SlideObjects.PictureSlide;
@@ -15,19 +16,20 @@ import java.util.ArrayList;
 /**
  * Created by Evgeniy on 11/21/2015.
  */
-public class CreateLessonScreen extends AbstractScreen
+public class CreateLessonScreen extends AbstractApplicationScreen
 {
     private static final String DEFAULT_NO_SLIDE_ERROR = "No slide was created !";
+
     //region Panels
 
-    protected JPanel currentSlidePanel;
-    protected JPanel soundsPanel;
-    protected JPanel lessonSlidesPanel;
-    protected JPanel commandsPanel;
+    private JPanel currentSlidePanel;
+    private JPanel soundsPanel;
+    private JPanel lessonSlidesPanel;
+    private JPanel commandsPanel;
+    private JPanel screenMenuPanel;
 
     //endregion
 
-    private final int DEFAULT_BUTTONS_INSESTE = 15;
     private boolean _lessonSaved;
 
     private ArrayList<IndexedButton> _slidesButtons;
@@ -38,11 +40,12 @@ public class CreateLessonScreen extends AbstractScreen
 
     public CreateLessonScreen()
     {
+        super();
+
         _slides = new ArrayList<>();
         _slidesButtons = new ArrayList<>();
 
         setButtons();
-        setTextPanes();
     }
 
     //TODO: maybe implement auto save feature
@@ -53,17 +56,6 @@ public class CreateLessonScreen extends AbstractScreen
 
         setConstraints(2, 1, 1, 1);
         screenMenuPanel.add(saveButton, _constraints);
-    }
-
-    private void setTextPanes()
-    {
-//        _constraints.anchor = GridBagConstraints.PAGE_START;
-//
-//        JTextPane commands = ComponentsFactory.createTextPane("Commands", commandsPanel.getX(), commandsPanel.getY(), 25, 15);
-//        commandsPanel.add(commands, _constraints);
-//
-//        //TODO: remove - only for testing
-//        _constraints.anchor = GridBagConstraints.NONE;
     }
 
     private void setButtons()
@@ -95,7 +87,13 @@ public class CreateLessonScreen extends AbstractScreen
             showErrorMessage(DEFAULT_NO_SLIDE_ERROR);
             return;
         }
-        Screens.SoundAreaFrame.setVisible(true);
+
+        Screens.SoundAreaScreen.setVisible(true);
+        setVisible(false);
+    }
+
+    public void addSoundElementToCurrentSlide(SoundElement element)
+    {
 
     }
 
@@ -128,7 +126,6 @@ public class CreateLessonScreen extends AbstractScreen
             currentSlidePanel.add(label, _constraints);
             currentSlidePanel.revalidate();
         }
-        showErrorMessage("exiting");
     }
 
     private void addSoundAreaButton()
@@ -148,7 +145,7 @@ public class CreateLessonScreen extends AbstractScreen
 
     private void deleteSlide()
     {
-        if (currentSlideIndex == 0)
+        if (currentSlideIndex == -1)
         {
             showErrorMessage(DEFAULT_NO_SLIDE_ERROR);
             return;
@@ -198,15 +195,6 @@ public class CreateLessonScreen extends AbstractScreen
         Dimension dimensions = new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT / 6);
         _scrollPane.setPreferredSize(dimensions);
         add(_scrollPane, BorderLayout.SOUTH);
-
-//        getContentPane().add(_scrollPane, BorderLayout.SOUTH);
-        //   scrollPane.setBounds(50, 30, 300, 50);
-        //     JPanel contentPane = new JPanel(null);
-        //   contentPane.setPreferredSize(new Dimension(500, 400));
-        //    contentPane.add(scrollPane);
-        // frame.setContentPane(contentPane);
-
-        //     pack();
     }
 
     private void setPanel(JPanel panel, Color color, int width, int height, String location)
@@ -221,6 +209,10 @@ public class CreateLessonScreen extends AbstractScreen
     private void onSaveCurrentLesson()
     {
         showInformationMessage("Saving lesson");
+
+        //TODO: create the xml file with the content
+
+        _lessonSaved = true;
     }
 
     //region Set Buttons
@@ -290,7 +282,6 @@ public class CreateLessonScreen extends AbstractScreen
         setConstraints(currentSlideIndex - 1, 0, 0, 0);
         lessonSlidesPanel.add(newSlideButton, _constraints);
         lessonSlidesPanel.revalidate();
-
     }
 
 

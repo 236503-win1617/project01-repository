@@ -6,12 +6,8 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public abstract class AbstractScreen extends JFrame
+public abstract class AbstractApplicationScreen extends AbstractEmptyScreen
 {
-    protected static GridBagConstraints _constraints = new GridBagConstraints();
-
-    protected JPanel screenMenuPanel;
-
     //TODO: remove this the the class managing the dynamic size should also be called on window change
     protected static Integer SCREEN_WIDTH;
     protected static Integer SCREEN_HEIGHT;
@@ -19,9 +15,9 @@ public abstract class AbstractScreen extends JFrame
     protected static Integer X_SCREEN_START_FROM = 20;
     protected static Integer Y_SCREEN_START_FROM = 20;
 
-    public AbstractScreen()
+    public AbstractApplicationScreen()
     {
-        _constraints.fill = GridBagConstraints.BOTH;
+        super();
 
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
@@ -42,17 +38,16 @@ public abstract class AbstractScreen extends JFrame
         {
             public void windowClosing(WindowEvent e)
             {
-                onClosingApp();
+                onClosingWindow();
             }
         });
     }
 
-    protected void setScreenPanels()
-    {
+    protected abstract void setScreenPanels();
 
-    }
+    protected abstract void setPanelsContent();
 
-    protected void onClosingApp()
+    protected void onClosingWindow()
     {
         if (isDataSaved())
         {
@@ -66,16 +61,6 @@ public abstract class AbstractScreen extends JFrame
         {
             //TODO: implement a way to save data before leaving - or not allowing exiting
         }
-    }
-
-    protected abstract void setPanelsContent();
-
-    protected void setBasicFrameContent()
-    {
-        screenMenuPanel.setLayout(null);
-        screenMenuPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-        screenMenuPanel.setBackground(SystemColor.menu);
-        setContentPane(screenMenuPanel);
     }
 
     protected boolean isDataSaved()
@@ -98,41 +83,5 @@ public abstract class AbstractScreen extends JFrame
         {
             //TODO: implement for a small screen
         }
-    }
-
-    protected void onExit()
-    {
-        showInformationMessage("exiting");
-        dispose();
-        System.exit(0);
-    }
-
-
-    protected void setConstraints(int grid_x, int grid_y, double weight_x, double weight_y)
-    {
-        _constraints.weightx = weight_x;
-        _constraints.weighty = weight_y;
-        _constraints.gridx = grid_x;
-        _constraints.gridy = grid_y;
-    }
-
-    protected void setSquareInsests(int value)
-    {
-        _constraints.insets = new Insets(value, value, value, value);
-    }
-
-    protected void showErrorMessage(String message)
-    {
-        JOptionPane.showMessageDialog(this, message, null, JOptionPane.ERROR_MESSAGE);
-    }
-
-    protected int showYesNoMessage(String message)
-    {
-        return JOptionPane.showConfirmDialog(this, message, null, JOptionPane.YES_NO_OPTION);
-    }
-
-    protected void showInformationMessage(String message)
-    {
-        JOptionPane.showMessageDialog(this, message, null, JOptionPane.INFORMATION_MESSAGE);
     }
 }

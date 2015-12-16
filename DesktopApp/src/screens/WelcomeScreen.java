@@ -7,7 +7,7 @@ import javax.swing.*;
 /**
  * Created by Evgeniy on 11/21/2015.
  */
-public class WelcomeScreen extends AbstractScreen
+public class WelcomeScreen extends AbstractApplicationScreen
 {
     private final String CREATE_LESSON = "Create New Lesson";
     private final String MODIFY_LESSON = "Modify Existing Lesson";
@@ -26,6 +26,12 @@ public class WelcomeScreen extends AbstractScreen
     }
 
     @Override
+    protected void setScreenPanels()
+    {
+
+    }
+
+    @Override
     protected void setPanelsContent()
     {
         setBasicFrameContent();
@@ -38,7 +44,7 @@ public class WelcomeScreen extends AbstractScreen
             Screens.CreateLessonScreen.setVisible(true);
             Screens.WelcomeScreen.setVisible(false);
         });
-        screenMenuPanel.add(createButton);
+        add(createButton);
     }
 
     private void setModifyButton()
@@ -48,13 +54,13 @@ public class WelcomeScreen extends AbstractScreen
             Screens.WelcomeScreen.setVisible(false);
             Screens.ModifyLessonScreen.setVisible(true);
         });
-        screenMenuPanel.add(modifyButton);
+        add(modifyButton);
     }
 
     private void setExitButton()
     {
         JButton exitButton = ComponentsFactory.createDefaultButton(EXIT, 100, 300);
-        exitButton.addActionListener(e -> onClosingApp());
-        screenMenuPanel.add(exitButton);
+        exitButton.addActionListener(e -> onClosingWindow());
+        add(exitButton);
     }
 }

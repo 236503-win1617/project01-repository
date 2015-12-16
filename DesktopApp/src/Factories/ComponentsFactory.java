@@ -28,24 +28,26 @@ public class ComponentsFactory
         return button;
     }
 
-    public static JTextPane createTextPane(String description, int start_x, int start_y, int width, int height)
+    public static JTextPane createBasicTexPane(String text)
     {
         JTextPane textPane = new JTextPane();
-        textPane.setText(description);
+        textPane.setText(text);
         textPane.setEditable(false);
         textPane.setFont(new Font(DEFAULT_FONT, Font.PLAIN, DEFAULT_FONT_SIZE));
         textPane.setForeground(Color.BLACK);
         textPane.setBackground(SystemColor.menu);
-        textPane.setBounds(start_x, start_y, width, height);
 
         return textPane;
     }
 
-    public static JTextField createTextField(String helperText, int start_x, int start_y, int width, int height)
+    public static JTextField createBasicTextField(String helperText)
     {
         JTextField textField = new JTextField();
+        textField.setHorizontalAlignment(JTextField.CENTER);
         textField.setToolTipText(helperText);
-        textField.setBounds(start_x, start_y, width, height);
+        textField.setForeground(Color.black);
+        textField.setFont(new Font(DEFAULT_FONT, Font.PLAIN, DEFAULT_FONT_SIZE));
+        textField.setBackground(SystemColor.menu);
 
         return textField;
     }

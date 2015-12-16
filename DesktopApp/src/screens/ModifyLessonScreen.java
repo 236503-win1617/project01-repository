@@ -7,11 +7,17 @@ import javax.swing.*;
 /**
  * Created by Evgeniy on 11/21/2015.
  */
-public class ModifyLessonScreen extends AbstractScreen
+public class ModifyLessonScreen extends AbstractApplicationScreen
 {
     public ModifyLessonScreen()
     {
         setBackButton();
+    }
+
+    @Override
+    protected void setScreenPanels()
+    {
+
     }
 
     @Override
@@ -27,6 +33,6 @@ public class ModifyLessonScreen extends AbstractScreen
             Screens.ModifyLessonScreen.setVisible(false);
             Screens.WelcomeScreen.setVisible(true);
         });
-        screenMenuPanel.add(backButton);
+        add(backButton);
     }
 }

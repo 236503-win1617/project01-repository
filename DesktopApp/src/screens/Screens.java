@@ -1,7 +1,5 @@
 package screens;
 
-import AdditionalClasses.SoundAreaFrame;
-
 import javax.swing.*;
 
 /**
@@ -11,14 +9,13 @@ import javax.swing.*;
 public class Screens
 {
     protected static JFrame WelcomeScreen = new WelcomeScreen();
-    protected static JFrame CreateLessonScreen = new CreateLessonScreen();
+    protected static CreateLessonScreen CreateLessonScreen = new CreateLessonScreen();
     protected static JFrame ModifyLessonScreen = new ModifyLessonScreen();
-    protected static SoundAreaFrame SoundAreaFrame = new SoundAreaFrame();
+    protected static SoundAreaScreen SoundAreaScreen = new SoundAreaScreen();
 
     public static void start()
     {
         //TODO: switch screens
-        //WelcomeScreen.setVisible(true);
-        CreateLessonScreen.setVisible(true);
+        WelcomeScreen.setVisible(true);
     }
 }
