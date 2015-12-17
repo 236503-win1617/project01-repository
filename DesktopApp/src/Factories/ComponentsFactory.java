@@ -40,6 +40,26 @@ public class ComponentsFactory
         return textPane;
     }
 
+    /**
+     * @param panel
+     * @param width
+     * @param height
+     * @param constantHorizontal JScrollPaneConstant for horizontal scrolling
+     * @param constantVertical   JScrollPaneConstant for vertical scrolling
+     * @return
+     */
+    public static JScrollPane createScrollPane(JPanel panel, int width, int height, int constantHorizontal, int constantVertical)
+    {
+        JScrollPane scrollPane = new JScrollPane(panel);
+        scrollPane.setHorizontalScrollBarPolicy(constantHorizontal);
+        scrollPane.setVerticalScrollBarPolicy(constantVertical);
+
+        Dimension dimensions = new Dimension(width, height);
+        scrollPane.setPreferredSize(dimensions);
+
+        return scrollPane;
+    }
+
     public static JTextField createBasicTextField(String helperText)
     {
         JTextField textField = new JTextField();

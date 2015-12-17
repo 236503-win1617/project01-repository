@@ -2,6 +2,7 @@ package screens;
 
 import AdditionalClasses.IndexedButton;
 import AdditionalClasses.SoundElement;
+import AdditionalClasses.SoundsPanel;
 import Factories.ComponentsFactory;
 import SlideObjects.AbstractSlide;
 import SlideObjects.PictureSlide;
@@ -12,6 +13,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Evgeniy on 11/21/2015.
@@ -23,7 +26,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen
     //region Panels
 
     private JPanel currentSlidePanel;
-    private JPanel soundsPanel;
+    private SoundsPanel soundsPanel;
     private JPanel lessonSlidesPanel;
     private JPanel commandsPanel;
     private JPanel screenMenuPanel;
@@ -36,7 +39,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen
     private ArrayList<AbstractSlide> _slides;
 
     private Integer currentSlideIndex = -1;
-    private JScrollPane _scrollPane;
+    private UUID selectedSound;
 
     public CreateLessonScreen()
     {
@@ -45,30 +48,8 @@ public class CreateLessonScreen extends AbstractApplicationScreen
         _slides = new ArrayList<>();
         _slidesButtons = new ArrayList<>();
 
-        setButtons();
-    }
-
-    //TODO: maybe implement auto save feature
-    private void setSaveLessonButton()
-    {
-        JButton saveButton = new JButton("Save Lesson");
-        saveButton.addActionListener(e -> onSaveCurrentLesson());
-
-        setConstraints(2, 1, 1, 1);
-        screenMenuPanel.add(saveButton, _constraints);
-    }
-
-    private void setButtons()
-    {
-        //TODO: maybe provide preview mode of the created lesson
-        //TODO: break to each panel buttons
-
-        setChoosePictureButton();
-        setMainMenuButton();
-        setCreateNewSlideButton();
-        setSaveLessonButton();
-        setDeleteCurrentSlideButton();
-        setAddSoundRegionButton();
+        setMenuPanelButtons();
+        setCommandsPanelButtons();
     }
 
     private void setAddSoundRegionButton()
@@ -77,7 +58,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen
         addSoundButton.addActionListener(e -> addSoundToSlide());
         setSquareInsests(DEFAULT_BUTTONS_INSESTE);
         setConstraints(0, 3, 1, 1);
-        commandsPanel.add(addSoundButton, _constraints);
+        commandsPanel.add(addSoundButton, constraints);
     }
 
     private void addSoundToSlide()
@@ -88,22 +69,17 @@ public class CreateLessonScreen extends AbstractApplicationScreen
             return;
         }
 
-        Screens.SoundAreaScreen.setVisible(true);
-        setVisible(false);
+        //TODO: return the original when done developing the scroling of elements
+//        Screens.SoundAreaScreen.setVisible(true);
+//        setVisible(false);
+
+        SoundElement tmp = new SoundElement("asd", 1, 1, 1, 1);
+        addSoundElementToCurrentSlide(tmp);
     }
 
     public void addSoundElementToCurrentSlide(SoundElement element)
     {
-
-    }
-
-    private void setChoosePictureButton()
-    {
-        JButton choosePicture = new JButton("Choose Picture");
-        choosePicture.addActionListener(e -> choosePicture());
-        setSquareInsests(DEFAULT_BUTTONS_INSESTE);
-        setConstraints(0, 2, 1, 1);
-        commandsPanel.add(choosePicture, _constraints);
+        // soundsPanel.addSoundElement(element);
     }
 
     private void choosePicture()
@@ -118,33 +94,30 @@ public class CreateLessonScreen extends AbstractApplicationScreen
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
         {
             File picture = chooser.getSelectedFile();
+            String picturePath = picture.getAbsolutePath();
 
-            ImageIcon image = new ImageIcon(picture.getAbsolutePath());
+            PictureSlide currentSlide = (PictureSlide) _slides.get(currentSlideIndex);
+            currentSlide.setPicturePath(picturePath);
+
+            ImageIcon image = new ImageIcon(picturePath);
             JLabel label = new JLabel("", image, JLabel.CENTER);
 
             setConstraints(0, 0, 1, 1);
-            currentSlidePanel.add(label, _constraints);
+            currentSlidePanel.add(label, constraints);
             currentSlidePanel.revalidate();
         }
     }
 
-    private void addSoundAreaButton()
-    {
-        // TODO: implement
-    }
-
-    private void setDeleteCurrentSlideButton()
-    {
-        setSquareInsests(DEFAULT_BUTTONS_INSESTE);
-        setConstraints(0, 1, 1, 1);
-        JButton deleteButton = new JButton("Delete Slide");
-
-        deleteButton.addActionListener(e -> deleteSlide());
-        commandsPanel.add(deleteButton, _constraints);
-    }
-
     private void deleteSlide()
     {
+        if (currentSlideIndex != _slidesButtons.size() - 1)
+        {
+            //TODO: implement delete in the middle
+
+            showErrorMessage("Delete is supported only for the last slide");
+            return;
+        }
+
         if (currentSlideIndex == -1)
         {
             showErrorMessage(DEFAULT_NO_SLIDE_ERROR);
@@ -171,7 +144,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen
     protected void setScreenPanels()
     {
         currentSlidePanel = new JPanel();
-        soundsPanel = new JPanel();
+        soundsPanel = new SoundsPanel();
         lessonSlidesPanel = new JPanel();
         screenMenuPanel = new JPanel();
         commandsPanel = new JPanel();
@@ -183,20 +156,17 @@ public class CreateLessonScreen extends AbstractApplicationScreen
         //TODO: maybe switch to a fixed size according to the tablet size
 
         setPanel(currentSlidePanel, Color.black, (SCREEN_WIDTH * 4) / 6, (SCREEN_HEIGHT * 4) / 6, BorderLayout.CENTER);
-        setPanel(soundsPanel, Color.YELLOW, SCREEN_WIDTH / 6, (SCREEN_HEIGHT * 4) / 6, BorderLayout.WEST);
-        setPanel(screenMenuPanel, Color.RED, SCREEN_WIDTH, SCREEN_HEIGHT / 6, BorderLayout.NORTH);
-        setPanel(commandsPanel, Color.GREEN, SCREEN_WIDTH / 6, (SCREEN_HEIGHT * 4) / 6, BorderLayout.EAST);
-        //   setPanel(lessonSlidesPanel, Color.blue, SCREEN_WIDTH, SCREEN_HEIGHT / 6, BorderLayout.SOUTH);
+        setPanel(commandsPanel, Color.GREEN, SCREEN_WIDTH / 6, (SCREEN_HEIGHT * 5) / 6, BorderLayout.EAST);
+        setPanel(screenMenuPanel, Color.RED, (SCREEN_WIDTH * 4) / 6, SCREEN_HEIGHT / 6, BorderLayout.NORTH);
 
+        soundsPanel.setBackground(Color.YELLOW);
         lessonSlidesPanel.setBackground(Color.BLUE);
-        _scrollPane = new JScrollPane(lessonSlidesPanel);
-        _scrollPane.setBackground(Color.BLUE);
-        _scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        _scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 
-        Dimension dimensions = new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT / 6);
-        _scrollPane.setPreferredSize(dimensions);
-        add(_scrollPane, BorderLayout.SOUTH);
+        JScrollPane lessonSlides = ComponentsFactory.createScrollPane(lessonSlidesPanel, SCREEN_WIDTH, SCREEN_HEIGHT / 6, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED, JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        JScrollPane slideSounds = ComponentsFactory.createScrollPane(soundsPanel, SCREEN_WIDTH / 6, (SCREEN_HEIGHT * 5) / 6, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+
+        add(slideSounds, BorderLayout.WEST);
+        add(lessonSlides, BorderLayout.SOUTH);
     }
 
     private void setPanel(JPanel panel, Color color, int width, int height, String location)
@@ -208,16 +178,153 @@ public class CreateLessonScreen extends AbstractApplicationScreen
         add(panel, location);
     }
 
-    private void onSaveCurrentLesson()
+    private void onSaveCurrentLesson(boolean autosave)
     {
-        showInformationMessage("Saving lesson");
-
+        if (!autosave)
+        {
+            showInformationMessage("Saving lesson");
+        }
         //TODO: create the xml file with the content
 
         _lessonSaved = true;
     }
 
+    private void addNewPictureSlide()
+    {
+        if (currentSlideIndex != _slidesButtons.size() - 1)
+        {
+            //TODO: implement insert in the middle
+
+            showErrorMessage("insert is supported only for the last slide");
+            return;
+        }
+
+        List<SoundElement> elements = soundsPanel.getSoundElements();
+        if (elements.size() != 0)
+        { //which means that the previous slide was a picture slide with sounds
+            PictureSlide pictureSlide = (PictureSlide) _slides.get(currentSlideIndex);
+            pictureSlide.setSoundElements(elements);
+        }
+
+        soundsPanel.clearContent();
+
+        //TODO: move the common code for video slide and picture slide
+
+        //TODO: maybe add a picture to the button for v3.0
+        currentSlideIndex++;
+
+        IndexedButton newSlideButton = new IndexedButton(currentSlideIndex, "In " + currentSlideIndex);
+        newSlideButton.addActionListener(e -> {
+            IndexedButton pressed = (IndexedButton) e.getSource();
+            onSlideSelected(pressed.getIndex());
+        });
+
+        //TODO: maybe change to the dimension of the panel
+        Dimension buttonSize = new Dimension(80, 80);
+        newSlideButton.setPreferredSize(buttonSize);
+        newSlideButton.setMaximumSize(buttonSize);
+        newSlideButton.setMinimumSize(buttonSize);
+
+        PictureSlide newPictureSlide = new PictureSlide();
+
+        addToContainers(currentSlideIndex, newSlideButton, newPictureSlide);
+
+        constraints.anchor = GridBagConstraints.FIRST_LINE_START;
+        setSquareInsests(10);
+        setConstraints(currentSlideIndex, 0, 0, 0);
+        lessonSlidesPanel.add(newSlideButton, constraints);
+        lessonSlidesPanel.revalidate();
+    }
+
+    private void addToContainers(int index, IndexedButton button, AbstractSlide slide)
+    {
+        _slides.add(index, slide);
+        _slidesButtons.add(index, button);
+    }
+
+    private void removeIndexFromContainers(int index)
+    {
+        _slides.remove(index);
+        _slidesButtons.remove(index);
+    }
+
+    private void onSlideSelected(int selectedIndex)
+    {
+        currentSlideIndex = selectedIndex;
+
+        showSelectedSlide(currentSlideIndex);
+        showInformationMessage("Selected index : " + selectedIndex);
+    }
+
+    private void showSelectedSlide(Integer currentSlideIndex)
+    {
+        // TODO: Implement
+    }
+
+    private void onDeleteSoundRegion()
+    {
+        if(selectedSound == null){
+            showErrorMessage("No Sound Region Selected");
+            return;
+        }
+        
+    }
+
     //region Set Buttons
+
+    private void setMenuPanelButtons()
+    {
+        setMainMenuButton();
+        setSaveLessonButton();
+    }
+
+    private void setCommandsPanelButtons()
+    {
+        setChoosePictureButton();
+        setCreateNewSlideButton();
+        setDeleteCurrentSlideButton();
+
+        //TODO: maybe switch to the panel of sounds
+        setAddSoundRegionButton();
+        setAddRemoveSoundButton();
+    }
+
+    private void setAddRemoveSoundButton()
+    {
+        JButton removeSoundButton = new JButton("Remove Sound");
+        removeSoundButton.addActionListener(e -> onDeleteSoundRegion());
+        setConstraints(0, 5, 1, 1);
+        commandsPanel.add(removeSoundButton, constraints);
+    }
+
+    //TODO: maybe implement auto save feature
+    private void setSaveLessonButton()
+    {
+        JButton saveButton = new JButton("Save Lesson");
+        saveButton.addActionListener(e -> onSaveCurrentLesson(false));
+
+        setConstraints(2, 1, 1, 1);
+        screenMenuPanel.add(saveButton, constraints);
+    }
+
+    private void setDeleteCurrentSlideButton()
+    {
+        setSquareInsests(DEFAULT_BUTTONS_INSESTE);
+        setConstraints(0, 1, 1, 1);
+        JButton deleteButton = new JButton("Delete Slide");
+
+        deleteButton.addActionListener(e -> deleteSlide());
+        commandsPanel.add(deleteButton, constraints);
+    }
+
+    private void setChoosePictureButton()
+    {
+        JButton choosePicture = new JButton("Choose Picture");
+        choosePicture.addActionListener(e -> choosePicture());
+        setSquareInsests(DEFAULT_BUTTONS_INSESTE);
+        setConstraints(0, 2, 1, 1);
+        commandsPanel.add(choosePicture, constraints);
+    }
 
     private void setCreateNewSlideButton()
     {
@@ -249,70 +356,10 @@ public class CreateLessonScreen extends AbstractApplicationScreen
 
         setConstraints(0, 0, 1, 1);
 
-        commandsPanel.add(createButton, _constraints);
+        commandsPanel.add(createButton, constraints);
     }
 
     private void addNewAnimationSlide()
-    {
-        //TODO: implement
-    }
-
-    private void addNewPictureSlide()
-    {
-        //TODO: maybe add a picture to the button for v3.0
-        currentSlideIndex++;
-
-        savePreviousSlide();
-
-        IndexedButton newSlideButton = new IndexedButton(currentSlideIndex, "In " + currentSlideIndex);
-        newSlideButton.addActionListener(e -> {
-            IndexedButton pressed = (IndexedButton) e.getSource();
-            onSlideSelected(pressed.getIndex());
-        });
-
-        //TODO: maybe change to the dimension of the panel
-        Dimension buttonSize = new Dimension(80, 80);
-        newSlideButton.setPreferredSize(buttonSize);
-        newSlideButton.setMaximumSize(buttonSize);
-        newSlideButton.setMinimumSize(buttonSize);
-
-        PictureSlide newPictureSlide = new PictureSlide();
-
-        addToContainers(currentSlideIndex, newSlideButton, newPictureSlide);
-
-        _constraints.anchor = GridBagConstraints.FIRST_LINE_START;
-        setConstraints(currentSlideIndex, 0, 0, 0);
-        lessonSlidesPanel.add(newSlideButton, _constraints);
-        lessonSlidesPanel.revalidate();
-    }
-
-
-    private void addToContainers(int index, IndexedButton button, AbstractSlide slide)
-    {
-        _slides.add(index, slide);
-        _slidesButtons.add(index, button);
-    }
-
-    private void removeIndexFromContainers(int index)
-    {
-        _slides.remove(index);
-        _slidesButtons.remove(index);
-    }
-
-    private void onSlideSelected(int selectedIndex)
-    {
-        currentSlideIndex = selectedIndex;
-
-        showSelectedSlide(currentSlideIndex);
-        showInformationMessage("Selected index : " + selectedIndex);
-    }
-
-    private void showSelectedSlide(Integer currentSlideIndex)
-    {
-        // TODO: Implement
-    }
-
-    private void savePreviousSlide()
     {
         //TODO: implement
     }
@@ -326,7 +373,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen
         });
         setConstraints(1, 1, 1, 1);
         setSquareInsests(DEFAULT_BUTTONS_INSESTE);
-        screenMenuPanel.add(backButton, _constraints);
+        screenMenuPanel.add(backButton, constraints);
     }
 
     //endregion

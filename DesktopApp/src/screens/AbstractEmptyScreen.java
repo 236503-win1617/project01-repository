@@ -11,11 +11,11 @@ public class AbstractEmptyScreen extends JFrame
 {
     protected final int DEFAULT_BUTTONS_INSESTE = 15;
 
-    protected GridBagConstraints _constraints = new GridBagConstraints();
+    protected GridBagConstraints constraints = new GridBagConstraints();
 
     protected AbstractEmptyScreen() throws HeadlessException
     {
-        _constraints.fill = GridBagConstraints.BOTH;
+        constraints.fill = GridBagConstraints.BOTH;
     }
 
     protected void setBasicFrameContent()
@@ -36,15 +36,15 @@ public class AbstractEmptyScreen extends JFrame
 
     protected void setConstraints(int grid_x, int grid_y, double weight_x, double weight_y)
     {
-        _constraints.weightx = weight_x;
-        _constraints.weighty = weight_y;
-        _constraints.gridx = grid_x;
-        _constraints.gridy = grid_y;
+        constraints.weightx = weight_x;
+        constraints.weighty = weight_y;
+        constraints.gridx = grid_x;
+        constraints.gridy = grid_y;
     }
 
     protected void setSquareInsests(int value)
     {
-        _constraints.insets = new Insets(value, value, value, value);
+        constraints.insets = new Insets(value, value, value, value);
     }
 
     protected void showErrorMessage(String message)

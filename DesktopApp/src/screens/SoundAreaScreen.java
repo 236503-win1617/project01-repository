@@ -130,28 +130,28 @@ public class SoundAreaScreen extends AbstractEmptyScreen
         chooseFileButton.addActionListener(e -> onSelectAudioFile());
 
         setConstraints(0, 4, 1, 1);
-        add(isFileSelectedPane, _constraints);
+        add(isFileSelectedPane, constraints);
 
         setConstraints(1, 4, 1, 1);
-        add(chooseFileButton, _constraints);
+        add(chooseFileButton, constraints);
 
         setConstraints(0, 5, 1, 1);
-        _constraints.gridwidth = 3;
-        add(selectedFilePane, _constraints);
+        constraints.gridwidth = 3;
+        add(selectedFilePane, constraints);
 
-        _constraints.gridwidth = 1;
+        constraints.gridwidth = 1;
 
         JButton okButton = new JButton("OK");
         okButton.addActionListener(e -> onOkButtonPressed());
 
         setConstraints(0, 6, 1, 1);
-        add(okButton, _constraints);
+        add(okButton, constraints);
 
         JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener(e -> onCancelButtonPressed());
 
         setConstraints(1, 6, 1, 1);
-        add(cancelButton, _constraints);
+        add(cancelButton, constraints);
 
         setLocationRelativeTo(null);
 
@@ -243,10 +243,10 @@ public class SoundAreaScreen extends AbstractEmptyScreen
     private void addPaneAndTextField(int row, JTextPane textPane, JTextField textField)
     {
         setConstraints(0, row, 1, 1);
-        add(textPane, _constraints);
+        add(textPane, constraints);
 
         setConstraints(1, row, 1, 1);
-        add(textField, _constraints);
+        add(textField, constraints);
     }
 
     protected void onClosingWindow()
