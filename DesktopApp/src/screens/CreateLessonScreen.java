@@ -3,18 +3,19 @@ package screens;
 import AdditionalClasses.IndexedButton;
 import AdditionalClasses.SoundElement;
 import AdditionalClasses.SoundsPanel;
+import AdditionalClasses.UniqueTextArea;
 import Factories.ComponentsFactory;
 import SlideObjects.AbstractSlide;
 import SlideObjects.PictureSlide;
+import javafx.scene.effect.ColorInput;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by Evgeniy on 11/21/2015.
@@ -22,6 +23,7 @@ import java.util.UUID;
 public class CreateLessonScreen extends AbstractApplicationScreen
 {
     private static final String DEFAULT_NO_SLIDE_ERROR = "No slide was created !";
+    private static final String UNEXPECTED_ERROR = "Something very bad has happened";
 
     //region Panels
 
@@ -35,8 +37,9 @@ public class CreateLessonScreen extends AbstractApplicationScreen
 
     private boolean _lessonSaved;
 
-    private ArrayList<IndexedButton> _slidesButtons;
-    private ArrayList<AbstractSlide> _slides;
+    private Map<UUID, UniqueTextArea> slideSoundAreas = new HashMap<>();
+    private ArrayList<IndexedButton> _slidesButtons = new ArrayList<>();
+    private ArrayList<AbstractSlide> _slides = new ArrayList<>();
 
     private Integer currentSlideIndex = -1;
     private UUID selectedSound;
@@ -44,9 +47,6 @@ public class CreateLessonScreen extends AbstractApplicationScreen
     public CreateLessonScreen()
     {
         super();
-
-        _slides = new ArrayList<>();
-        _slidesButtons = new ArrayList<>();
 
         setMenuPanelButtons();
         setCommandsPanelButtons();
@@ -79,7 +79,44 @@ public class CreateLessonScreen extends AbstractApplicationScreen
 
     public void addSoundElementToCurrentSlide(SoundElement element)
     {
-        // soundsPanel.addSoundElement(element);
+        if (element == null)
+        {
+            showErrorMessage(UNEXPECTED_ERROR);
+            return;
+        }
+
+        UUID areaID = UUID.randomUUID();
+        UniqueTextArea soundArea = new UniqueTextArea(areaID);
+        soundArea.setForeground(Color.green);
+        //TODO: create text from sound region
+
+        soundArea.setText("Sound Area\n" + slideSoundAreas.size());
+        soundArea.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mouseReleased(MouseEvent e)
+            {
+                UniqueTextArea textArea = (UniqueTextArea) e.getSource();
+                setNewSelectedSoundRegion(textArea.getId());
+            }
+        });
+
+        setConstraints(0, -1 * slideSoundAreas.size(), 1, 1);
+
+        slideSoundAreas.put(areaID, soundArea);
+
+        soundsPanel.add(soundArea, constraints);
+        soundsPanel.revalidate();
+    }
+
+    private void setNewSelectedSoundRegion(UUID newId)
+    {
+        if (selectedSound != null)
+        {
+            //TODO: restore the previous region to default
+        }
+
+        selectedSound = newId;
     }
 
     private void choosePicture()
@@ -263,11 +300,19 @@ public class CreateLessonScreen extends AbstractApplicationScreen
 
     private void onDeleteSoundRegion()
     {
-        if(selectedSound == null){
+        if (selectedSound == null)
+        {
             showErrorMessage("No Sound Region Selected");
             return;
         }
-        
+
+        UniqueTextArea areaToDelete = slideSoundAreas.remove(selectedSound);
+
+        soundsPanel.remove(areaToDelete);
+        soundsPanel.revalidate();
+        soundsPanel.repaint();
+
+        selectedSound = null;
     }
 
     //region Set Buttons
