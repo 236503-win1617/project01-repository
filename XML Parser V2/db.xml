@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<slide>
+   <picture id="1">
+      <path>"C:\Documents\pic1.jpg"</path>
+	  <xsize>85</xsize>
+	  <ysize>85</ysize>
+      <xcord>100</xcord>
+      <ycord>100</ycord>
+   </picture>
+   <picture id="2">
+      <path>"C:\Documents\pic2.jpg"</path>
+	  <xsize>150</xsize>
+	  <ysize>150</ysize>
+      <xcord>0</xcord>
+      <ycord>0</ycord>
+   </picture>
+</slide>
