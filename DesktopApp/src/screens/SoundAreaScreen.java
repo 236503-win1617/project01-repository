@@ -44,12 +44,12 @@ public class SoundAreaScreen extends AbstractEmptyScreen
         setLayout(new GridBagLayout());
         setSize(new Dimension(550, 550));
 
-        JTextPane start_x_pane = ComponentsFactory.createBasicTexPane("Start X:");
-        JTextPane start_y_pane = ComponentsFactory.createBasicTexPane("Start Y:");
-        JTextPane widthPane = ComponentsFactory.createBasicTexPane("Width:");
-        JTextPane heightPane = ComponentsFactory.createBasicTexPane("Height:");
-        selectedFilePane = ComponentsFactory.createBasicTexPane("");
-        isFileSelectedPane = ComponentsFactory.createBasicTexPane(NO_FILE_IS_SELECTED);
+        JTextPane start_x_pane = ComponentsFactory.createBasicTextPane("Start X:");
+        JTextPane start_y_pane = ComponentsFactory.createBasicTextPane("Start Y:");
+        JTextPane widthPane = ComponentsFactory.createBasicTextPane("Width:");
+        JTextPane heightPane = ComponentsFactory.createBasicTextPane("Height:");
+        selectedFilePane = ComponentsFactory.createBasicTextPane("");
+        isFileSelectedPane = ComponentsFactory.createBasicTextPane(NO_FILE_IS_SELECTED);
         isFileSelectedPane.setForeground(Color.RED);
 
         start_x_TextField = ComponentsFactory.createBasicTextField(INSERT_INTEGER);
@@ -220,7 +220,7 @@ public class SoundAreaScreen extends AbstractEmptyScreen
         {
             //TODO: maybe switch to a swing worker instead of this
 
-            SoundElement soundElement = new SoundElement(_soundFile.getAbsolutePath(), _start_x, _start_y, _height, _width);
+            SoundElement soundElement = new SoundElement(_soundFile, _start_x, _start_y, _height, _width);
 
             Screens.CreateLessonScreen.addSoundElementToCurrentSlide(soundElement);
 

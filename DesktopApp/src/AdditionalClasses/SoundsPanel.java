@@ -9,22 +9,22 @@ import java.util.List;
  */
 public class SoundsPanel extends JPanel
 {
-    private List<SoundElement> elements = new LinkedList<>();
-
-    public void addSoundElement(SoundElement element)
-    {
-        elements.add(element);
-        revalidate();
-    }
-
-    public List<SoundElement> getSoundElements()
-    {
-        return elements;
-    }
-
-    public void clearContent()
-    {
-        elements = new LinkedList<>();
-        revalidate();
-    }
+//    private List<SoundElement> elements = new LinkedList<>();
+//
+//    public void addSoundElement(SoundElement element)
+//    {
+//        elements.add(element);
+//        revalidate();
+//    }
+//
+//    public List<SoundElement> getSoundElements()
+//    {
+//        return elements;
+//    }
+//
+//    public void clearContent()
+//    {
+//        elements.clear();
+//        revalidate();
+//    }
 }

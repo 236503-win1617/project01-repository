@@ -2,12 +2,10 @@ package screens;
 
 import AdditionalClasses.IndexedButton;
 import AdditionalClasses.SoundElement;
-import AdditionalClasses.SoundsPanel;
-import AdditionalClasses.UniqueTextArea;
+import AdditionalClasses.UniqueTextPane;
 import Factories.ComponentsFactory;
 import SlideObjects.AbstractSlide;
 import SlideObjects.PictureSlide;
-import javafx.scene.effect.ColorInput;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,10 +23,13 @@ public class CreateLessonScreen extends AbstractApplicationScreen
     private static final String DEFAULT_NO_SLIDE_ERROR = "No slide was created !";
     private static final String UNEXPECTED_ERROR = "Something very bad has happened";
 
+    private static final int TEXT_AREA_HEIGHT = 100;
+    private static final int SLIDE_BUTTON_SIZE = 80;
+
     //region Panels
 
     private JPanel currentSlidePanel;
-    private SoundsPanel soundsPanel;
+    private JPanel soundsPanel;
     private JPanel lessonSlidesPanel;
     private JPanel commandsPanel;
     private JPanel screenMenuPanel;
@@ -37,7 +38,9 @@ public class CreateLessonScreen extends AbstractApplicationScreen
 
     private boolean _lessonSaved;
 
-    private Map<UUID, UniqueTextArea> slideSoundAreas = new HashMap<>();
+    private Map<UUID, UniqueTextPane> slideSoundAreas = new HashMap<>();
+    private Map<UUID, SoundElement> slideSoundElements = new HashMap<>();
+
     private ArrayList<IndexedButton> _slidesButtons = new ArrayList<>();
     private ArrayList<AbstractSlide> _slides = new ArrayList<>();
 
@@ -73,7 +76,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen
 //        Screens.SoundAreaScreen.setVisible(true);
 //        setVisible(false);
 
-        SoundElement tmp = new SoundElement("asd", 1, 1, 1, 1);
+        SoundElement tmp = new SoundElement(null, 1, 1, 1, 1);
         addSoundElementToCurrentSlide(tmp);
     }
 
@@ -85,38 +88,54 @@ public class CreateLessonScreen extends AbstractApplicationScreen
             return;
         }
 
-        UUID areaID = UUID.randomUUID();
-        UniqueTextArea soundArea = new UniqueTextArea(areaID);
-        soundArea.setForeground(Color.green);
-        //TODO: create text from sound region
+        //TODO: make a nicer text display
 
-        soundArea.setText("Sound Area\n" + slideSoundAreas.size());
-        soundArea.addMouseListener(new MouseAdapter()
+        UUID uuid = UUID.randomUUID();
+
+        UniqueTextPane soundTextPane = new UniqueTextPane(uuid);
+        soundTextPane.setForeground(Color.red);
+
+        soundTextPane.setText(element.toString() + "\nNumber of areas " + slideSoundAreas.size());
+        soundTextPane.addMouseListener(new MouseAdapter()
         {
             @Override
             public void mouseReleased(MouseEvent e)
             {
-                UniqueTextArea textArea = (UniqueTextArea) e.getSource();
-                setNewSelectedSoundRegion(textArea.getId());
+                UniqueTextPane textArea = (UniqueTextPane) e.getSource();
+                selectedSound = textArea.getId();
             }
         });
 
-        setConstraints(0, -1 * slideSoundAreas.size(), 1, 1);
+        Dimension textAreaDimension = getSoundAreaDimension();
+        setElementConstSize(soundTextPane, textAreaDimension);
 
-        slideSoundAreas.put(areaID, soundArea);
+        slideSoundAreas.put(uuid, soundTextPane);
+        slideSoundElements.put(uuid, element);
 
-        soundsPanel.add(soundArea, constraints);
+        //TODO: add the sound to the current slide
+
+        constraints.anchor = GridBagConstraints.PAGE_START;
+        setSquareInsests(DEFAULT_BUTTONS_INSESTE);
+        setConstraints(0, slideSoundAreas.size(), 0, 0);
+
+        soundsPanel.add(soundTextPane, constraints);
+
         soundsPanel.revalidate();
     }
 
-    private void setNewSelectedSoundRegion(UUID newId)
+    private void setElementConstSize(JComponent element, Dimension dimension)
     {
-        if (selectedSound != null)
-        {
-            //TODO: restore the previous region to default
-        }
+        element.setPreferredSize(dimension);
+        element.setMaximumSize(dimension);
+        element.setMinimumSize(dimension);
+    }
 
-        selectedSound = newId;
+    private Dimension getSoundAreaDimension()
+    {
+        int width = soundsPanel.getWidth() - (DEFAULT_BUTTONS_INSESTE * 3);
+        int height = TEXT_AREA_HEIGHT;
+
+        return new Dimension(width, height);
     }
 
     private void choosePicture()
@@ -181,7 +200,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen
     protected void setScreenPanels()
     {
         currentSlidePanel = new JPanel();
-        soundsPanel = new SoundsPanel();
+        soundsPanel = new JPanel();
         lessonSlidesPanel = new JPanel();
         screenMenuPanel = new JPanel();
         commandsPanel = new JPanel();
@@ -236,14 +255,20 @@ public class CreateLessonScreen extends AbstractApplicationScreen
             return;
         }
 
-        List<SoundElement> elements = soundsPanel.getSoundElements();
+        List<SoundElement> elements = new ArrayList<>(slideSoundElements.values());
         if (elements.size() != 0)
-        { //which means that the previous slide was a picture slide with sounds
+        {
+            //which means that the previous slide was a picture slide with sounds
+
             PictureSlide pictureSlide = (PictureSlide) _slides.get(currentSlideIndex);
             pictureSlide.setSoundElements(elements);
+
+            slideSoundElements.clear();
+            slideSoundAreas.clear();
         }
 
-        soundsPanel.clearContent();
+        soundsPanel.removeAll();
+        soundsPanel.repaint();
 
         //TODO: move the common code for video slide and picture slide
 
@@ -252,15 +277,13 @@ public class CreateLessonScreen extends AbstractApplicationScreen
 
         IndexedButton newSlideButton = new IndexedButton(currentSlideIndex, "In " + currentSlideIndex);
         newSlideButton.addActionListener(e -> {
-            IndexedButton pressed = (IndexedButton) e.getSource();
-            onSlideSelected(pressed.getIndex());
+            IndexedButton indexedButton = (IndexedButton) e.getSource();
+            onSlideSelected(indexedButton.getIndex());
         });
 
         //TODO: maybe change to the dimension of the panel
-        Dimension buttonSize = new Dimension(80, 80);
-        newSlideButton.setPreferredSize(buttonSize);
-        newSlideButton.setMaximumSize(buttonSize);
-        newSlideButton.setMinimumSize(buttonSize);
+        Dimension buttonSize = new Dimension(SLIDE_BUTTON_SIZE, SLIDE_BUTTON_SIZE);
+        setElementConstSize(newSlideButton, buttonSize);
 
         PictureSlide newPictureSlide = new PictureSlide();
 
@@ -306,7 +329,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen
             return;
         }
 
-        UniqueTextArea areaToDelete = slideSoundAreas.remove(selectedSound);
+        UniqueTextPane areaToDelete = slideSoundAreas.remove(selectedSound);
 
         soundsPanel.remove(areaToDelete);
         soundsPanel.revalidate();

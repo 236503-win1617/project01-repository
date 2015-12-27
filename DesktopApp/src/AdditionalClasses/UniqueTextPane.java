@@ -6,11 +6,11 @@ import java.util.UUID;
 /**
  * Created by Evgeniy on 12/17/2015.
  */
-public class UniqueTextArea extends JTextArea
+public class UniqueTextPane extends JTextPane
 {
     private final UUID id;
 
-    public UniqueTextArea(UUID id)
+    public UniqueTextPane(UUID id)
     {
         super();
         this.id = id;

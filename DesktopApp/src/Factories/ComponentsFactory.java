@@ -1,7 +1,10 @@
 package Factories;
 
+import AdditionalClasses.UniqueTextPane;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.UUID;
 
 /**
  * Created by Evgeniy on 11/21/2015.
@@ -18,19 +21,25 @@ public class ComponentsFactory
 
     public static JButton createDefaultButton(String text, int start_x, int start_y)
     {
-        return createButon(text, start_x, start_y, DEFAULT_BUTTON_WIDTH, DEFAULT_BUTTON_HEIGHT);
+        return createButton(text, start_x, start_y, DEFAULT_BUTTON_WIDTH, DEFAULT_BUTTON_HEIGHT);
     }
 
-    public static JButton createButon(String text, int start_x, int start_y, int width, int height)
+    public static JButton createButton(String text, int start_x, int start_y, int width, int height)
     {
         JButton button = new JButton(text);
         button.setBounds(start_x, start_y, width, height);
         return button;
     }
 
-    public static JTextPane createBasicTexPane(String text)
+//    public static UniqueTextPane createUniqueTextPane(String text){
+//        UUID uuid = UUID.randomUUID();
+//        Uniq
+//    }
+
+    public static JTextPane createBasicTextPane(String text)
     {
         JTextPane textPane = new JTextPane();
+
         textPane.setText(text);
         textPane.setEditable(false);
         textPane.setFont(new Font(DEFAULT_FONT, Font.PLAIN, DEFAULT_FONT_SIZE));
@@ -50,6 +59,7 @@ public class ComponentsFactory
      */
     public static JScrollPane createScrollPane(JPanel panel, int width, int height, int constantHorizontal, int constantVertical)
     {
+        panel.setLayout(new GridBagLayout());
         JScrollPane scrollPane = new JScrollPane(panel);
         scrollPane.setHorizontalScrollBarPolicy(constantHorizontal);
         scrollPane.setVerticalScrollBarPolicy(constantVertical);
