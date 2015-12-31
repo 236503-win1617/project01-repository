@@ -23,7 +23,7 @@ public class ModifyLessonScreen extends AbstractApplicationScreen
     @Override
     protected void setPanelsContent()
     {
-        setBasicFrameContent();
+
     }
 
     private void setBackButton()

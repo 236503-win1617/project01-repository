@@ -39,10 +39,12 @@ public class SoundAreaScreen extends AbstractEmptyScreen
     {
         super();
 
+        //TODO: remove to parent
         setLayout(new GridBagLayout());
+
         setDefaultCloseOperation(HIDE_ON_CLOSE);
 
-        setSize(new Dimension(550, 550));
+        setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 
         JTextPane start_x_pane = ComponentsFactory.createBasicTextPane("Start X:");
         JTextPane start_y_pane = ComponentsFactory.createBasicTextPane("Start Y:");
@@ -153,8 +155,6 @@ public class SoundAreaScreen extends AbstractEmptyScreen
         setConstraints(1, 6, 1, 1);
         add(cancelButton, constraints);
 
-        setLocationRelativeTo(null);
-
         addWindowListener(new WindowAdapter()
         {
             @Override
@@ -163,6 +163,8 @@ public class SoundAreaScreen extends AbstractEmptyScreen
                 onClosingWindow();
             }
         });
+
+        setLocationRelativeTo(null);
     }
 
     private void onSelectAudioFile()
@@ -296,6 +298,10 @@ public class SoundAreaScreen extends AbstractEmptyScreen
         start_y_TextField.setText("");
         widthTextField.setText("");
         heightTextField.setText("");
+        selectedFilePane.setText("");
+
+        isFileSelectedPane.setText(NO_FILE_IS_SELECTED);
+        isFileSelectedPane.setForeground(Color.RED);
 
         _height = null;
         _width = null;

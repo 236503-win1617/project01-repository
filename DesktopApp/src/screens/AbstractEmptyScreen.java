@@ -1,5 +1,7 @@
 package screens;
 
+import AdditionalClasses.IndexedButton;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -9,10 +11,26 @@ import java.awt.*;
  */
 public class AbstractEmptyScreen extends JFrame
 {
+    //TODO: remove this the the class managing the dynamic size should also be called on window change
+    protected static Integer SCREEN_WIDTH;
+    protected static Integer SCREEN_HEIGHT;
+
+    protected final static int DEFAULT_BUTTONS_INSETS = 15;
+
+    protected final static Integer X_SCREEN_START_FROM = 20;
+    protected final static Integer Y_SCREEN_START_FROM = 20;
+
+    protected final static Integer DEFAULT_WIDTH = 550;
+    protected final static Integer DEFAULT_HEIGHT = 550;
+
     protected GridBagConstraints constraints = new GridBagConstraints();
 
     protected AbstractEmptyScreen() throws HeadlessException
     {
+        super();
+//        setLayout(new GridBagLayout());
+        setLocationRelativeTo(null);
+
         constraints.fill = GridBagConstraints.BOTH;
     }
 
@@ -20,6 +38,19 @@ public class AbstractEmptyScreen extends JFrame
     {
         dispose();
         System.exit(0);
+    }
+
+    protected void onExitApp(boolean safeExit)
+    {
+        if (!safeExit)
+        {
+            if (showYesNoMessage("Are you sure ?") != JOptionPane.YES_OPTION)
+            {
+                return;
+            }
+        }
+
+        onExit();
     }
 
     protected void setConstraints(int grid_x, int grid_y, double weight_x, double weight_y)

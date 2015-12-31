@@ -15,7 +15,6 @@ public class Screens
 
     public static void start()
     {
-        //TODO: switch screens
         WelcomeScreen.setVisible(true);
     }
 }

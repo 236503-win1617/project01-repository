@@ -1,23 +1,13 @@
 package screens;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public abstract class AbstractApplicationScreen extends AbstractEmptyScreen
 {
-    //TODO: remove this the the class managing the dynamic size should also be called on window change
-    protected static Integer SCREEN_WIDTH;
-    protected static Integer SCREEN_HEIGHT;
-
-    protected final static int DEFAULT_BUTTONS_INSETS = 15;
-
-    protected final static Integer X_SCREEN_START_FROM = 20;
-    protected final static Integer Y_SCREEN_START_FROM = 20;
-
-    public AbstractApplicationScreen()
+       public AbstractApplicationScreen()
     {
         super();
 
@@ -40,7 +30,8 @@ public abstract class AbstractApplicationScreen extends AbstractEmptyScreen
         {
             public void windowClosing(WindowEvent e)
             {
-                onClosingWindow();
+                boolean dataSaved = isDataSaved();
+                onExitApp(dataSaved);
             }
         });
     }
@@ -49,26 +40,10 @@ public abstract class AbstractApplicationScreen extends AbstractEmptyScreen
 
     protected abstract void setPanelsContent();
 
-    protected void onClosingWindow()
-    {
-        if (isDataSaved())
-        {
-            int result = showYesNoMessage("Are you sure ?");
-            if (result == JOptionPane.YES_OPTION)
-            {
-                onExit();
-            }
-        }
-        else
-        {
-            //TODO: implement a way to save data before leaving - or not allowing exiting
-        }
-    }
-
     //TODO: maybe switch to abstract
     protected boolean isDataSaved()
     {
-        return true;
+        return false;
     }
 
     //TODO: create a class responsible for screens size
