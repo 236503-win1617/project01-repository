@@ -9,8 +9,6 @@ import java.awt.*;
  */
 public class AbstractEmptyScreen extends JFrame
 {
-    protected final int DEFAULT_BUTTONS_INSESTE = 15;
-
     protected GridBagConstraints constraints = new GridBagConstraints();
 
     protected AbstractEmptyScreen() throws HeadlessException
@@ -18,18 +16,8 @@ public class AbstractEmptyScreen extends JFrame
         constraints.fill = GridBagConstraints.BOTH;
     }
 
-    protected void setBasicFrameContent()
-    {
-        JPanel basicPanel = new JPanel();
-        basicPanel.setLayout(null);
-        basicPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-        basicPanel.setBackground(SystemColor.menu);
-        setContentPane(basicPanel);
-    }
-
     protected void onExit()
     {
-        // showInformationMessage("exiting");
         dispose();
         System.exit(0);
     }
@@ -42,7 +30,7 @@ public class AbstractEmptyScreen extends JFrame
         constraints.gridy = grid_y;
     }
 
-    protected void setSquareInsests(int value)
+    protected void setSquareInsets(int value)
     {
         constraints.insets = new Insets(value, value, value, value);
     }

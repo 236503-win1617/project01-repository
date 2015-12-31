@@ -28,7 +28,7 @@ public class ModifyLessonScreen extends AbstractApplicationScreen
 
     private void setBackButton()
     {
-        JButton backButton = ComponentsFactory.createDefaultButton("Main menu", 40, 40);
+        JButton backButton = ComponentsFactory.createBasicButton("Main menu");
         backButton.addActionListener(e -> {
             Screens.ModifyLessonScreen.setVisible(false);
             Screens.WelcomeScreen.setVisible(true);

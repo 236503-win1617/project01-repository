@@ -2,6 +2,8 @@ package SlideObjects;
 
 import AdditionalClasses.SoundElement;
 
+import java.io.File;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -10,29 +12,29 @@ import java.util.List;
  */
 public class PictureSlide extends AbstractSlide
 {
-    private List<SoundElement> soundElements;
-    private String picturePath;
+    private SoundElement[] soundElements;
+    private File pictureFile;
 
-    public void setPicturePath(String path)
+    public void setPictureFile(File pictureFile)
     {
-        validateNotNull(path);
+        validateNotNull(pictureFile);
 
-        picturePath = path;
+        this.pictureFile = pictureFile;
     }
 
-    public String getPicturePath()
+    public File getPictureFile()
     {
-        return picturePath;
+        return pictureFile;
     }
 
-    public void setSoundElements(List<SoundElement> elements)
+    public void setSoundElements(SoundElement[] elements)
     {
         validateNotNull(elements);
 
         soundElements = elements;
     }
 
-    public List<SoundElement> getSoundElements()
+    public SoundElement[] getSoundElements()
     {
         return soundElements;
     }

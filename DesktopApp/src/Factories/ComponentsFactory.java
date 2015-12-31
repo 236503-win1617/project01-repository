@@ -19,22 +19,19 @@ public class ComponentsFactory
 
     private static String DEFAULT_FONT = "Ariel";
 
-    public static JButton createDefaultButton(String text, int start_x, int start_y)
+    public static JButton createBasicButton(String text)
     {
-        return createButton(text, start_x, start_y, DEFAULT_BUTTON_WIDTH, DEFAULT_BUTTON_HEIGHT);
+        Dimension dimension = new Dimension(DEFAULT_BUTTON_WIDTH, DEFAULT_BUTTON_HEIGHT);
+        return createSizedButton(text, dimension);
     }
 
-    public static JButton createButton(String text, int start_x, int start_y, int width, int height)
+    private static JButton createSizedButton(String text, Dimension dimension)
     {
         JButton button = new JButton(text);
-        button.setBounds(start_x, start_y, width, height);
+        button.setSize(dimension);
+
         return button;
     }
-
-//    public static UniqueTextPane createUniqueTextPane(String text){
-//        UUID uuid = UUID.randomUUID();
-//        Uniq
-//    }
 
     public static JTextPane createBasicTextPane(String text)
     {

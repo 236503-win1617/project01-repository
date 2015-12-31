@@ -28,7 +28,6 @@ public class SoundAreaScreen extends AbstractEmptyScreen
     private final JTextPane selectedFilePane;
     private final JTextPane isFileSelectedPane;
 
-
     private Integer _start_x;
     private Integer _start_y;
     private Integer _height;
@@ -40,8 +39,9 @@ public class SoundAreaScreen extends AbstractEmptyScreen
     {
         super();
 
-        setDefaultCloseOperation(HIDE_ON_CLOSE);
         setLayout(new GridBagLayout());
+        setDefaultCloseOperation(HIDE_ON_CLOSE);
+
         setSize(new Dimension(550, 550));
 
         JTextPane start_x_pane = ComponentsFactory.createBasicTextPane("Start X:");
@@ -119,7 +119,7 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 
         //TODO: add sound file verification
 
-        setSquareInsests(DEFAULT_BUTTONS_INSESTE);
+        setSquareInsets(DEFAULT_BUTTONS_INSETS);
 
         addPaneAndTextField(0, start_x_pane, start_x_TextField);
         addPaneAndTextField(1, start_y_pane, start_y_TextField);
@@ -222,7 +222,7 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 
             SoundElement soundElement = new SoundElement(_soundFile, _start_x, _start_y, _height, _width);
 
-            Screens.CreateLessonScreen.addSoundElementToCurrentSlide(soundElement);
+            Screens.CreateLessonScreen.addNewSoundElementToCurrentSlide(soundElement);
 
             //TODO: change this for using the same screen for multiple lessons
 

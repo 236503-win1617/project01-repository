@@ -12,8 +12,10 @@ public abstract class AbstractApplicationScreen extends AbstractEmptyScreen
     protected static Integer SCREEN_WIDTH;
     protected static Integer SCREEN_HEIGHT;
 
-    protected static Integer X_SCREEN_START_FROM = 20;
-    protected static Integer Y_SCREEN_START_FROM = 20;
+    protected final static int DEFAULT_BUTTONS_INSETS = 15;
+
+    protected final static Integer X_SCREEN_START_FROM = 20;
+    protected final static Integer Y_SCREEN_START_FROM = 20;
 
     public AbstractApplicationScreen()
     {
@@ -63,6 +65,7 @@ public abstract class AbstractApplicationScreen extends AbstractEmptyScreen
         }
     }
 
+    //TODO: maybe switch to abstract
     protected boolean isDataSaved()
     {
         return true;

@@ -16,6 +16,6 @@ public class Screens
     public static void start()
     {
         //TODO: switch screens
-        CreateLessonScreen.setVisible(true);
+        WelcomeScreen.setVisible(true);
     }
 }
