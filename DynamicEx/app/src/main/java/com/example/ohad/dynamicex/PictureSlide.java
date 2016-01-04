@@ -41,7 +41,7 @@ public class PictureSlide extends Slide {
 
         // Set background
 
-        File imgFile = new File(path);
+        File imgFile = new File(Environment.getExternalStorageDirectory().getPath() + path);
         if(imgFile.exists()){
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             setBackground(activity, layout, myBitmap);
