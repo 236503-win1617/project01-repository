@@ -10,7 +10,7 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
-    String xmlPath = "huja";
+    String xmlPath = "should_be_path";
     Lesson lesson;
 
     @Override
@@ -22,14 +22,12 @@ public class MainActivity extends AppCompatActivity {
 
         lesson = new Lesson(MainActivity.this);
 
-
-
         // TODO: Un-comment in real app
-        /*
+
         XmlParser parser = new XmlParser(xmlPath);
         parser.parse(lesson); // Loads the data from the XML into the lesson
         lesson.showFirstSlide();
-        */
+
 
         FloatingActionButton fab_next = (FloatingActionButton) findViewById(R.id.fab_next);
         fab_next.setOnClickListener(new View.OnClickListener() {
