@@ -13,7 +13,7 @@ import android.widget.VideoView;
 /**
  * Created by Ohad on 26/12/2015.
  */
-public class VideoSlide implements Slide {
+public class VideoSlide extends Slide {
 
     protected VideoView mPlayer = null;
     protected Button mPlayButton = null;

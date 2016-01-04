@@ -10,16 +10,16 @@ public class DynamicButton {
     private String text;
     private int start_x, start_y;
     private int width, height;
-    private int soundId;
+    private String path;
     MediaPlayer mp;
 
-    public DynamicButton(String text, int start_x, int start_y, int width, int height, int soundId) {
+    public DynamicButton(String text, int start_x, int start_y, int width, int height, String path) {
         this.text = text;
         this.start_x = start_x;
         this.start_y = start_y;
         this.width = width;
         this.height = height;
-        this.soundId = soundId;
+        this.path = path;
         this.mp = null;
     }
 
@@ -43,8 +43,8 @@ public class DynamicButton {
         return height;
     }
 
-    public int getSoundId() {
-        return soundId;
+    public String getPath() {
+        return path;
     }
 
     public MediaPlayer getMp() {

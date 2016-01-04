@@ -2,29 +2,34 @@ package com.example.ohad.dynamicex;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
  * Created by Ohad on 11/12/2015.
  */
-public class PictureSlide implements Slide {
+public class PictureSlide extends Slide {
 
-    int drawableId;
+    String path;
     ArrayList<Button> buttons = new ArrayList<>();
     ArrayList<TextView> texts = new ArrayList<>();
     ArrayList<DynamicButton> dynamicButtons = new ArrayList<>();
     ArrayList<DynamicText> dynamicTexts = new ArrayList<>();
 
-    public PictureSlide(int id, String title, ArrayList<DynamicButton> dynamicButtons, ArrayList<DynamicText> dynamicTexts) {
-        this.drawableId = id;
+    public PictureSlide(String path, ArrayList<DynamicButton> dynamicButtons, ArrayList<DynamicText> dynamicTexts) {
+        this.path = path;
         this.dynamicButtons = dynamicButtons;
         this.dynamicTexts = dynamicTexts;
     }
@@ -35,9 +40,14 @@ public class PictureSlide implements Slide {
         //layout.removeAllViews();
 
         // Set background
-        Drawable d = activity.getResources().getDrawable(drawableId);
-        setRes(layout, d);
 
+        File imgFile = new File(path);
+        if(imgFile.exists()){
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            setBackground(activity, layout, myBitmap);
+        }
+
+        // On the first show of the slide - create the buttons and texts
         if (buttons.size() != dynamicButtons.size() || texts.size() != dynamicTexts.size()) {
             // Create all dynamic texts
             for (final DynamicText dynamicText : dynamicTexts) {
@@ -54,6 +64,7 @@ public class PictureSlide implements Slide {
             }
         }
 
+        // If elements are already created, just show them
         else {
             for (final TextView tv : texts)
                 tv.setVisibility(View.VISIBLE);
@@ -73,11 +84,11 @@ public class PictureSlide implements Slide {
 
 
     @SuppressWarnings("deprecation")
-    private void setRes(RelativeLayout rl, Drawable drawable) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-            rl.setBackground(drawable);
+    private void setBackground(Activity activity, RelativeLayout rl, Bitmap bitmap) {
+        if(Build.VERSION.SDK_INT >= 16)
+            rl.setBackground(new BitmapDrawable(activity.getResources(), bitmap));
         else
-            rl.setBackgroundDrawable(drawable);
+            rl.setBackgroundDrawable(new BitmapDrawable(bitmap));
     }
 
     private TextView createTV(Activity activity, final DynamicText text) {
@@ -111,7 +122,7 @@ public class PictureSlide implements Slide {
                     mp.reset();
                     mp.release();
                 }
-                mp = MediaPlayer.create(context, button.getSoundId());
+                mp = MediaPlayer.create(context, Uri.parse(Environment.getExternalStorageDirectory().getPath() + button.getPath()));
                 mp.start();
             }
         });
