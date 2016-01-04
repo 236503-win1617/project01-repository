@@ -9,14 +9,10 @@ public class IndexedButton extends JButton
 {
     private final int _index;
 
-    public IndexedButton(int index)
-    {
-        _index = index;
-    }
-
     public IndexedButton(int index, String text)
     {
         super(text);
+
         _index = index;
     }
 

@@ -5,4 +5,11 @@ package SlideObjects;
  */
 public abstract class AbstractSlide
 {
+    protected void validateNotNull(Object obj)
+    {
+        if (obj == null)
+        {
+            throw new NullPointerException();
+        }
+    }
 }

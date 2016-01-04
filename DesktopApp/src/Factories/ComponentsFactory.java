@@ -1,7 +1,10 @@
 package Factories;
 
+import AdditionalClasses.UniqueTextPane;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.UUID;
 
 /**
  * Created by Evgeniy on 11/21/2015.
@@ -16,36 +19,62 @@ public class ComponentsFactory
 
     private static String DEFAULT_FONT = "Ariel";
 
-    public static JButton createDefaultButton(String text, int start_x, int start_y)
+    public static JButton createBasicButton(String text)
     {
-        return createButon(text, start_x, start_y, DEFAULT_BUTTON_WIDTH, DEFAULT_BUTTON_HEIGHT);
+        Dimension dimension = new Dimension(DEFAULT_BUTTON_WIDTH, DEFAULT_BUTTON_HEIGHT);
+        return createSizedButton(text, dimension);
     }
 
-    public static JButton createButon(String text, int start_x, int start_y, int width, int height)
+    private static JButton createSizedButton(String text, Dimension dimension)
     {
         JButton button = new JButton(text);
-        button.setBounds(start_x, start_y, width, height);
+        button.setSize(dimension);
+
         return button;
     }
 
-    public static JTextPane createTextPane(String description, int start_x, int start_y, int width, int height)
+    public static JTextPane createBasicTextPane(String text)
     {
         JTextPane textPane = new JTextPane();
-        textPane.setText(description);
+
+        textPane.setText(text);
         textPane.setEditable(false);
         textPane.setFont(new Font(DEFAULT_FONT, Font.PLAIN, DEFAULT_FONT_SIZE));
         textPane.setForeground(Color.BLACK);
         textPane.setBackground(SystemColor.menu);
-        textPane.setBounds(start_x, start_y, width, height);
 
         return textPane;
     }
 
-    public static JTextField createTextField(String helperText, int start_x, int start_y, int width, int height)
+    /**
+     * @param panel
+     * @param width
+     * @param height
+     * @param constantHorizontal JScrollPaneConstant for horizontal scrolling
+     * @param constantVertical   JScrollPaneConstant for vertical scrolling
+     * @return
+     */
+    public static JScrollPane createScrollPane(JPanel panel, int width, int height, int constantHorizontal, int constantVertical)
+    {
+        panel.setLayout(new GridBagLayout());
+        JScrollPane scrollPane = new JScrollPane(panel);
+        scrollPane.setHorizontalScrollBarPolicy(constantHorizontal);
+        scrollPane.setVerticalScrollBarPolicy(constantVertical);
+
+        Dimension dimensions = new Dimension(width, height);
+        scrollPane.setPreferredSize(dimensions);
+
+        return scrollPane;
+    }
+
+    public static JTextField createBasicTextField(String helperText)
     {
         JTextField textField = new JTextField();
+        textField.setHorizontalAlignment(JTextField.CENTER);
         textField.setToolTipText(helperText);
-        textField.setBounds(start_x, start_y, width, height);
+        textField.setForeground(Color.black);
+        textField.setFont(new Font(DEFAULT_FONT, Font.PLAIN, DEFAULT_FONT_SIZE));
+        textField.setBackground(SystemColor.menu);
 
         return textField;
     }
