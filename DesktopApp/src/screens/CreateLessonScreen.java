@@ -4,7 +4,7 @@ import AdditionalClasses.IndexedButton;
 import AdditionalClasses.SoundElement;
 import AdditionalClasses.UniqueTextPane;
 import Factories.ComponentsFactory;
-import Factories.DOM4JCreateXMLDemo;
+import Factories.CreateXmlFactory;
 import SlideObjects.AbstractSlide;
 import SlideObjects.PictureSlide;
 
@@ -234,7 +234,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
     private void onSaveCurrentLesson(boolean autosave) {
         if (!autosave) {
             String name = "Default name ";
-            DOM4JCreateXMLDemo.generate(_slides, name);
+            CreateXmlFactory.generate(_slides, name);
         }
 
         _lessonSaved = true;
