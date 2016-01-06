@@ -4,6 +4,7 @@ import AdditionalClasses.IndexedButton;
 import AdditionalClasses.SoundElement;
 import AdditionalClasses.UniqueTextPane;
 import Factories.ComponentsFactory;
+import Factories.DOM4JCreateXMLDemo;
 import SlideObjects.AbstractSlide;
 import SlideObjects.PictureSlide;
 
@@ -232,9 +233,9 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
 
     private void onSaveCurrentLesson(boolean autosave) {
         if (!autosave) {
-            showInformationMessage("Saving lesson");
+            String name = "Default name ";
+            DOM4JCreateXMLDemo.generate(_slides, name);
         }
-        //TODO: create the xml file with the content
 
         _lessonSaved = true;
     }
@@ -288,7 +289,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
         if (slide instanceof PictureSlide) {
             PictureSlide pictureSlide = (PictureSlide) slide;
             if (pictureSlide.getPictureFile() == null) {
-                showErrorMessage("Saving without picture");
+                // showErrorMessage("Saving without picture");
 
                 //TODO: let the user create slide without any pictures
             }
@@ -326,8 +327,9 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
             return;
         }
 
-        saveCurrentSlide();
+        selectedSound = null;
 
+        saveCurrentSlide();
         clearSoundElementsContainers();
         clearPanel(soundsPanel);
         clearPanel(currentSlidePanel);
