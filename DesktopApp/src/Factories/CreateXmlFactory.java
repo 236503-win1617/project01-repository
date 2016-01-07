@@ -13,10 +13,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class CreateXmlFactory {
     //TODO: start using the name
     //TODO: what is the index for ?
+    //TODO: copy the picture and audio files also into the dir
     public static void generate(ArrayList<AbstractSlide> list, String name) {
         try {
             Document document = DocumentHelper.createDocument();
@@ -51,11 +53,21 @@ public class CreateXmlFactory {
                     index++;
                 }
             }
+            boolean success = (new File(".//xmlDir")).mkdirs();
+            if (!success) {
+                // Directory already exists which is good
+            }
             OutputFormat format = OutputFormat.createPrettyPrint();
             XMLWriter writer;
-            OutputStream output = new FileOutputStream(".\\db1234.xml");
-            writer = new XMLWriter(output, format);
-            writer.write(document);
+            Random random = new Random();
+            File f = new File(".\\xmlDir\\db"+Integer.toString(random.nextInt())+".xml");
+            while(f.exists()) {
+                random = new Random();
+                f = new File(".\\xmlDir\\db"+Integer.toString(random.nextInt())+".xml");
+            }
+            OutputStream output = new FileOutputStream(f.getPath());
+            writer = new XMLWriter( output, format );
+            writer.write( document );
         } catch (Exception e) {
             e.printStackTrace();
         }
