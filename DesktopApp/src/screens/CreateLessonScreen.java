@@ -19,6 +19,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.swing.Timer;
+import java.awt.*;
+import java.awt.event.*;
+
 /**
  * Created by Evgeniy on 11/21/2015.
  */
@@ -231,12 +235,28 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
         add(panel, location);
     }
 
+    private void onAutoSaveCurrentLesson(boolean autosave) {
+            showInformationMessage("Autosave - Saving lesson");
+            String name = "Default name ";
+            CreateXmlFactory.generate(_slides, name);
+
+        _lessonSaved = true;
+    }
+
     private void onSaveCurrentLesson(boolean autosave) {
         if (!autosave) {
             String name = "Default name ";
             CreateXmlFactory.generate(_slides, name);
         }
-
+        if(SettingScreen.a == 1){
+            int delay = 30000; //milliseconds
+            ActionListener taskPerformer = new ActionListener() {
+                public void actionPerformed(ActionEvent evt) {
+                    onAutoSaveCurrentLesson(false);
+                }
+            };
+            new Timer(delay, taskPerformer).start();
+        }
         _lessonSaved = true;
     }
 

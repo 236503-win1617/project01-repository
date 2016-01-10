@@ -33,14 +33,17 @@ public class WelcomeScreen extends AbstractEmptyScreen {
 
     private void setAboutButton() {
         JButton aboutButton = ComponentsFactory.createBasicButton("About");
-        aboutButton.addActionListener(e -> showInformationMessage("Not supported yet !"));
+        aboutButton.addActionListener(e -> showInformationMessage("© Techion - all rights reserved."));
         setConstraints(0, 3, 1, 1);
         add(aboutButton, constraints);
     }
 
     private void setSettingsButton() {
         JButton settingsButton = ComponentsFactory.createBasicButton("Settings");
-        settingsButton.addActionListener(e -> showInformationMessage("Not supported yet !"));
+        settingsButton.addActionListener(e -> {
+                    Screens.SettingScreen.setVisible(true);
+                    Screens.WelcomeScreen.setVisible(false);
+                });
         setConstraints(0, 2, 1, 1);
         add(settingsButton, constraints);
     }
