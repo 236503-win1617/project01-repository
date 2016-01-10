@@ -27,6 +27,7 @@ public class PictureSlide extends Slide {
     ArrayList<TextView> texts = new ArrayList<>();
     ArrayList<DynamicButton> dynamicButtons = new ArrayList<>();
     ArrayList<DynamicText> dynamicTexts = new ArrayList<>();
+    boolean firstShow = true;
 
     public PictureSlide(String path, ArrayList<DynamicButton> dynamicButtons, ArrayList<DynamicText> dynamicTexts) {
         this.path = path;
@@ -43,12 +44,13 @@ public class PictureSlide extends Slide {
 
         File imgFile = new File(Environment.getExternalStorageDirectory().getPath() + path);
         if(imgFile.exists()){
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            //Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            Bitmap myBitmap = decodeSampledBitmapFromFile(imgFile.getAbsolutePath(), 250, 250);
             setBackground(activity, layout, myBitmap);
         }
 
         // On the first show of the slide - create the buttons and texts
-        if (buttons.size() != dynamicButtons.size() || texts.size() != dynamicTexts.size()) {
+        if (firstShow) {
             // Create all dynamic texts
             for (final DynamicText dynamicText : dynamicTexts) {
                 TextView tv = createTV(activity, dynamicText);
@@ -62,6 +64,8 @@ public class PictureSlide extends Slide {
                 buttons.add(b);
                 layout.addView(b);
             }
+
+            firstShow = false;
         }
 
         // If elements are already created, just show them
@@ -128,6 +132,46 @@ public class PictureSlide extends Slide {
         });
 
         return myButton;
+    }
+
+
+    //////////////////// Loading Large Bitmaps ///////////////////
+
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
+    public static Bitmap decodeSampledBitmapFromFile(String path, int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(path, options);
     }
 
 }
