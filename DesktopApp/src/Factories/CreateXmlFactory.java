@@ -1,8 +1,13 @@
-package Factories;
+/**
+ * @author philip&avi
+ *
+ */
+package newProject;
 
-import AdditionalClasses.SoundElement;
-import SlideObjects.AbstractSlide;
-import SlideObjects.PictureSlide;
+//import AdditionalClasses.SoundElement;
+//import SlideObjects.AbstractSlide;
+//import SlideObjects.PictureSlide;
+
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -18,7 +23,6 @@ import java.util.Random;
 public class CreateXmlFactory {
     //TODO: start using the name
     //TODO: what is the index for ?
-    //TODO: copy the picture and audio files also into the dir
     public static void generate(ArrayList<AbstractSlide> list, String name) {
         try {
             Document document = DocumentHelper.createDocument();
@@ -34,13 +38,24 @@ public class CreateXmlFactory {
 
                     File pictureFile = item.getPictureFile();
                     String fileName = (pictureFile == null) ? "" : pictureFile.toString();
-
-                    pictureElement.addElement("image_file").addText(fileName);
+                    String [] bits = fileName.split("\\\\");
+                    if(bits.length<2){
+                    	bits = fileName.split("////");
+                    }
+                    String lastOne = bits[bits.length-1];
+                    pictureElement.addElement("image_file").addText("/AAImages/"+lastOne);
                     Element soundsList = pictureElement.addElement("sounds_list");
                     for (SoundElement soundItem : item.getSoundElements()) {
                         Element soundButton = soundsList.addElement("sound_button");
+                        String soundName=soundItem.soundFile.toString();
+                        String [] bits2 = soundName.split("\\\\");
+                        if(bits2.length<2){
+                        	bits2 = soundName.split("////");
+                        }
+                        String lastOne2 = bits2[bits2.length-1];
+
                         soundButton.addElement("sound_file")
-                                .addText(soundItem.soundFile.toString());
+                                .addText("/AASounds/"+lastOne2);
                         soundButton.addElement("start_x")
                                 .addText(Integer.toString(soundItem.start_x));
                         soundButton.addElement("start_y")
@@ -53,21 +68,21 @@ public class CreateXmlFactory {
                     index++;
                 }
             }
-            boolean success = (new File(".//xmlDir")).mkdirs();
-            if (!success) {
-                // Directory already exists which is good
-            }
-            OutputFormat format = OutputFormat.createPrettyPrint();
-            XMLWriter writer;
-            Random random = new Random();
-            File f = new File(".\\xmlDir\\db"+Integer.toString(random.nextInt())+".xml");
-            while(f.exists()) {
-                random = new Random();
-                f = new File(".\\xmlDir\\db"+Integer.toString(random.nextInt())+".xml");
-            }
-            OutputStream output = new FileOutputStream(f.getPath());
-            writer = new XMLWriter( output, format );
-            writer.write( document );
+		boolean success = (new File(".//xmlDir")).mkdirs();
+		if (!success) {
+		    // Directory already exists which is good
+		}
+		OutputFormat format = OutputFormat.createPrettyPrint();
+		XMLWriter writer;
+	    Random random = new Random();
+	    File f = new File(".\\xmlDir\\db"+Integer.toString(random.nextInt())+".xml");
+	    while(f.exists()) { 
+	    	random = new Random();
+	    	 f = new File(".\\xmlDir\\db"+Integer.toString(random.nextInt())+".xml");
+	    }
+		OutputStream output = new FileOutputStream(f.getPath());
+		writer = new XMLWriter( output, format );
+		writer.write( document );
         } catch (Exception e) {
             e.printStackTrace();
         }
