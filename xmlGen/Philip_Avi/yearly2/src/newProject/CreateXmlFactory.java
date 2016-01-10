@@ -1,8 +1,12 @@
+/**
+ * @author philip&avi
+ *
+ */
 package newProject;
 
-import AdditionalClasses.SoundElement;
-import SlideObjects.AbstractSlide;
-import SlideObjects.PictureSlide;
+//import AdditionalClasses.SoundElement;
+//import SlideObjects.AbstractSlide;
+//import SlideObjects.PictureSlide;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -34,13 +38,24 @@ public class CreateXmlFactory {
 
                     File pictureFile = item.getPictureFile();
                     String fileName = (pictureFile == null) ? "" : pictureFile.toString();
-
-                    pictureElement.addElement("image_file").addText(fileName);
+                    String [] bits = fileName.split("\\\\");
+                    if(bits.length<2){
+                    	bits = fileName.split("////");
+                    }
+                    String lastOne = bits[bits.length-1];
+                    pictureElement.addElement("image_file").addText("/AAImages/"+lastOne);
                     Element soundsList = pictureElement.addElement("sounds_list");
                     for (SoundElement soundItem : item.getSoundElements()) {
                         Element soundButton = soundsList.addElement("sound_button");
+                        String soundName=soundItem.soundFile.toString();
+                        String [] bits2 = soundName.split("\\\\");
+                        if(bits2.length<2){
+                        	bits2 = soundName.split("////");
+                        }
+                        String lastOne2 = bits2[bits2.length-1];
+
                         soundButton.addElement("sound_file")
-                                .addText(soundItem.soundFile.toString());
+                                .addText("/AASounds/"+lastOne2);
                         soundButton.addElement("start_x")
                                 .addText(Integer.toString(soundItem.start_x));
                         soundButton.addElement("start_y")

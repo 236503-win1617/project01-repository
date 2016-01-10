@@ -10,8 +10,8 @@ import java.util.ArrayList;
 public class unitTest {
 	public static void main(String[] args)  {
 		ArrayList<AbstractSlide> pictureSlides = new ArrayList<AbstractSlide>();
-		File catPic =new File("C:\\Users\\akozokin\\Desktop\\cat.jpg");
-		File sound= new File("C:\\Users\\akozokin\\Desktop\\Sound.wav");
+		File catPic =new File("C://Users//akozokin//Desktop//cat.jpg");
+		File sound= new File("C://Users//akozokin//Desktop//Sound.wav");
 		PictureSlide p1= new PictureSlide();
 		SoundElement[] soundArray = new SoundElement[4];
 		SoundElement s1= new SoundElement(sound, 0, 0, 100, 80);
