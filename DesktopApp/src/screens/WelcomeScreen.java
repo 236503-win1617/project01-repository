@@ -21,7 +21,7 @@ public class WelcomeScreen extends AbstractEmptyScreen {
 
         setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 
-        setSquareInsets(DEFAULT_BUTTONS_INSETS);
+        setSquareInsets(DEFAULT_BUTTONS_INSETS + 5);
         setCreateButton();
         setModifyButton();
         setSettingsButton();
@@ -33,15 +33,18 @@ public class WelcomeScreen extends AbstractEmptyScreen {
 
     private void setAboutButton() {
         JButton aboutButton = ComponentsFactory.createBasicButton("About");
-        aboutButton.addActionListener(e -> showInformationMessage("Not supported yet !"));
+        aboutButton.addActionListener(e -> showInformationMessage("© Techion - all rights reserved."));
         setConstraints(0, 3, 1, 1);
         add(aboutButton, constraints);
     }
 
     private void setSettingsButton() {
         JButton settingsButton = ComponentsFactory.createBasicButton("Settings");
-        settingsButton.addActionListener(e -> showInformationMessage("Not supported yet !"));
-        setConstraints(0, 2, 0.5, 1);
+        settingsButton.addActionListener(e -> {
+                    Screens.SettingScreen.setVisible(true);
+                    Screens.WelcomeScreen.setVisible(false);
+                });
+        setConstraints(0, 2, 1, 1);
         add(settingsButton, constraints);
     }
 
@@ -51,7 +54,7 @@ public class WelcomeScreen extends AbstractEmptyScreen {
             Screens.CreateLessonScreen.setVisible(true);
             Screens.WelcomeScreen.setVisible(false);
         });
-        setConstraints(0, 0,2, 1);
+        setConstraints(0, 0, 1, 1);
         add(createButton, constraints);
     }
 
@@ -62,14 +65,14 @@ public class WelcomeScreen extends AbstractEmptyScreen {
 //            Screens.WelcomeScreen.setVisible(false);
 //            Screens.ModifyLessonScreen.setVisible(true);
         });
-        setConstraints(0, 1, 0.5, 1);
+        setConstraints(0, 1, 1, 1);
         add(modifyButton, constraints);
     }
 
     private void setExitButton() {
         JButton exitButton = ComponentsFactory.createBasicButton(EXIT);
         exitButton.addActionListener(e -> onExitApp(true));
-        setConstraints(0, 4, 0.5, 1);
+        setConstraints(0, 4, 1, 1);
         add(exitButton, constraints);
     }
 }

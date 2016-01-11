@@ -1,0 +1,47 @@
+<lesson>
+	<!-- name will be displayed for lessons for it to be user friendly 
+	(we will be have to check for name duplications) -->
+	<name>Animals</name>
+	<!-- all the paths should be relative to the lesson directory -->
+	<!-- Probably should be an object to papulate it's fields -->
+	<slide>	
+		<!-- Maybe the order should be defined according to location -->
+		<order>1</order>
+		<slide_type>Picture</slide_type>
+		<image_file>.\1.jpeg</image_file>
+		<sounds_list>
+			<!-- sound button prabably should also be object -->
+			<sound_button>
+				<sound_file>.\cat.wav</sound_file>
+				<start_x>0</start_x>
+				<start_y>0</start_y>
+				<width>50</width>
+				<height>50</height>
+			</sound_button>
+			
+			<sound_button>
+				<sound_file>.\dog.wav</sound_file>
+				<start_x>100</start_x>
+				<start_y>100</start_y>
+				<width>50</width>
+				<height>50</height>
+			</sound_button>		
+			
+			<sound_button>
+				<sound_file>.\cow.wav</sound_file>
+				<start_x>200</start_x>
+				<start_y>200</start_y>
+				<width>50</width>
+				<height>50</height>
+			</sound_button>
+		
+		</sounds_list>
+	</slide>
+	
+	<slide>
+		<order>2</order>
+		<!-- for now no support but the design should include the suppor for different slides -->
+		<slide_type>Video</slide_type> 
+		<!-- ... -->
+	</slide>	
+</lesson>

@@ -4,11 +4,14 @@ import AdditionalClasses.IndexedButton;
 import AdditionalClasses.SoundElement;
 import AdditionalClasses.UniqueTextPane;
 import Factories.ComponentsFactory;
+import Factories.CreateXmlFactory;
 import SlideObjects.AbstractSlide;
 import SlideObjects.PictureSlide;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -95,7 +98,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
 
         UniqueTextPane soundTextPane = new UniqueTextPane(uuid);
         soundTextPane.setForeground(Color.red);
-
+        soundTextPane.setEditable(false);
         soundTextPane.setFont(new Font("Ariel", Font.BOLD, 16));
         soundTextPane.setText(element.toString());
         soundTextPane.addMouseListener(new MouseAdapter() {
@@ -156,8 +159,27 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
     private void loadPicture(String path) {
         currentSlidePanel.removeAll();
 
-        ImageIcon image = new ImageIcon(path);
-        JLabel label = new JLabel("", image, JLabel.CENTER);
+        ImageIcon imageIcon = new ImageIcon(path);
+
+        int panelHeight = currentSlidePanel.getHeight();
+        int panelWidth = currentSlidePanel.getWidth();
+
+        int imageHeight = imageIcon.getIconHeight();
+        int imageWidth = imageIcon.getIconWidth();
+
+        if (imageHeight > panelHeight) {
+            double factor = ((double) panelHeight / imageHeight);
+            int newWidth = (int) (imageWidth * factor);
+//        if(imageIcon.getIconHeight() < imageIcon.getIconWidth()){
+//            showInformationMessage("vertical");
+//        }
+            Image image = imageIcon.getImage();
+            Image resizedImage = image.getScaledInstance(newWidth, panelHeight, Image.SCALE_SMOOTH); // scale it the smooth way
+
+            imageIcon = new ImageIcon(resizedImage);
+        }
+
+        JLabel label = new JLabel("", imageIcon, JLabel.CENTER);
 
         setConstraints(0, 0, 1, 1);
 
@@ -187,10 +209,16 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
 
             removeIndexFromContainers(currentSlideIndex);
 
+            currentSlideIndex--;
+
+            clearPanel(soundsPanel);
+            clearPanel(currentSlidePanel);
             lessonSlidesPanel.revalidate();
             lessonSlidesPanel.repaint();
 
-            currentSlideIndex--;
+            if (currentSlideIndex >= 0) {
+                loadSlide(currentSlideIndex);
+            }
         }
     }
 
@@ -230,12 +258,39 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
         add(panel, location);
     }
 
+    private void onAutoSaveCurrentLesson(boolean autosave) {
+        showInformationMessage("Autosave - Saving lesson");
+        String name = "Default name ";
+        CreateXmlFactory.generate(_slides, name);
+
+        _lessonSaved = true;
+    }
+
     private void onSaveCurrentLesson(boolean autosave) {
         if (!autosave) {
-            showInformationMessage("Saving lesson");
-        }
-        //TODO: create the xml file with the content
+            if (_slides.size() == 0) {
+                showInformationMessage("Cannot save empty lesson !");
+                return;
+            }
 
+            String lessonName = showInputMesssage("Insert Lesson Name:");
+
+            if (lessonName != null) {
+                CreateXmlFactory.generate(_slides, lessonName);
+                showInformationMessage("Lesson '" + lessonName + "' was saved !");
+            }
+            //TODO: implement a check that lesson doesn't exists or overwrite the previous one
+            return;
+        }
+        if (SettingScreen.a == 1) {
+            int delay = 30000; //milliseconds
+            ActionListener taskPerformer = new ActionListener() {
+                public void actionPerformed(ActionEvent evt) {
+                    onAutoSaveCurrentLesson(false);
+                }
+            };
+            new Timer(delay, taskPerformer).start();
+        }
         _lessonSaved = true;
     }
 
@@ -288,7 +343,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
         if (slide instanceof PictureSlide) {
             PictureSlide pictureSlide = (PictureSlide) slide;
             if (pictureSlide.getPictureFile() == null) {
-                showErrorMessage("Saving without picture");
+                // showErrorMessage("Saving without picture");
 
                 //TODO: let the user create slide without any pictures
             }
@@ -326,21 +381,20 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
             return;
         }
 
-        saveCurrentSlide();
+        selectedSound = null;
 
+        saveCurrentSlide();
         clearSoundElementsContainers();
         clearPanel(soundsPanel);
         clearPanel(currentSlidePanel);
 
-        if (slideSoundAreas.size() > 0) {
-            clearPanel(soundsPanel);
-        }
-
-        clearPanel(currentSlidePanel);
-
         currentSlideIndex = selectedIndex;
 
-        AbstractSlide slide = _slides.get(selectedIndex);
+        loadSlide(currentSlideIndex);
+    }
+
+    private void loadSlide(Integer index) {
+        AbstractSlide slide = _slides.get(index);
 
         if (slide instanceof PictureSlide) {
             loadPictureSlide((PictureSlide) slide);
