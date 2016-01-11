@@ -80,4 +80,9 @@ public class AbstractEmptyScreen extends JFrame
     {
         JOptionPane.showMessageDialog(this, message, null, JOptionPane.INFORMATION_MESSAGE);
     }
+
+    protected String showInputMesssage(String message)
+    {
+        return JOptionPane.showInputDialog(this,message);
+    }
 }
