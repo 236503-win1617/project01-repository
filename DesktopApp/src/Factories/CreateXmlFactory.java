@@ -2,11 +2,11 @@
  * @author philip&avi
  *
  */
-package newProject;
+package Factories;
 
-//import AdditionalClasses.SoundElement;
-//import SlideObjects.AbstractSlide;
-//import SlideObjects.PictureSlide;
+import AdditionalClasses.SoundElement;
+import SlideObjects.AbstractSlide;
+import SlideObjects.PictureSlide;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
