@@ -5,6 +5,8 @@ package SlideObjects;
  */
 public abstract class AbstractSlide
 {
+    public abstract SlideType getType();
+
     protected void validateNotNull(Object obj)
     {
         if (obj == null)

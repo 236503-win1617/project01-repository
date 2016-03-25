@@ -35,4 +35,9 @@ public class PictureSlide extends AbstractSlide {
 
         soundElements = elements;
     }
+
+    @Override
+    public SlideType getType() {
+        return SlideType.Picture;
+    }
 }

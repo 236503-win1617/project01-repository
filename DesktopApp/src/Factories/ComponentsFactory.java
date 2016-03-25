@@ -9,8 +9,7 @@ import java.util.UUID;
 /**
  * Created by Evgeniy on 11/21/2015.
  */
-public class ComponentsFactory
-{
+public class ComponentsFactory {
     private static Integer DEFAULT_BUTTON_WIDTH = 200;
     private static Integer DEFAULT_BUTTON_HEIGHT = 45;
 
@@ -19,22 +18,19 @@ public class ComponentsFactory
 
     private static String DEFAULT_FONT = "Ariel";
 
-    public static JButton createBasicButton(String text)
-    {
+    public static JButton createBasicButton(String text) {
         Dimension dimension = new Dimension(DEFAULT_BUTTON_WIDTH, DEFAULT_BUTTON_HEIGHT);
         return createSizedButton(text, dimension);
     }
 
-    private static JButton createSizedButton(String text, Dimension dimension)
-    {
+    private static JButton createSizedButton(String text, Dimension dimension) {
         JButton button = new JButton(text);
         button.setSize(dimension);
 
         return button;
     }
 
-    public static JTextPane createBasicTextPane(String text)
-    {
+    public static JTextPane createBasicTextPane(String text) {
         JTextPane textPane = new JTextPane();
 
         textPane.setText(text);
@@ -54,8 +50,7 @@ public class ComponentsFactory
      * @param constantVertical   JScrollPaneConstant for vertical scrolling
      * @return
      */
-    public static JScrollPane createScrollPane(JPanel panel, int width, int height, int constantHorizontal, int constantVertical)
-    {
+    public static JScrollPane createScrollPane(JPanel panel, int width, int height, int constantHorizontal, int constantVertical) {
         panel.setLayout(new GridBagLayout());
         JScrollPane scrollPane = new JScrollPane(panel);
         scrollPane.setHorizontalScrollBarPolicy(constantHorizontal);
@@ -67,8 +62,16 @@ public class ComponentsFactory
         return scrollPane;
     }
 
-    public static JTextField createBasicTextField(String helperText)
-    {
+    public static UniqueTextPane createUniqueTextPane(UUID uuid, String text) {
+        UniqueTextPane uniquePane = new UniqueTextPane(uuid);
+        uniquePane.setForeground(Color.red);
+        uniquePane.setEditable(false);
+        uniquePane.setFont(new Font("Ariel", Font.BOLD, 16));
+        uniquePane.setText(text);
+        return uniquePane;
+    }
+
+    public static JTextField createBasicTextField(String helperText) {
         JTextField textField = new JTextField();
         textField.setHorizontalAlignment(JTextField.CENTER);
         textField.setToolTipText(helperText);
@@ -90,8 +93,7 @@ public class ComponentsFactory
      * @param height
      * @return
      */
-    public static JComboBox createComboBox(Object[] values, String helperText, int start_x, int start_y, int width, int height)
-    {
+    public static JComboBox createComboBox(Object[] values, String helperText, int start_x, int start_y, int width, int height) {
         JComboBox comboBox = new JComboBox();
         comboBox.setToolTipText(helperText);
         comboBox.setModel(new DefaultComboBoxModel(values));
