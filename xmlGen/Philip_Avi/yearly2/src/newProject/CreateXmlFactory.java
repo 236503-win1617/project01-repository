@@ -74,11 +74,13 @@ public class CreateXmlFactory {
 		}
 		OutputFormat format = OutputFormat.createPrettyPrint();
 		XMLWriter writer;
-	    Random random = new Random();
-	    File f = new File(".\\xmlDir\\db"+Integer.toString(random.nextInt())+".xml");
+	    //Random random = new Random();
+	    int counter = 0;
+		File f = new File(".\\xmlDir\\db"+Integer.toString(counter)+".xml");
 	    while(f.exists()) { 
+			counter++;
 	    	random = new Random();
-	    	 f = new File(".\\xmlDir\\db"+Integer.toString(random.nextInt())+".xml");
+	    	File f = new File(".\\xmlDir\\db"+Integer.toString(counter)+".xml");
 	    }
 		OutputStream output = new FileOutputStream(f.getPath());
 		writer = new XMLWriter( output, format );
