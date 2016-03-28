@@ -13,16 +13,16 @@ import android.widget.ImageView;
 import java.util.Random;
 
 
-public class GameNumbers extends Activity {
+public class GameAnimals extends Activity {
 
 
     int[] arr = new int[11];
-    int[] images = {R.drawable.number0, R.drawable.number1, R.drawable.number2 ,R.drawable.number3,
-            R.drawable.number4, R.drawable.number5, R.drawable.number6, R.drawable.number7,
-            R.drawable.number8, R.drawable.number9};
-    int[] sounds = {R.drawable.s0, R.drawable.s1, R.drawable.s2,R.drawable.s3,
-            R.drawable.s4, R.drawable.s5, R.drawable.s6, R.drawable.s7, R.drawable.s8,
-            R.drawable.s9, R.drawable.s10};
+    int[] images = {R.drawable.tiger, R.drawable.panda, R.drawable.snake ,R.drawable.turtle,
+            R.drawable.giraffe, R.drawable.dog, R.drawable.cat, R.drawable.monkey,
+            R.drawable.kangaroo, R.drawable.lion};
+    int[] sounds = {R.drawable.Tiger, R.drawable.Panda, R.drawable.Snake,R.drawable.Turtle,
+            R.drawable.Giraffe, R.drawable.Dog, R.drawable.Cat, R.drawable.Monkey, R.drawable.Kangaroo,
+            R.drawable.Lion};
     int[] rand_nums = new int[4];
 
     int numOfChoice;
@@ -46,16 +46,16 @@ public class GameNumbers extends Activity {
             rand_nums[i]=j;
             j++;
         }
-        ImageView view = (ImageView)findViewById(R.id.num1);
+        ImageView view = (ImageView)findViewById(R.id.color1);
         view.setImageResource(images[rand_nums[0]]);
         view.setTag(rand_nums[0]);
-        view = (ImageView)findViewById(R.id.num2);
+        view = (ImageView)findViewById(R.id.color2);
         view.setImageResource(images[rand_nums[1]]);
         view.setTag(rand_nums[1]);
-        view = (ImageView)findViewById(R.id.num3);
+        view = (ImageView)findViewById(R.id.color3);
         view.setImageResource(images[rand_nums[2]]);
         view.setTag(rand_nums[2]);
-        view = (ImageView)findViewById(R.id.num4);
+        view = (ImageView)findViewById(R.id.color4);
         view.setImageResource(images[rand_nums[3]]);
         view.setTag(rand_nums[3]);
         numOfChoice = rand_nums[rand.nextInt(4)];
