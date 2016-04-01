@@ -15,6 +15,10 @@ import org.xml.sax.InputSource;
 public class XmlParser {
 	private String path;
 
+	public enum Game {
+		COLORS,NUMBERS,ANIMALS,MEMORY
+	}
+
 	XmlParser(String path) {
 		this.path = path;
 	}
@@ -85,6 +89,7 @@ public class XmlParser {
 					}
 
 				}
+
 			}
 
 		} catch (Exception ex) {
