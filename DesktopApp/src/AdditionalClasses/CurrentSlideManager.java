@@ -2,14 +2,19 @@ package AdditionalClasses;
 
 import SlideObjects.AbstractSlide;
 import SlideObjects.PictureSlide;
-import SlideObjects.SlideType;
-import com.sun.corba.se.impl.io.TypeMismatchException;
+import SlideObjects.Rotation;
+import SlideObjects.VideoSlide;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.MissingResourceException;
 import java.util.UUID;
 
 /**
@@ -38,7 +43,7 @@ public class CurrentSlideManager {
 
     public void deleteSoundRegion(UUID soundId) {
         UniqueTextPane areaToDelete = slideSoundAreas.remove(soundId);
-        if(areaToDelete == null){
+        if (areaToDelete == null) {
             throw new RuntimeException("No such id exists");
         }
         slideSoundElements.remove(areaToDelete.getId());
@@ -71,8 +76,11 @@ public class CurrentSlideManager {
 
             SoundElement[] soundElements = slideSoundElements.values().toArray(new SoundElement[0]);
             pictureSlide.setSoundElements(soundElements);
+        } else if (slide instanceof VideoSlide) {
+            VideoSlide videoSlide = (VideoSlide) slide;
+            // TODO: implement video saving
         } else {
-            throw new IllegalArgumentException("Slide is not supported type" + slide.getClass().toString());
+            throw new UnsupportedOperationException("Slide is not supported type" + slide.getClass().toString());
         }
     }
 
@@ -89,33 +97,44 @@ public class CurrentSlideManager {
         soundsPanel.repaint();
     }
 
-    public void loadPicture(String path) {
+    public void loadPictureFromFile(File imageFile, Rotation pictureRotation) throws IOException {
         currentSlide.removeAll();
-        //TODO: reimplement picture loading according to the dimensions
-        ImageIcon imageIcon = new ImageIcon(path);
 
+        BufferedImage image = ImageIO.read(imageFile);
+
+        int imageHeight = image.getHeight();
+        int imageWidth = image.getWidth();
+
+        AffineTransform tx = new AffineTransform();
+        tx.rotate(pictureRotation.getRotationInRadians(), imageWidth / 2, imageHeight / 2);
+        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+        image = op.filter(image, null);
+
+        Image resizedImage = getResizedImage(image, imageHeight, imageWidth);
+
+        ImageIcon imageIcon = new ImageIcon(resizedImage);
+        JLabel imageLabel = new JLabel("", imageIcon, JLabel.CENTER);
+
+        currentSlide.add(imageLabel, pictureConstraints);
+        currentSlide.revalidate();
+        currentSlide.repaint();
+    }
+
+    private Image getResizedImage(BufferedImage image, int imageHeight, int imageWidth) {
         int panelHeight = currentSlide.getHeight();
         int panelWidth = currentSlide.getWidth();
 
-        int imageHeight = imageIcon.getIconHeight();
-        int imageWidth = imageIcon.getIconWidth();
-
-        if (imageHeight > panelHeight) {
-            double factor = ((double) panelHeight / imageHeight);
-            int newWidth = (int) (imageWidth * factor);
-//        if(imageIcon.getIconHeight() < imageIcon.getIconWidth()){
-//            showInformationMessage("vertical");
-//        }
-            Image image = imageIcon.getImage();
-            Image resizedImage = image.getScaledInstance(newWidth, panelHeight, Image.SCALE_SMOOTH); // scale it the smooth way
-
-            imageIcon = new ImageIcon(resizedImage);
+        if ((imageHeight <= panelHeight) && (imageWidth <= panelWidth)) {
+            return image;
         }
 
-        JLabel label = new JLabel("", imageIcon, JLabel.CENTER);
+        double heightFactor = ((double) panelHeight / imageHeight);
+        double widthFactor = ((double) panelWidth / imageWidth);
+        double factor = Double.max(heightFactor, widthFactor);
 
-        currentSlide.add(label, pictureConstraints);
-        currentSlide.revalidate();
-        currentSlide.repaint();
+        int newWidth = (int) (imageWidth * factor);
+        int newHeight = (int) (imageHeight * factor);
+
+        return image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
     }
 }

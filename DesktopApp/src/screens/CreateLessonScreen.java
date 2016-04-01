@@ -3,8 +3,7 @@ package screens;
 import AdditionalClasses.*;
 import Factories.ComponentsFactory;
 import Factories.CreateXmlFactory;
-import SlideObjects.AbstractSlide;
-import SlideObjects.PictureSlide;
+import SlideObjects.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -118,7 +117,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
         return new Dimension(width, height);
     }
 
-    private void choosePicture() {
+    private void chooseFile() {
         if (currentSlideIndex < 0) {
             showErrorMessage(DEFAULT_NO_SLIDE_ERROR);
             return;
@@ -126,12 +125,29 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
 
         JFileChooser chooser = new JFileChooser();
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            File pictureFile = chooser.getSelectedFile();
+            File selectedFile = chooser.getSelectedFile();
 
-            PictureSlide currentSlide = (PictureSlide) _slides.get(currentSlideIndex);
-            currentSlide.setPictureFile(pictureFile);
+            AbstractSlide currentSlide = _slides.get(currentSlideIndex);
+            SlideType currentType = currentSlide.getType();
 
-            currentSlideManager.loadPicture(pictureFile.getAbsolutePath());
+            if (!currentSlide.isFileNameSupported(selectedFile.getName())) {
+                showErrorMessage(String.format("The file '%s' is not supported for slide '%s'", selectedFile.getName(), currentType));
+                return;
+            }
+
+            currentSlide.setSlideFile(selectedFile);
+            try {
+                if (currentType == SlideType.Picture) {
+                    currentSlideManager.loadPictureFromFile(selectedFile, Rotation.NO_ROTATION);
+                } else if (currentType == SlideType.Video) {
+                    showInformationMessage("The video was added to the slide");
+                    currentSlideManager.loadPictureFromFile(FileResources.okPicture, Rotation.NO_ROTATION);
+                } else {
+                    showErrorMessage("Not supported type :" + currentType.toString());
+                }
+            } catch (Exception ex) {
+                showErrorMessage(ex.getMessage());
+            }
         }
     }
 
@@ -140,11 +156,13 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
         if (pictureToLoad == null) {
             pictureToLoad = FileResources.noPictureAvailable;
         }
-
-        currentSlideManager.loadPicture(pictureToLoad.getAbsolutePath());
-
-        for (SoundElement element : pictureSlide.getSoundElements()) {
-            addNewSoundElementToCurrentSlide(element);
+        try {
+            currentSlideManager.loadPictureFromFile(pictureToLoad, pictureSlide.getRotation());
+            for (SoundElement element : pictureSlide.getSoundElements()) {
+                addNewSoundElementToCurrentSlide(element);
+            }
+        } catch (Exception ex) {
+            showErrorMessage("Error during loading of picture slide " + ex.getMessage());
         }
     }
 
@@ -251,7 +269,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
         }
     }
 
-    private void addNewSlide() {
+    private void addNewSlide(SlideType type) {
         if (currentSlideIndex != _slidesButtons.size() - 1) {
             //TODO: implement insert in the middle
 
@@ -273,22 +291,42 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
             IndexedButton indexedButton = (IndexedButton) e.getSource();
             onSlideSelected(indexedButton.getIndex());
         });
-
-        currentSlideManager.loadPicture(FileResources.noPictureAvailable.getAbsolutePath());
-
-        //TODO: maybe change to the dimension of the panel
         Dimension buttonSize = new Dimension(SLIDE_BUTTON_SIZE, SLIDE_BUTTON_SIZE);
         setElementConstSize(newSlideButton, buttonSize);
 
-        PictureSlide newPictureSlide = new PictureSlide();
+        //TODO: maybe change to the dimension of the panel
 
-        addToContainers(currentSlideIndex, newSlideButton, newPictureSlide);
+        AbstractSlide newSlide = createNewSlide(type);
+
+        try {
+            if (type == SlideType.Picture) {
+                currentSlideManager.loadPictureFromFile(FileResources.noPictureAvailable, Rotation.NO_ROTATION);
+            } else if (type == SlideType.Video) {
+                currentSlideManager.loadPictureFromFile(FileResources.noVideoAvailable, Rotation.NO_ROTATION);
+            } else {
+                throw new UnsupportedOperationException("Not supported type" + type.toString());
+            }
+        } catch (Exception ex) {
+            showErrorMessage(ex.getMessage());
+        }
+
+        addToContainers(currentSlideIndex, newSlideButton, newSlide);
 
         constraints.anchor = GridBagConstraints.FIRST_LINE_START;
         setSquareInsets(10);
         setConstraints(currentSlideIndex, 0, 0, 0);
         lessonSlidesPanel.add(newSlideButton, constraints);
         lessonSlidesPanel.revalidate();
+    }
+
+    private AbstractSlide createNewSlide(SlideType type) {
+        if (type == SlideType.Picture) {
+            return new PictureSlide();
+        } else if (type == SlideType.Video) {
+            return new VideoSlide();
+        } else {
+            throw new UnsupportedOperationException("Not supported type" + type.toString());
+        }
     }
 
     private void saveCurrentSlide() {
@@ -320,13 +358,19 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
         loadSlide(currentSlideIndex);
     }
 
-    private void loadSlide(Integer index){
+    private void loadSlide(Integer index) {
         AbstractSlide slide = _slides.get(index);
         if (slide instanceof PictureSlide) {
             loadPictureSlide((PictureSlide) slide);
+        } else if (slide instanceof VideoSlide) {
+            loadVideoSlide((VideoSlide) slide);
         } else {
             showErrorMessage("slide is not supported type" + slide.getClass().getTypeName());
         }
+    }
+
+    private void loadVideoSlide(VideoSlide slide) {
+
     }
 
     private void onDeleteSoundRegion() {
@@ -366,6 +410,39 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
         //TODO: maybe switch to the panel of sounds
         setAddSoundRegionButton();
         setAddRemoveSoundButton();
+        setRotateImageButton();
+    }
+
+    private void setRotateImageButton() {
+        JButton rotateImage = new JButton("Rotate Slide");
+        rotateImage.addActionListener(e -> onRotateImage());
+        setConstraints(0, 6, 1, 1);
+        commandsPanel.add(rotateImage, constraints);
+    }
+
+    private void onRotateImage() {
+        if (currentSlideIndex < 0) {
+            showErrorMessage(MessageErrors.NO_SLIDE_TO_EXECUTE_ON);
+            return;
+        }
+        AbstractSlide slide = _slides.get(currentSlideIndex);
+        if (!(slide instanceof PictureSlide)) {
+            showErrorMessage(MessageErrors.NOT_SUPPORTED_FOR_SLIDE);
+            return;
+        }
+        File pictureFile = ((PictureSlide) slide).getPictureFile();
+
+        if (pictureFile == null) { // No picture was selected
+            return;
+        }
+        slide.rotateSlide();
+        Rotation pictureRotation = slide.getRotation();
+
+        try {
+            currentSlideManager.loadPictureFromFile(pictureFile, pictureRotation);
+        } catch (Exception ex) {
+            showErrorMessage("Error during rotating of the picture " + ex.getMessage());
+        }
     }
 
     private void setAddRemoveSoundButton() {
@@ -394,11 +471,11 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
     }
 
     private void setChoosePictureButton() {
-        JButton choosePicture = new JButton("Choose Picture");
-        choosePicture.addActionListener(e -> choosePicture());
+        JButton chooseContentFile = new JButton("Select Slide's Content");
+        chooseContentFile.addActionListener(e -> chooseFile());
         setSquareInsets(DEFAULT_BUTTONS_INSETS);
         setConstraints(0, 2, 1, 1);
-        commandsPanel.add(choosePicture, constraints);
+        commandsPanel.add(chooseContentFile, constraints);
     }
 
     private void setCreateNewSlideButton() {
@@ -407,10 +484,10 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
         JPopupMenu popupMenu = new JPopupMenu();
 
         JMenuItem pictureSlide = new JMenuItem("Picture Slide");
-        pictureSlide.addActionListener(e -> addNewSlide());
+        pictureSlide.addActionListener(e -> addNewSlide(SlideType.Picture));
 
         JMenuItem videoSlide = new JMenuItem("Video Slide");
-        videoSlide.addActionListener(e -> addNewVideoSlide());
+        videoSlide.addActionListener(e -> addNewSlide(SlideType.Video));
 
         popupMenu.add(pictureSlide);
         popupMenu.add(videoSlide);
@@ -425,10 +502,6 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
         setConstraints(0, 0, 1, 1);
 
         commandsPanel.add(createButton, constraints);
-    }
-
-    private void addNewVideoSlide() {
-        //TODO: implement
     }
 
     private void setMainMenuButton() {
