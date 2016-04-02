@@ -7,10 +7,7 @@ import SlideObjects.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
@@ -19,14 +16,14 @@ import java.util.UUID;
 /**
  * Created by Evgeniy on 11/21/2015.
  */
-public class CreateLessonScreen extends AbstractApplicationScreen {
-    private static final String DEFAULT_NO_SLIDE_ERROR = "No slide was created !";
-    private static final String CANNOT_SEND_MAIL_ERROR = "Cannot send mail !";
-    private static final String UNEXPECTED_ERROR = "Something very bad has happened";
+public class CreateLessonScreen extends AbstractEmptyScreen {
+
     private static final String MAIL_TO_HEADER = "MailTo:evgenhvost@gmail.com?Subject=";
 
     private static final int TEXT_AREA_HEIGHT = 100;
     private static final int SLIDE_BUTTON_SIZE = 80;
+
+//    private HashMap<SlideType, AbstractSlideManager> slideTypeToManager = new HashMap<>();
 
     private final CurrentSlideManager currentSlideManager;
 
@@ -51,8 +48,33 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
     public CreateLessonScreen() {
         super();
 
+        //TODO: use this code for resizing of a window
+//        frame.addComponentListener(new ComponentListener() {
+//            public void componentResized(ComponentEvent e) {
+//                // do stuff
+//            }
+//        });
+
+
+// call onExit() when cross is clicked
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                //TODO: add saving options
+                boolean dataSaved = false;
+                onExitApp(dataSaved);
+            }
+        });
+
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setDynamicBounds();
+        setScreenPanels();
+        setPanelsContent();
+
         setMenuPanelButtons();
         setCommandsPanelButtons();
+
+        //       slideTypeToManager.put(SlideType.Picture, new PictureSlideManager());
+        //       slideTypeToManager.put(SlideType.Picture, new VideoSlideManager());
 
         this.currentSlideManager = new CurrentSlideManager(currentSlidePanel, soundsPanel);
     }
@@ -67,7 +89,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
 
     private void addSound() {
         if (currentSlideIndex < 0) {
-            showErrorMessage(DEFAULT_NO_SLIDE_ERROR);
+            showErrorMessage(MessageErrors.DEFAULT_NO_SLIDE_ERROR);
             return;
         }
 
@@ -77,7 +99,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
 
     public void addNewSoundElementToCurrentSlide(SoundElement soundElement) {
         if (soundElement == null) {
-            showErrorMessage(UNEXPECTED_ERROR);
+            showErrorMessage(MessageErrors.UNEXPECTED_ERROR);
             return;
         }
 
@@ -119,7 +141,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
 
     private void chooseFile() {
         if (currentSlideIndex < 0) {
-            showErrorMessage(DEFAULT_NO_SLIDE_ERROR);
+            showErrorMessage(MessageErrors.DEFAULT_NO_SLIDE_ERROR);
             return;
         }
 
@@ -175,7 +197,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
         }
 
         if (currentSlideIndex == -1) {
-            showErrorMessage(DEFAULT_NO_SLIDE_ERROR);
+            showErrorMessage(MessageErrors.DEFAULT_NO_SLIDE_ERROR);
             return;
         }
 
@@ -198,8 +220,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
         }
     }
 
-    @Override
-    protected void setScreenPanels() {
+    private void setScreenPanels() {
         currentSlidePanel = new JPanel();
         soundsPanel = new JPanel();
         lessonSlidesPanel = new JPanel();
@@ -207,8 +228,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
         commandsPanel = new JPanel();
     }
 
-    @Override
-    protected void setPanelsContent() {
+    private void setPanelsContent() {
         //TODO: maybe switch to a fixed size according to the tablet size
 
         //TODO: switch to gridbag constraints
@@ -539,7 +559,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
 
     private void sendMail(String subject) {
         if (!Desktop.isDesktopSupported()) {
-            showErrorMessage(CANNOT_SEND_MAIL_ERROR + "\nupgrade to a newer Java version");
+            showErrorMessage(MessageErrors.CANNOT_SEND_MAIL_ERROR + "\nupgrade to a newer Java version");
             return;
         }
 
@@ -548,7 +568,19 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
             URI uri = new URI(MAIL_TO_HEADER + subject);
             desktop.mail(uri);
         } catch (Exception e) {
-            showErrorMessage(CANNOT_SEND_MAIL_ERROR + "\n" + e.getMessage());
+            showErrorMessage(MessageErrors.CANNOT_SEND_MAIL_ERROR + "\n" + e.getMessage());
+        }
+    }
+
+    private void setDynamicBounds() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        SCREEN_WIDTH = (int) screenSize.getWidth() - 100;
+        SCREEN_HEIGHT = (int) screenSize.getHeight() - 100;
+
+        if (SCREEN_HEIGHT > 600) {
+            setBounds(X_SCREEN_START_FROM, Y_SCREEN_START_FROM, SCREEN_WIDTH, SCREEN_HEIGHT);
+        } else {
+            //TODO: implement for a small screen
         }
     }
 }

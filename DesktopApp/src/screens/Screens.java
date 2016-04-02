@@ -10,7 +10,6 @@ public class Screens
 {
     protected static JFrame WelcomeScreen = new WelcomeScreen();
     protected static CreateLessonScreen CreateLessonScreen = new CreateLessonScreen();
-    protected static JFrame ModifyLessonScreen = new ModifyLessonScreen();
     protected static SoundAreaScreen SoundAreaScreen = new SoundAreaScreen();
     protected static SettingScreen SettingScreen = new SettingScreen();
 

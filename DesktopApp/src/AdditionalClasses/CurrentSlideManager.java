@@ -22,7 +22,6 @@ import java.util.UUID;
  */
 public class CurrentSlideManager {
     private final GridBagConstraints pictureConstraints;
-    //TODO: extend this class to abstract + picture + video
 
     private Map<UUID, UniqueTextPane> slideSoundAreas = new HashMap<>();
     private Map<UUID, SoundElement> slideSoundElements = new HashMap<>();
@@ -90,13 +89,6 @@ public class CurrentSlideManager {
         clearPanels();
     }
 
-    private void clearPanels() {
-        currentSlide.removeAll();
-        currentSlide.repaint();
-        soundsPanel.removeAll();
-        soundsPanel.repaint();
-    }
-
     public void loadPictureFromFile(File imageFile, Rotation pictureRotation) throws IOException {
         currentSlide.removeAll();
 
@@ -136,5 +128,12 @@ public class CurrentSlideManager {
         int newHeight = (int) (imageHeight * factor);
 
         return image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+    }
+
+    private void clearPanels() {
+        currentSlide.removeAll();
+        currentSlide.repaint();
+        soundsPanel.removeAll();
+        soundsPanel.repaint();
     }
 }
