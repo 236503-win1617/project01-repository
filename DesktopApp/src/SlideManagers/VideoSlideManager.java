@@ -41,9 +41,9 @@ public class VideoSlideManager extends AbstractSlideManager {
 
         File videoFile = currentSlide.getVideoFile();
         if (videoFile == null) {
-            loadPictureFromFile(FileResources.noVideoAvailable, Rotation.NO_ROTATION);
+            loadPictureFromFile(FileResources.getNoVideoStream(), Rotation.NO_ROTATION);
         } else {
-            loadPictureFromFile(FileResources.okPicture, currentSlide.getRotation());
+            loadPictureFromFile(FileResources.getOkStream(), currentSlide.getRotation());
             setVideoFileTextPane(videoFile);
         }
     }
@@ -92,7 +92,7 @@ public class VideoSlideManager extends AbstractSlideManager {
                     currentSlide.setSlideFile(videoFile);
                     Screens.CreateLessonScreen.showInformationMessage("The video was added to the slide");
 
-                    loadPictureFromFile(FileResources.okPicture, Rotation.NO_ROTATION);
+                    loadPictureFromFile(FileResources.getOkStream(), Rotation.NO_ROTATION);
                     setVideoFileTextPane(videoFile);
                 } catch (Exception ex) {
                     Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());

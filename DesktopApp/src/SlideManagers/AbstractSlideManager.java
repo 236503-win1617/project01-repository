@@ -10,8 +10,8 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by Evgeniy on 4/2/2016.
@@ -63,7 +63,7 @@ public abstract class AbstractSlideManager {
         constraints.gridy = grid_y;
     }
 
-    protected void loadPictureFromFile(File imageFile, Rotation pictureRotation) throws IOException {
+    protected void loadPictureFromFile(InputStream imageFile, Rotation pictureRotation) throws IOException {
         currentSlidePanel.removeAll();
 
         BufferedImage image = ImageIO.read(imageFile);

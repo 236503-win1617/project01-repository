@@ -16,7 +16,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -49,14 +51,15 @@ public class PictureSlideManager extends AbstractSlideManager {
         }
 
         File pictureFile = currentSlide.getPictureFile();
-
-        if (pictureFile == null) { // No picture was selected
-            return;
+        if (pictureFile == null) {
+            return; // No picture was selected
         }
+
+        InputStream pictureStream = new FileInputStream(pictureFile);
         currentSlide.rotateSlide();
         Rotation pictureRotation = currentSlide.getRotation();
 
-        loadPictureFromFile(pictureFile, pictureRotation);
+        loadPictureFromFile(pictureStream, pictureRotation);
     }
 
     @Override
@@ -69,11 +72,13 @@ public class PictureSlideManager extends AbstractSlideManager {
 
         currentSlide = (PictureSlide) slide;
 
-        File pictureToLoad = currentSlide.getPictureFile();
-        if (pictureToLoad == null) {
-            pictureToLoad = FileResources.noPictureAvailable;
+        InputStream streamToLoad = FileResources.getNoPictureStream();
+        File pictureFile = currentSlide.getPictureFile();
+        if (pictureFile != null) {
+            streamToLoad = new FileInputStream(pictureFile);
         }
-        loadPictureFromFile(pictureToLoad, currentSlide.getRotation());
+
+        loadPictureFromFile(streamToLoad, currentSlide.getRotation());
 
         for (SoundElement element : currentSlide.getSoundElements()) {
             addNewSoundElement(element);
@@ -179,7 +184,7 @@ public class PictureSlideManager extends AbstractSlideManager {
 
             currentSlide.setSlideFile(selectedFile);
             try {
-                loadPictureFromFile(selectedFile, Rotation.NO_ROTATION);
+                loadPictureFromFile(new FileInputStream(selectedFile), Rotation.NO_ROTATION);
             } catch (Exception ex) {
                 Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());
             }
