@@ -38,24 +38,24 @@ public class CreateXmlFactory {
 
                     File pictureFile = item.getPictureFile();
                     String fileName = (pictureFile == null) ? "" : pictureFile.toString();
-                    String [] bits = fileName.split("\\\\");
-                    if(bits.length<2){
-                    	bits = fileName.split("////");
+                    String [] relPath = fileName.split("\\\\");
+                    if(relPath.length<2){
+                    	relPath = fileName.split("////");
                     }
-                    String lastOne = bits[bits.length-1];
-                    pictureElement.addElement("image_file").addText("/AAImages/"+lastOne);
+                    String lastOne = relPath[relPath.length-1];
+                    pictureElement.addElement("image_file").addText("./"+lastOne);
                     Element soundsList = pictureElement.addElement("sounds_list");
                     for (SoundElement soundItem : item.getSoundElements()) {
                         Element soundButton = soundsList.addElement("sound_button");
                         String soundName=soundItem.soundFile.toString();
-                        String [] bits2 = soundName.split("\\\\");
-                        if(bits2.length<2){
-                        	bits2 = soundName.split("////");
+                        String [] relPath2 = soundName.split("\\\\");
+                        if(relPath2.length<2){
+                        	relPath2 = soundName.split("////");
                         }
-                        String lastOne2 = bits2[bits2.length-1];
+                        String lastOne2 = relPath2[relPath2.length-1];
 
                         soundButton.addElement("sound_file")
-                                .addText("/AASounds/"+lastOne2);
+                                .addText("./"+lastOne2);
                         soundButton.addElement("start_x")
                                 .addText(Integer.toString(soundItem.start_x));
                         soundButton.addElement("start_y")
@@ -74,7 +74,6 @@ public class CreateXmlFactory {
 		}
 		OutputFormat format = OutputFormat.createPrettyPrint();
 		XMLWriter writer;
-	    //Random random = new Random();
 	    int counter = 0;
 		File f = new File(".\\xmlDir\\db"+Integer.toString(counter)+".xml");
 	    while(f.exists()) { 

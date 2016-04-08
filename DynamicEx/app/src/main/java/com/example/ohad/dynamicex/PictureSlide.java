@@ -42,7 +42,7 @@ public class PictureSlide extends Slide {
 
         // Set background
 
-        File imgFile = new File(Environment.getExternalStorageDirectory().getPath() + path);
+        File imgFile = new File(path);
         if(imgFile.exists()){
             //Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             Bitmap myBitmap = decodeSampledBitmapFromFile(imgFile.getAbsolutePath(), 250, 250);
@@ -126,7 +126,7 @@ public class PictureSlide extends Slide {
                     mp.reset();
                     mp.release();
                 }
-                mp = MediaPlayer.create(context, Uri.parse(Environment.getExternalStorageDirectory().getPath() + button.getPath()));
+                mp = MediaPlayer.create(context, Uri.parse(button.getPath()));
                 mp.start();
             }
         });

@@ -1,5 +1,7 @@
 package com.example.ohad.dynamicex;
 
+import android.widget.Toast;
+
 import java.io.FileInputStream;
 import java.util.ArrayList;
 
@@ -13,22 +15,13 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 public class XmlParser {
-	private String path;
 
-	public enum Game {
-		COLORS,NUMBERS,ANIMALS,MEMORY
-	}
-
-	XmlParser(String path) {
-		this.path = path;
-	}
-
-	void parse(Lesson lesson) { // parse(Lesson lesson)
+	void parse(String xmlPath, String lessonPath, Lesson lesson) { // parse(Lesson lesson)
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		try {
 			DocumentBuilder builder = factory.newDocumentBuilder();
 
-			FileInputStream fis = new FileInputStream(this.path);
+			FileInputStream fis = new FileInputStream(xmlPath);
 			InputSource is = new InputSource(fis);
 			Document doc = builder.parse(is);
 
@@ -45,12 +38,11 @@ public class XmlParser {
 					Element e = (Element) n;
 					//Get the type of slide
 					String type = e.getElementsByTagName("slide_type").item(0).getTextContent();
-					System.out.println(type);
 
 					if (type.equals("Picture")) {
 						//Get the path of picture
 						String picturePath = e.getElementsByTagName("image_file").item(0).getTextContent();
-						System.out.println(picturePath);
+						picturePath = lessonPath + picturePath;
 
 						//Iterate over all the buttons
 						NodeList nButtons = e.getElementsByTagName("sound_button");
@@ -62,6 +54,7 @@ public class XmlParser {
 
 								//Get the path for sound file
 								String bSoundPath = eBut.getElementsByTagName("sound_file").item(0).getTextContent();
+								bSoundPath = lessonPath + bSoundPath;
 
 								//Get the start x coordinate
 								int bStartX = Integer.parseInt(eBut.getElementsByTagName("start_x").item(0).getTextContent());
@@ -89,7 +82,6 @@ public class XmlParser {
 					}
 
 				}
-
 			}
 
 		} catch (Exception ex) {
