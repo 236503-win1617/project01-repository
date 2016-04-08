@@ -25,6 +25,6 @@ public class VideoSlide extends AbstractSlide {
 
     @Override
     protected String[] getSupportedFormats() {
-        return new String[]{"wmv", "avi", "mpg", "mpeg"};
+        return new String[]{"wmv", "avi", "mpg", "mpeg", "mp4", "mkv"};
     }
 }

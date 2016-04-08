@@ -1,4 +1,4 @@
-package AdditionalClasses;
+package Resources;
 
 import java.io.File;
 
@@ -10,9 +10,8 @@ public class FileResources {
     private static final String NO_VIDEO_FILE_NAME = "desktopApp/resources/no_video.jpg";
     private static final String OK_FILE_NAME = "desktopApp/resources/ok.jpg";
 
+    //TODO: maybe switch to resource loader
     private static File getFileSource(String filename) {
-        //TODO: maybe switch to resource loader
-
         return new File(filename);
     }
 

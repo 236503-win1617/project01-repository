@@ -1,209 +1,92 @@
 package screens;
 
-import AdditionalClasses.*;
+import AdditionalClasses.IndexedButton;
+import AdditionalClasses.SoundElement;
 import Factories.ComponentsFactory;
 import Factories.CreateXmlFactory;
-import SlideObjects.*;
+import Resources.MessageErrors;
+import SlideManagers.AbstractSlideManager;
+import SlideManagers.PictureSlideManager;
+import SlideManagers.VideoSlideManager;
+import SlideObjects.AbstractSlide;
+import SlideObjects.PictureSlide;
+import SlideObjects.SlideType;
+import SlideObjects.VideoSlide;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.io.File;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.UUID;
+import java.util.HashMap;
 
 /**
  * Created by Evgeniy on 11/21/2015.
  */
 public class CreateLessonScreen extends AbstractEmptyScreen {
-
     private static final String MAIL_TO_HEADER = "MailTo:evgenhvost@gmail.com?Subject=";
 
-    private static final int TEXT_AREA_HEIGHT = 100;
     private static final int SLIDE_BUTTON_SIZE = 80;
 
-//    private HashMap<SlideType, AbstractSlideManager> slideTypeToManager = new HashMap<>();
-
-    private final CurrentSlideManager currentSlideManager;
+    private HashMap<SlideType, AbstractSlideManager> slideTypeToManager = new HashMap<>();
+    private AbstractSlideManager currentSlideManager;
 
     //region Panels
 
-    private JPanel currentSlidePanel;
-    private JPanel soundsPanel;
-    private JPanel lessonSlidesPanel;
-    private JPanel commandsPanel;
-    private JPanel screenMenuPanel;
+    private JPanel currentSlidePanel = new JPanel();
+    private JPanel soundsPanel = new JPanel();
+    private JPanel lessonSlidesPanel = new JPanel();
+    private JPanel commandsPanel = new JPanel();
+    private JPanel screenMenuPanel = new JPanel();
 
     //endregion
-
-    //TODO: Implement good saving
 
     private ArrayList<IndexedButton> _slidesButtons = new ArrayList<>();
     private ArrayList<AbstractSlide> _slides = new ArrayList<>();
 
-    private Integer currentSlideIndex = -1;
-    private UUID selectedSoundId;
+    private int currentSlideIndex = -1;
 
     public CreateLessonScreen() {
         super();
-
-        //TODO: use this code for resizing of a window
-//        frame.addComponentListener(new ComponentListener() {
-//            public void componentResized(ComponentEvent e) {
-//                // do stuff
-//            }
-//        });
-
-
-// call onExit() when cross is clicked
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                //TODO: add saving options
                 boolean dataSaved = false;
                 onExitApp(dataSaved);
             }
         });
 
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         setDynamicBounds();
-        setScreenPanels();
-        setPanelsContent();
+        setPanelsLocations();
 
         setMenuPanelButtons();
         setCommandsPanelButtons();
 
-        //       slideTypeToManager.put(SlideType.Picture, new PictureSlideManager());
-        //       slideTypeToManager.put(SlideType.Picture, new VideoSlideManager());
-
-        this.currentSlideManager = new CurrentSlideManager(currentSlidePanel, soundsPanel);
+        slideTypeToManager.put(SlideType.Picture, new PictureSlideManager(currentSlidePanel, commandsPanel, soundsPanel));
+        slideTypeToManager.put(SlideType.Video, new VideoSlideManager(currentSlidePanel, commandsPanel));
     }
 
-    private void setAddSoundRegionButton() {
-        JButton addSoundButton = new JButton("Add Sound");
-        addSoundButton.addActionListener(e -> addSound());
-        setSquareInsets(DEFAULT_BUTTONS_INSETS);
-        setConstraints(0, 3, 1, 1);
-        commandsPanel.add(addSoundButton, constraints);
-    }
-
-    private void addSound() {
-        if (currentSlideIndex < 0) {
-            showErrorMessage(MessageErrors.DEFAULT_NO_SLIDE_ERROR);
-            return;
-        }
-
-        Screens.SoundAreaScreen.setVisible(true);
-        setVisible(false);
-    }
-
-    public void addNewSoundElementToCurrentSlide(SoundElement soundElement) {
+    //TODO: remove this method when switching to different sound selecting
+    //TODO: make a nicer text display
+    public void addNewSoundElement(SoundElement soundElement) {
         if (soundElement == null) {
             showErrorMessage(MessageErrors.UNEXPECTED_ERROR);
             return;
         }
 
-        //TODO: make a nicer text display
-
-        UUID uuid = UUID.randomUUID();
-        UniqueTextPane soundTextPane = ComponentsFactory.createUniqueTextPane(uuid, soundElement.toString());
-
-        soundTextPane.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                UniqueTextPane textArea = (UniqueTextPane) e.getSource();
-                selectedSoundId = textArea.getId();
-            }
-        });
-
-        Dimension soundAreaDimension = getSoundAreaDimension();
-        setElementConstSize(soundTextPane, soundAreaDimension);
-
-        constraints.anchor = GridBagConstraints.PAGE_START;
-        setSquareInsets(DEFAULT_BUTTONS_INSETS);
-        setConstraints(0, currentSlideManager.getSoundsCount(), 0, 0);
-
-        currentSlideManager.addSoundToSlide(soundElement, soundTextPane, constraints);
+        PictureSlideManager manager = (PictureSlideManager) currentSlideManager;
+        manager.addNewSoundElement(soundElement);
     }
 
-    private void setElementConstSize(JComponent element, Dimension dimension) {
-        element.setPreferredSize(dimension);
-        element.setMaximumSize(dimension);
-        element.setMinimumSize(dimension);
-    }
-
-    private Dimension getSoundAreaDimension() {
-        int width = soundsPanel.getWidth() - (DEFAULT_BUTTONS_INSETS * 2);
-        int height = TEXT_AREA_HEIGHT;
-
-        return new Dimension(width, height);
-    }
-
-    private void chooseFile() {
-        if (currentSlideIndex < 0) {
-            showErrorMessage(MessageErrors.DEFAULT_NO_SLIDE_ERROR);
-            return;
-        }
-
-        JFileChooser chooser = new JFileChooser();
-        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = chooser.getSelectedFile();
-
-            AbstractSlide currentSlide = _slides.get(currentSlideIndex);
-            SlideType currentType = currentSlide.getType();
-
-            if (!currentSlide.isFileNameSupported(selectedFile.getName())) {
-                showErrorMessage(String.format("The file '%s' is not supported for slide '%s'", selectedFile.getName(), currentType));
-                return;
-            }
-
-            currentSlide.setSlideFile(selectedFile);
-            try {
-                if (currentType == SlideType.Picture) {
-                    currentSlideManager.loadPictureFromFile(selectedFile, Rotation.NO_ROTATION);
-                } else if (currentType == SlideType.Video) {
-                    showInformationMessage("The video was added to the slide");
-                    currentSlideManager.loadPictureFromFile(FileResources.okPicture, Rotation.NO_ROTATION);
-                } else {
-                    showErrorMessage("Not supported type :" + currentType.toString());
-                }
-            } catch (Exception ex) {
-                showErrorMessage(ex.getMessage());
-            }
-        }
-    }
-
-    private void loadPictureSlide(PictureSlide pictureSlide) {
-        File pictureToLoad = pictureSlide.getPictureFile();
-        if (pictureToLoad == null) {
-            pictureToLoad = FileResources.noPictureAvailable;
-        }
-        try {
-            currentSlideManager.loadPictureFromFile(pictureToLoad, pictureSlide.getRotation());
-            for (SoundElement element : pictureSlide.getSoundElements()) {
-                addNewSoundElementToCurrentSlide(element);
-            }
-        } catch (Exception ex) {
-            showErrorMessage("Error during loading of picture slide " + ex.getMessage());
-        }
-    }
-
+    //TODO: implement delete in the middle
     private void deleteSlide() {
         if (currentSlideIndex != _slidesButtons.size() - 1) {
-            //TODO: implement delete in the middle
-
             showErrorMessage("Delete is supported only for the last slide");
-            return;
-        }
-
-        if (currentSlideIndex == -1) {
+        } else if (currentSlideIndex == -1) {
             showErrorMessage(MessageErrors.DEFAULT_NO_SLIDE_ERROR);
-            return;
-        }
-
-        int result = showYesNoMessage("Are you sure you want to delete the slide ?");
-
-        if (result == JOptionPane.YES_OPTION) {
+        } else if (showYesNoMessage("Are you sure you want to delete the slide ?") == JOptionPane.YES_OPTION) {
             currentSlideManager.clearContent();
 
             JButton button = _slidesButtons.get(currentSlideIndex);
@@ -211,27 +94,21 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
             lessonSlidesPanel.remove(button);
             lessonSlidesPanel.repaint();
 
-            removeIndexFromContainers(currentSlideIndex);
+            _slides.remove(currentSlideIndex);
+            _slidesButtons.remove(currentSlideIndex);
+
             currentSlideIndex--;
 
             if (currentSlideIndex >= 0) {
-                loadSlide(currentSlideIndex);
+                AbstractSlide slide = _slides.get(currentSlideIndex);
+                loadSlide(slide);
             }
         }
     }
 
-    private void setScreenPanels() {
-        currentSlidePanel = new JPanel();
-        soundsPanel = new JPanel();
-        lessonSlidesPanel = new JPanel();
-        screenMenuPanel = new JPanel();
-        commandsPanel = new JPanel();
-    }
-
-    private void setPanelsContent() {
-        //TODO: maybe switch to a fixed size according to the tablet size
-
-        //TODO: switch to gridbag constraints
+    //TODO: maybe switch to a fixed size according to the tablet size
+    //TODO: switch to gridbag constraints
+    private void setPanelsLocations() {
         setPanel(currentSlidePanel, Color.BLACK, (SCREEN_WIDTH * 4) / 6, (SCREEN_HEIGHT * 4) / 6, BorderLayout.CENTER);
         setPanel(commandsPanel, Color.GREEN, SCREEN_WIDTH / 6, (SCREEN_HEIGHT * 5) / 6, BorderLayout.EAST);
         setPanel(screenMenuPanel, Color.RED, (SCREEN_WIDTH * 4) / 6, SCREEN_HEIGHT / 6, BorderLayout.NORTH);
@@ -254,8 +131,10 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         add(panel, location);
     }
 
+    //TODO: Reimplement
+    //TODO: add saving options
+    //TODO: no saving for default name - auto save only after first successful 'save as'
     private void onAutoSaveCurrentLesson(boolean autosave) {
-        //TODO: Reimplement
         showInformationMessage("Autosave - Saving lesson");
         String name = "Default name ";
         CreateXmlFactory.generate(_slides, name);
@@ -289,21 +168,19 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         }
     }
 
-    private void addNewSlide(SlideType type) {
+    //TODO: implement insert in the middle
+    //TODO: add a picture to the button for v4.0
+    private void addNewSlide(AbstractSlide newSlide) {
         if (currentSlideIndex != _slidesButtons.size() - 1) {
-            //TODO: implement insert in the middle
-
             showErrorMessage("insert is supported only for the last slide");
             return;
         }
 
-        if (currentSlideIndex >= 0) {
-            saveCurrentSlide();
+        if (currentSlideIndex > -1) {
+            currentSlideManager.saveDataToCurrentSlide();
+            currentSlideManager.clearContent();
         }
 
-        currentSlideManager.clearContent();
-
-        //TODO: maybe add a picture to the button for v3.0
         currentSlideIndex++;
 
         IndexedButton newSlideButton = new IndexedButton(currentSlideIndex, "In " + currentSlideIndex);
@@ -312,56 +189,17 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
             onSlideSelected(indexedButton.getIndex());
         });
         Dimension buttonSize = new Dimension(SLIDE_BUTTON_SIZE, SLIDE_BUTTON_SIZE);
-        setElementConstSize(newSlideButton, buttonSize);
+        ComponentsFactory.setElementConstSize(newSlideButton, buttonSize);
 
-        //TODO: maybe change to the dimension of the panel
+        _slides.add(currentSlideIndex, newSlide);
+        _slidesButtons.add(currentSlideIndex, newSlideButton);
 
-        AbstractSlide newSlide = createNewSlide(type);
-
-        try {
-            if (type == SlideType.Picture) {
-                currentSlideManager.loadPictureFromFile(FileResources.noPictureAvailable, Rotation.NO_ROTATION);
-            } else if (type == SlideType.Video) {
-                currentSlideManager.loadPictureFromFile(FileResources.noVideoAvailable, Rotation.NO_ROTATION);
-            } else {
-                throw new UnsupportedOperationException("Not supported type" + type.toString());
-            }
-        } catch (Exception ex) {
-            showErrorMessage(ex.getMessage());
-        }
-
-        addToContainers(currentSlideIndex, newSlideButton, newSlide);
+        loadSlide(newSlide);
 
         constraints.anchor = GridBagConstraints.FIRST_LINE_START;
-        setSquareInsets(10);
         setConstraints(currentSlideIndex, 0, 0, 0);
         lessonSlidesPanel.add(newSlideButton, constraints);
         lessonSlidesPanel.revalidate();
-    }
-
-    private AbstractSlide createNewSlide(SlideType type) {
-        if (type == SlideType.Picture) {
-            return new PictureSlide();
-        } else if (type == SlideType.Video) {
-            return new VideoSlide();
-        } else {
-            throw new UnsupportedOperationException("Not supported type" + type.toString());
-        }
-    }
-
-    private void saveCurrentSlide() {
-        AbstractSlide slide = _slides.get(currentSlideIndex);
-        currentSlideManager.saveDataToSlide(slide);
-    }
-
-    private void addToContainers(int index, IndexedButton button, AbstractSlide slide) {
-        _slides.add(index, slide);
-        _slidesButtons.add(index, button);
-    }
-
-    private void removeIndexFromContainers(int index) {
-        _slides.remove(index);
-        _slidesButtons.remove(index);
     }
 
     private void onSlideSelected(int selectedIndex) {
@@ -369,36 +207,22 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
             return;
         }
 
-        selectedSoundId = null;
-        saveCurrentSlide();
-
+        currentSlideManager.saveDataToCurrentSlide();
         currentSlideManager.clearContent();
+
         currentSlideIndex = selectedIndex;
-
-        loadSlide(currentSlideIndex);
+        AbstractSlide slide = _slides.get(currentSlideIndex);
+        loadSlide(slide);
     }
 
-    private void loadSlide(Integer index) {
-        AbstractSlide slide = _slides.get(index);
-        if (slide instanceof PictureSlide) {
-            loadPictureSlide((PictureSlide) slide);
-        } else if (slide instanceof VideoSlide) {
-            loadVideoSlide((VideoSlide) slide);
-        } else {
-            showErrorMessage("slide is not supported type" + slide.getClass().getTypeName());
-        }
-    }
-
-    private void loadVideoSlide(VideoSlide slide) {
-
-    }
-
-    private void onDeleteSoundRegion() {
-        if (selectedSoundId == null) {
-            showErrorMessage("No Sound Region Selected");
-        } else {
-            currentSlideManager.deleteSoundRegion(selectedSoundId);
-            selectedSoundId = null;
+    //TODO: maybe switch to index loading
+    private void loadSlide(AbstractSlide slide) {
+        try {
+            SlideType slideType = slide.getType();
+            currentSlideManager = slideTypeToManager.get(slideType);
+            currentSlideManager.loadSlide(slide);
+        } catch (Exception ex) {
+            showErrorMessage(MessageErrors.UNEXPECTED_ERROR + ex.getMessage());
         }
     }
 
@@ -412,116 +236,50 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         setHelpButton();
     }
 
-    private void setHelpButton() {
-        JButton helpButton = new JButton("Help");
-        helpButton.addActionListener(e -> showInformationMessage("Help Not supported yet"));
-
-        //TODO: Implement a help screen
-        setSquareInsets(DEFAULT_BUTTONS_INSETS);
-        setConstraints(4, 0, 1, 1);
-        screenMenuPanel.add(helpButton, constraints);
-    }
-
     private void setCommandsPanelButtons() {
-        setChoosePictureButton();
-        setCreateNewSlideButton();
+        setAddPictureSlideButton();
+        setAddVideoSlideButton();
         setDeleteCurrentSlideButton();
-
-        //TODO: maybe switch to the panel of sounds
-        setAddSoundRegionButton();
-        setAddRemoveSoundButton();
-        setRotateImageButton();
-    }
-
-    private void setRotateImageButton() {
-        JButton rotateImage = new JButton("Rotate Slide");
-        rotateImage.addActionListener(e -> onRotateImage());
-        setConstraints(0, 6, 1, 1);
-        commandsPanel.add(rotateImage, constraints);
-    }
-
-    private void onRotateImage() {
-        if (currentSlideIndex < 0) {
-            showErrorMessage(MessageErrors.NO_SLIDE_TO_EXECUTE_ON);
-            return;
-        }
-        AbstractSlide slide = _slides.get(currentSlideIndex);
-        if (!(slide instanceof PictureSlide)) {
-            showErrorMessage(MessageErrors.NOT_SUPPORTED_FOR_SLIDE);
-            return;
-        }
-        File pictureFile = ((PictureSlide) slide).getPictureFile();
-
-        if (pictureFile == null) { // No picture was selected
-            return;
-        }
-        slide.rotateSlide();
-        Rotation pictureRotation = slide.getRotation();
-
-        try {
-            currentSlideManager.loadPictureFromFile(pictureFile, pictureRotation);
-        } catch (Exception ex) {
-            showErrorMessage("Error during rotating of the picture " + ex.getMessage());
-        }
-    }
-
-    private void setAddRemoveSoundButton() {
-        JButton removeSoundButton = new JButton("Remove Sound");
-        removeSoundButton.addActionListener(e -> onDeleteSoundRegion());
-        setConstraints(0, 5, 1, 1);
-        commandsPanel.add(removeSoundButton, constraints);
-    }
-
-    //TODO: maybe implement auto save feature
-    private void setSaveLessonButton() {
-        JButton saveButton = new JButton("Save Lesson");
-        saveButton.addActionListener(e -> onSaveCurrentLesson(false));
-
-        setConstraints(1, 0, 1, 1);
-        screenMenuPanel.add(saveButton, constraints);
+        setRotateSlideButton();
     }
 
     private void setDeleteCurrentSlideButton() {
-        setSquareInsets(DEFAULT_BUTTONS_INSETS);
-        setConstraints(0, 1, 1, 1);
+        setConstraints(0, 2, 1, 1);
         JButton deleteButton = new JButton("Delete Slide");
 
         deleteButton.addActionListener(e -> deleteSlide());
         commandsPanel.add(deleteButton, constraints);
     }
 
-    private void setChoosePictureButton() {
-        JButton chooseContentFile = new JButton("Select Slide's Content");
-        chooseContentFile.addActionListener(e -> chooseFile());
-        setSquareInsets(DEFAULT_BUTTONS_INSETS);
-        setConstraints(0, 2, 1, 1);
-        commandsPanel.add(chooseContentFile, constraints);
-    }
-
-    private void setCreateNewSlideButton() {
-        JButton createButton = ComponentsFactory.createBasicButton("Add New Slide");
-
-        JPopupMenu popupMenu = new JPopupMenu();
-
-        JMenuItem pictureSlide = new JMenuItem("Picture Slide");
-        pictureSlide.addActionListener(e -> addNewSlide(SlideType.Picture));
-
-        JMenuItem videoSlide = new JMenuItem("Video Slide");
-        videoSlide.addActionListener(e -> addNewSlide(SlideType.Video));
-
-        popupMenu.add(pictureSlide);
-        popupMenu.add(videoSlide);
-
-        createButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                popupMenu.show(e.getComponent(), e.getX(), e.getY());
+    private void setRotateSlideButton() {
+        JButton rotateImage = new JButton("Rotate Slide");
+        rotateImage.addActionListener(e -> {
+            if (currentSlideIndex == -1) {
+                showErrorMessage(MessageErrors.NO_SLIDE_TO_EXECUTE_ON);
+            } else {
+                try {
+                    currentSlideManager.onRotateCommand();
+                } catch (Exception ex) {
+                    showErrorMessage("Error during rotate command " + ex.getMessage());
+                }
             }
         });
+        setConstraints(0, 3, 1, 1);
+        commandsPanel.add(rotateImage, constraints);
+    }
 
+    private void setAddPictureSlideButton() {
+        JButton addPictureSlide = new JButton("Add Picture Slide");
+        addPictureSlide.addActionListener(e -> addNewSlide(new PictureSlide()));
         setConstraints(0, 0, 1, 1);
+        commandsPanel.add(addPictureSlide, constraints);
+    }
 
-        commandsPanel.add(createButton, constraints);
+    private void setAddVideoSlideButton() {
+        JButton addPictureSlide = new JButton("Add Video Slide");
+        addPictureSlide.addActionListener(e -> addNewSlide(new VideoSlide()));
+        setConstraints(0, 1, 1, 1);
+        commandsPanel.add(addPictureSlide, constraints);
     }
 
     private void setMainMenuButton() {
@@ -531,32 +289,46 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
             Screens.WelcomeScreen.setVisible(true);
         });
         setConstraints(0, 0, 1, 1);
-        setSquareInsets(DEFAULT_BUTTONS_INSETS);
         screenMenuPanel.add(backButton, constraints);
     }
-
 
     private void setSendFeedbackButton() {
         JButton sendFeedbackButton = new JButton("Send Feedback");
         sendFeedbackButton.addActionListener(e -> sendMail("Send%20Feedback"));
 
         setConstraints(2, 0, 1, 1);
-        setSquareInsets(DEFAULT_BUTTONS_INSETS);
         screenMenuPanel.add(sendFeedbackButton, constraints);
     }
 
+    //TODO: Implement good saving
+    //TODO: maybe implement auto save feature
+    private void setSaveLessonButton() {
+        JButton saveButton = new JButton("Save Lesson");
+        saveButton.addActionListener(e -> onSaveCurrentLesson(false));
+
+        setConstraints(1, 0, 1, 1);
+        screenMenuPanel.add(saveButton, constraints);
+    }
+
+    //TODO: Implement a help screen
+    private void setHelpButton() {
+        JButton helpButton = new JButton("Help");
+        helpButton.addActionListener(e -> showInformationMessage("Help Not supported yet"));
+        setConstraints(4, 0, 1, 1);
+        screenMenuPanel.add(helpButton, constraints);
+    }
 
     private void setReportBugButton() {
         JButton reportBugButton = new JButton("Report Bug");
         reportBugButton.addActionListener(e -> sendMail("Report%20Bug"));
 
         setConstraints(3, 0, 1, 1);
-        setSquareInsets(DEFAULT_BUTTONS_INSETS);
         screenMenuPanel.add(reportBugButton, constraints);
     }
 
     //endregion
 
+    //TODO: Create mail manager class
     private void sendMail(String subject) {
         if (!Desktop.isDesktopSupported()) {
             showErrorMessage(MessageErrors.CANNOT_SEND_MAIL_ERROR + "\nupgrade to a newer Java version");

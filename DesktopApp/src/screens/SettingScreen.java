@@ -1,7 +1,5 @@
 package screens;
 
-import Factories.ComponentsFactory;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -28,7 +26,6 @@ public class SettingScreen extends AbstractEmptyScreen
 
         setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 
-        setSquareInsets(DEFAULT_BUTTONS_INSETS + 5);
         setCreateButton();
         setModifyButton();
 //        setSettingsButton();
@@ -37,20 +34,6 @@ public class SettingScreen extends AbstractEmptyScreen
 
         setLocationRelativeTo(null);
     }
-
-//    private void setAboutButton() {
-//        JButton aboutButton = ComponentsFactory.createBasicButton("About");
-//        aboutButton.addActionListener(e -> showInformationMessage("© Techion - all rights reserved."));
-//        setConstraints(0, 3, 1, 1);
-//        add(aboutButton, constraints);
-//    }
-//
-//    private void setSettingsButton() {
-//        JButton settingsButton = ComponentsFactory.createBasicButton("Settings");
-//        settingsButton.addActionListener(e -> showInformationMessage("Not supported yet !"));
-//        setConstraints(0, 2, 1, 1);
-//        add(settingsButton, constraints);
-//    }
 
     private void setCreateButton() {
         JButton createButton = new JButton(OPTION1);
@@ -65,7 +48,7 @@ public class SettingScreen extends AbstractEmptyScreen
     }
 
     private void setModifyButton() {
-        JButton modifyButton = ComponentsFactory.createBasicButton(OPTION2);
+        JButton modifyButton = new JButton(OPTION2);
         modifyButton.addActionListener(e -> {
             a = 0;
             showInformationMessage("disable auto save");
@@ -77,7 +60,7 @@ public class SettingScreen extends AbstractEmptyScreen
     }
 
     private void setExitButton() {
-        JButton exitButton = ComponentsFactory.createBasicButton(BACK);
+        JButton exitButton = new JButton(BACK);
         exitButton.addActionListener(e -> {
             Screens.WelcomeScreen.setVisible(true);
             Screens.SettingScreen.setVisible(false);

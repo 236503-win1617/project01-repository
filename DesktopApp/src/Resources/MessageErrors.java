@@ -1,4 +1,4 @@
-package AdditionalClasses;
+package Resources;
 
 /**
  * Created by Evgeniy on 3/19/2016.

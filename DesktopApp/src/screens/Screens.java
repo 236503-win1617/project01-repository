@@ -8,10 +8,11 @@ import javax.swing.*;
  */
 public class Screens
 {
-    protected static JFrame WelcomeScreen = new WelcomeScreen();
-    protected static CreateLessonScreen CreateLessonScreen = new CreateLessonScreen();
-    protected static SoundAreaScreen SoundAreaScreen = new SoundAreaScreen();
-    protected static SettingScreen SettingScreen = new SettingScreen();
+    //TODO: Change to protected when stop using sound area screen
+    public static JFrame WelcomeScreen = new WelcomeScreen();
+    public static CreateLessonScreen CreateLessonScreen = new CreateLessonScreen();
+    public static SoundAreaScreen SoundAreaScreen = new SoundAreaScreen();
+    public static SettingScreen SettingScreen = new SettingScreen();
 
     public static void start()
     {
