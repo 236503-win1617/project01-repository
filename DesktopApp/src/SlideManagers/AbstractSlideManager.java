@@ -1,5 +1,6 @@
 package SlideManagers;
 
+import AdditionalClasses.SoundElement;
 import Factories.ComponentsFactory;
 import SlideObjects.AbstractSlide;
 import SlideObjects.Rotation;
@@ -10,6 +11,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -105,4 +107,7 @@ public abstract class AbstractSlideManager {
 
         return image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
     }
+    public abstract void loadPictureFile(File PictureToLoad);
+
+    public abstract void addNewSoundElement(SoundElement soundElement);
 }

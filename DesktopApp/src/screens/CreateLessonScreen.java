@@ -2,8 +2,7 @@ package screens;
 
 import AdditionalClasses.IndexedButton;
 import AdditionalClasses.SoundElement;
-import Factories.ComponentsFactory;
-import Factories.CreateXmlFactory;
+import Factories.*;
 import Resources.MessageErrors;
 import SlideManagers.AbstractSlideManager;
 import SlideManagers.PictureSlideManager;
@@ -13,6 +12,7 @@ import SlideObjects.PictureSlide;
 import SlideObjects.SlideType;
 import SlideObjects.VideoSlide;
 
+import java.io.File;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -67,6 +67,38 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         slideTypeToManager.put(SlideType.Picture, new PictureSlideManager(currentSlidePanel, commandsPanel, soundsPanel));
         slideTypeToManager.put(SlideType.Video, new VideoSlideManager(currentSlidePanel, commandsPanel));
     }
+
+    public void loadExistingLesson(Lesson toLoad){
+        for(Slide s: toLoad.slides){
+            //if its a picture slide
+            //instanceof
+            if(s instanceof Factories.PictureSlide){
+                PictureSlide picSlide = new PictureSlide();
+
+                addNewSlide(picSlide);
+                try {
+                    SlideType slideType = picSlide.getType();
+                    currentSlideManager = slideTypeToManager.get(slideType);
+                    currentSlideManager.loadPictureFile(new File(s.getPath()));
+                    for(DynamicButton b: s.getDynamicButtons()){
+                        SoundElement soundElement = new SoundElement(new File(b.getPath()),b.getStartX(), b.getStartY(), b.getHeight(), b.getWidth());
+                        currentSlideManager.addNewSoundElement(soundElement);
+                    }
+//                    s.getDynamicButtons();
+
+
+
+                    //Screens.CreateLessonScreen.addNewSoundElement(soundElement);
+
+                } catch (Exception ex) {
+                    showErrorMessage(MessageErrors.UNEXPECTED_ERROR + ex.getMessage());
+                }
+            }
+        }
+
+    }
+
+
 
     //TODO: remove this method when switching to different sound selecting
     //TODO: make a nicer text display
