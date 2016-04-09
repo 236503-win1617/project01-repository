@@ -27,6 +27,7 @@ public class WelcomeScreen extends AbstractEmptyScreen {
 
     private void setAboutButton() {
         JButton aboutButton = new JButton("About");
+
         aboutButton.addActionListener(e -> showInformationMessage("© Technion - all rights reserved."));
         setConstraints(0, 3, 1, 1);
         add(aboutButton, constraints);
@@ -55,17 +56,17 @@ public class WelcomeScreen extends AbstractEmptyScreen {
     private void setModifyButton() {
         JButton modifyButton = new JButton("Modify Existing Lesson");
         modifyButton.addActionListener(e -> {
-            JFileChooser chooser = new JFileChooser();
-            chooser.showOpenDialog(Screens.WelcomeScreen);
-            File selectedFile = chooser.getSelectedFile();
+//            JFileChooser chooser = new JFileChooser();
+//            chooser.showOpenDialog(Screens.WelcomeScreen);
+//            File selectedFile = chooser.getSelectedFile();
 
-            
-            Lesson LoadedLeson = new Lesson();
-            XmlParser.parse(selectedFile.getPath(),"xmlDir\\",LoadedLeson);
-            Screens.CreateLessonScreen =  new CreateLessonScreen();
-            Screens.CreateLessonScreen.setVisible(true);
-            Screens.WelcomeScreen.setVisible(false);
-            Screens.CreateLessonScreen.loadExistingLesson(LoadedLeson);
+            Screens.ModifyLesson.run();
+//            Lesson LoadedLeson = new Lesson();
+//            XmlParser.parse(selectedFile.getPath(),"xmlDir\\",LoadedLeson);
+//            Screens.CreateLessonScreen =  new CreateLessonScreen();
+//            Screens.CreateLessonScreen.setVisible(true);
+//            Screens.WelcomeScreen.setVisible(false);
+//            Screens.CreateLessonScreen.loadExistingLesson(LoadedLeson);
             //showInformationMessage("Not supported yet !");
         });
         setConstraints(0, 1, 1, 1);

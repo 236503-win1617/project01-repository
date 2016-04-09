@@ -13,7 +13,7 @@ public class Screens
     public static CreateLessonScreen CreateLessonScreen = new CreateLessonScreen();
     public static SoundAreaScreen SoundAreaScreen = new SoundAreaScreen();
     public static SettingScreen SettingScreen = new SettingScreen();
-
+    public static ModifyLesson ModifyLesson = new ModifyLesson();
     public static void start()
     {
         WelcomeScreen.setVisible(true);
