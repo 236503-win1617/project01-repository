@@ -2,6 +2,7 @@ package screens;
 
 import AdditionalClasses.SoundElement;
 import Factories.ComponentsFactory;
+import SlideObjects.Rotation;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +11,8 @@ import java.awt.event.FocusListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.nio.file.Files;
 
 /**
  * Created by Evgeniy on 12/7/2015.
@@ -174,6 +177,12 @@ public class SoundAreaScreen extends AbstractEmptyScreen
             String filePathToShow = selectedFile.getAbsolutePath();
             String fileIsSelected = "Selected Audio File";
             Color selectedColor = Color.GREEN;
+            try {
+                File NewLocation = new File(".\\xmlDir\\AASounds\\" + selectedFile.getName());
+                Files.copy(selectedFile.toPath(),NewLocation.toPath());
+            } catch (Exception ex) {
+                Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());
+            }
 
             //TODO: validate it can be played
 

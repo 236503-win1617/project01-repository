@@ -11,6 +11,7 @@ import SlideObjects.PictureSlide;
 import SlideObjects.Rotation;
 import screens.Screens;
 
+import java.nio.file.Files;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -167,6 +168,17 @@ public class PictureSlideManager extends AbstractSlideManager {
         Screens.CreateLessonScreen.setVisible(false);
     }
 
+
+    //new
+    public void loadPictureFile(File PictureToLoad){
+        currentSlide.setSlideFile(PictureToLoad);
+        try {
+            loadPictureFromFile(new FileInputStream(PictureToLoad), Rotation.NO_ROTATION);
+        } catch (Exception ex) {
+            Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());
+        }
+    }
+
     private void selectPictureFile() {
         if (currentSlide == null) {
             Screens.CreateLessonScreen.showErrorMessage(MessageErrors.DEFAULT_NO_SLIDE_ERROR);
@@ -185,6 +197,12 @@ public class PictureSlideManager extends AbstractSlideManager {
             currentSlide.setSlideFile(selectedFile);
             try {
                 loadPictureFromFile(new FileInputStream(selectedFile), Rotation.NO_ROTATION);
+
+                //new:
+                //File(String pathname)
+
+                File NewLocation = new File(".\\xmlDir\\AAImages\\" + selectedFile.getName());
+                Files.copy(selectedFile.toPath(),NewLocation.toPath());
             } catch (Exception ex) {
                 Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());
             }

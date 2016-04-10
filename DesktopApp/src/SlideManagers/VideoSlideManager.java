@@ -1,5 +1,6 @@
 package SlideManagers;
 
+import AdditionalClasses.SoundElement;
 import Factories.ComponentsFactory;
 import Resources.FileResources;
 import Resources.MessageErrors;
@@ -111,4 +112,12 @@ public class VideoSlideManager extends AbstractSlideManager {
         setConstraints(0, 1, 1, 1);
         currentSlidePanel.add(videoText, constraints);
     }
+
+    //new
+    public void loadPictureFile(File PictureToLoad) {
+    }
+    public void addNewSoundElement(SoundElement soundElement){
+
+    }
+
 }
