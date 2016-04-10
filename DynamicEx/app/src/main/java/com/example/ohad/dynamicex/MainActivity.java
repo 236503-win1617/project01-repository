@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+
         lesson = new Lesson(MainActivity.this);
 
         String xmlPath = xmlFolder.listFiles()[0].getPath(); // For now, just take the first file in the xml folder

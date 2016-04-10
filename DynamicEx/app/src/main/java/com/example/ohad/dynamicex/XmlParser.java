@@ -84,10 +84,17 @@ public class XmlParser {
 						}
 
 						//
+						//for testing
 						Slide newSlide = new PictureSlide(picturePath, dynamicButtonsArr, dynamicTextsArr);
+						//Slide newSlide
 						lesson.addSlide(newSlide);
 					}
-
+					if(type.equals("game")){
+						XmlParser.Game gameType = XmlParser.Game.valueOf(e.getElementsByTagName("gameType").item(0).getTextContent());
+						System.out.println(gameType);
+						Slide newSlide = new GameSlide(gameType);
+						lesson.addSlide(newSlide);
+					}
 				}
 
 			}
@@ -95,5 +102,7 @@ public class XmlParser {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+		Slide newSlide = new GameSlide(Game.COLORS);
+		lesson.addSlide(newSlide);
 	}
 }
