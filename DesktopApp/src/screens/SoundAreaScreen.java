@@ -2,6 +2,7 @@ package screens;
 
 import AdditionalClasses.SoundElement;
 import Factories.ComponentsFactory;
+import SlideObjects.Rotation;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +11,8 @@ import java.awt.event.FocusListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.nio.file.Files;
 
 /**
  * Created by Evgeniy on 12/7/2015.
@@ -121,8 +124,6 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 
         //TODO: add sound file verification
 
-        setSquareInsets(DEFAULT_BUTTONS_INSETS);
-
         addPaneAndTextField(0, start_x_pane, start_x_TextField);
         addPaneAndTextField(1, start_y_pane, start_y_TextField);
         addPaneAndTextField(2, widthPane, widthTextField);
@@ -176,6 +177,12 @@ public class SoundAreaScreen extends AbstractEmptyScreen
             String filePathToShow = selectedFile.getAbsolutePath();
             String fileIsSelected = "Selected Audio File";
             Color selectedColor = Color.GREEN;
+            try {
+                File NewLocation = new File(".\\xmlDir\\AASounds\\" + selectedFile.getName());
+                Files.copy(selectedFile.toPath(),NewLocation.toPath());
+            } catch (Exception ex) {
+                Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());
+            }
 
             //TODO: validate it can be played
 
@@ -224,7 +231,7 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 
             SoundElement soundElement = new SoundElement(_soundFile, _start_x, _start_y, _height, _width);
 
-            Screens.CreateLessonScreen.addNewSoundElementToCurrentSlide(soundElement);
+            Screens.CreateLessonScreen.addNewSoundElement(soundElement);
 
             //TODO: change this for using the same screen for multiple lessons
 

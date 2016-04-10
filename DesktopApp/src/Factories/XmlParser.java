@@ -1,6 +1,6 @@
-package com.example.ohad.dynamicex;
+package Factories;
 
-import android.widget.Toast;
+//import android.widget.Toast;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import org.xml.sax.InputSource;
 
 public class XmlParser {
 
-	void parse(String xmlPath, String lessonPath, Lesson lesson) { // parse(Lesson lesson)
+	public static void parse(String xmlPath, String lessonPath, Lesson lesson) { // parse(Lesson lesson)
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		try {
 			DocumentBuilder builder = factory.newDocumentBuilder();
@@ -71,13 +71,16 @@ public class XmlParser {
 								int bHeight = Integer.parseInt(eBut.getElementsByTagName("height").item(0).getTextContent());
 
 								//create new DynamicButton
-								DynamicButton newDynamicButton = new DynamicButton("Push Me", bStartX, bStartY, bWidth, bHeight, bSoundPath);
+
+								String newbSoundPath = bSoundPath.replace("/","\\");
+								DynamicButton newDynamicButton = new DynamicButton("Push Me", bStartX, bStartY, bWidth, bHeight, newbSoundPath);
 								dynamicButtonsArr.add(newDynamicButton);
 							}
 						}
 
 						//
-						Slide newSlide = new PictureSlide(picturePath, dynamicButtonsArr, dynamicTextsArr);
+						String newFormat = picturePath.replace("/","\\");
+						Slide newSlide = new PictureSlide(newFormat, dynamicButtonsArr, dynamicTextsArr);
 						lesson.addSlide(newSlide);
 					}
 

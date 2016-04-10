@@ -1,27 +1,21 @@
 package screens;
 
-import Factories.ComponentsFactory;
+import Factories.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 /**
  * Created by Evgeniy on 11/21/2015.
  */
 public class WelcomeScreen extends AbstractEmptyScreen {
-    private final String CREATE_LESSON = "Create New Lesson";
-    private final String MODIFY_LESSON = "Modify Existing Lesson";
-    private final String EXIT = "Exit";
-
     public WelcomeScreen() {
         super();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
         setLayout(new GridBagLayout());
-
         setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 
-        setSquareInsets(DEFAULT_BUTTONS_INSETS + 5);
         setCreateButton();
         setModifyButton();
         setSettingsButton();
@@ -32,14 +26,15 @@ public class WelcomeScreen extends AbstractEmptyScreen {
     }
 
     private void setAboutButton() {
-        JButton aboutButton = ComponentsFactory.createBasicButton("About");
-        aboutButton.addActionListener(e -> showInformationMessage("© Techion - all rights reserved."));
+        JButton aboutButton = new JButton("About");
+
+        aboutButton.addActionListener(e -> showInformationMessage("© Technion - all rights reserved."));
         setConstraints(0, 3, 1, 1);
         add(aboutButton, constraints);
     }
 
     private void setSettingsButton() {
-        JButton settingsButton = ComponentsFactory.createBasicButton("Settings");
+        JButton settingsButton = new JButton("Settings");
         settingsButton.addActionListener(e -> {
                     Screens.SettingScreen.setVisible(true);
                     Screens.WelcomeScreen.setVisible(false);
@@ -49,7 +44,7 @@ public class WelcomeScreen extends AbstractEmptyScreen {
     }
 
     private void setCreateButton() {
-        JButton createButton = new JButton(CREATE_LESSON);
+        JButton createButton = new JButton("Create New Lesson");
         createButton.addActionListener(e -> {
             Screens.CreateLessonScreen.setVisible(true);
             Screens.WelcomeScreen.setVisible(false);
@@ -59,18 +54,27 @@ public class WelcomeScreen extends AbstractEmptyScreen {
     }
 
     private void setModifyButton() {
-        JButton modifyButton = ComponentsFactory.createBasicButton(MODIFY_LESSON);
+        JButton modifyButton = new JButton("Modify Existing Lesson");
         modifyButton.addActionListener(e -> {
-            showInformationMessage("Not supported yet !");
+//            JFileChooser chooser = new JFileChooser();
+//            chooser.showOpenDialog(Screens.WelcomeScreen);
+//            File selectedFile = chooser.getSelectedFile();
+
+            Screens.ModifyLesson.run();
+//            Lesson LoadedLeson = new Lesson();
+//            XmlParser.parse(selectedFile.getPath(),"xmlDir\\",LoadedLeson);
+//            Screens.CreateLessonScreen =  new CreateLessonScreen();
+//            Screens.CreateLessonScreen.setVisible(true);
 //            Screens.WelcomeScreen.setVisible(false);
-//            Screens.ModifyLessonScreen.setVisible(true);
+//            Screens.CreateLessonScreen.loadExistingLesson(LoadedLeson);
+            //showInformationMessage("Not supported yet !");
         });
         setConstraints(0, 1, 1, 1);
         add(modifyButton, constraints);
     }
 
     private void setExitButton() {
-        JButton exitButton = ComponentsFactory.createBasicButton(EXIT);
+        JButton exitButton = new JButton("Exit");
         exitButton.addActionListener(e -> onExitApp(true));
         setConstraints(0, 4, 1, 1);
         add(exitButton, constraints);
