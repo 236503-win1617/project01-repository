@@ -23,9 +23,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //TODO add create fragment here
-
-
         lesson = new Lesson(MainActivity.this);
 
         String xmlPath = xmlFolder.listFiles()[0].getPath(); // For now, just take the first file in the xml folder
@@ -60,6 +57,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void sayNum(View v){
+        Slide curr = lesson.getCurrSlide();
+        if (curr instanceof GameSlide){
+            ((GameSlide)curr).getGameFragment().sayNum(v);
+        }
+    }
+    public void checkNum(View v){
+        Slide curr = lesson.getCurrSlide();
+        if (curr instanceof GameSlide){
+            ((GameSlide)curr).getGameFragment().checkNum(v);
+        }
+    }
+    public void initNums(View v){
+        Slide curr = lesson.getCurrSlide();
+        if (curr instanceof GameSlide){
+            ((GameSlide)curr).getGameFragment().initNums(v);
+        }
     }
 
 }

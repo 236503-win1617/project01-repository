@@ -15,4 +15,9 @@ public class GameFragment extends Fragment {
         View view = inflater.inflate(R.layout.game_fragment,container,false);
         return view;
     }
+
+    public void sayNum(View v){}
+    public void checkNum(View view){}
+    public void initNums(View v){}
+
 }

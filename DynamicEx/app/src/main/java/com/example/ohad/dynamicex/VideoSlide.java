@@ -76,7 +76,7 @@ public class VideoSlide extends Slide {
     }
 
     @Override
-    public void hide() {
+    public void hide(Activity activity) {
         mPlayButton.setVisibility(View.INVISIBLE);
         mPlayer.setVisibility(View.INVISIBLE);
     }

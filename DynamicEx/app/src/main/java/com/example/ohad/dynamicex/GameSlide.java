@@ -2,13 +2,7 @@ package com.example.ohad.dynamicex;
 
 import android.app.Activity;
 import android.app.FragmentManager;
-import android.graphics.Bitmap;
-import android.os.Environment;
-import android.support.v4.app.Fragment;
-import android.view.View;
-import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+
 
 import java.io.File;
 
@@ -18,17 +12,26 @@ import java.io.File;
 public class GameSlide extends Slide {
     private GameFragment gameFragment;
 
-    public GameSlide(XmlParser.Game game){
+    public GameSlide(XmlParser.Game game,Activity activity){
         switch (game) {
             case NUMBERS:
                 gameFragment = new GameNumbers();
+                break;
             case COLORS:
                 gameFragment = new GameColors();
+                break;
             case ANIMALS:
                 gameFragment = new GameAnimals();
+                break;
             default:
                 gameFragment = new GameNumbers();
         }
+        activity.getFragmentManager().beginTransaction().add(R.id.main_container, gameFragment).commit();
+        FragmentManager fm = activity.getFragmentManager();
+        fm.beginTransaction()
+                .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                .hide(gameFragment)
+                .commit();
     }
 
     public void show(Activity activity) {
@@ -39,7 +42,15 @@ public class GameSlide extends Slide {
                 .commit();
     }
 
-    public void hide() {
-        //TODO kill an activity of the game. check if it will have any impact or it needs to move inside the activity of each game itself!
+    public void hide(Activity activity) {
+        FragmentManager fm = activity.getFragmentManager();
+        fm.beginTransaction()
+                .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                .hide(gameFragment)
+                .commit();
+    }
+
+    public GameFragment getGameFragment(){
+        return gameFragment;
     }
 }

@@ -78,7 +78,7 @@ public class PictureSlide extends Slide {
         }
     }
 
-    public void hide() {
+    public void hide(Activity activity) {
         for (final TextView tv : texts)
             tv.setVisibility(View.INVISIBLE);
 

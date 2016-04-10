@@ -92,7 +92,7 @@ public class XmlParser {
 					if(type.equals("game")){
 						XmlParser.Game gameType = XmlParser.Game.valueOf(e.getElementsByTagName("gameType").item(0).getTextContent());
 						System.out.println(gameType);
-						Slide newSlide = new GameSlide(gameType);
+						Slide newSlide = new GameSlide(gameType,lesson.activity);
 						lesson.addSlide(newSlide);
 					}
 				}
@@ -102,7 +102,7 @@ public class XmlParser {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		Slide newSlide = new GameSlide(Game.COLORS);
+		Slide newSlide = new GameSlide(Game.NUMBERS,lesson.activity);
 		lesson.addSlide(newSlide);
 	}
 }
