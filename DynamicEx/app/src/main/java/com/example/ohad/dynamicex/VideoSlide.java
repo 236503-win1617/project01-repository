@@ -13,6 +13,9 @@ import android.widget.VideoView;
 /**
  * Created by Ohad on 26/12/2015.
  */
+
+// Video slides are not supported by desktop app yet - Here I'm already supporting them for later versions
+
 public class VideoSlide extends Slide {
 
     protected VideoView mPlayer = null;
@@ -29,17 +32,13 @@ public class VideoSlide extends Slide {
     public void show(Activity activity) {
 
         RelativeLayout layout = (RelativeLayout)activity.findViewById(R.id.content_main);
-        //layout.removeAllViews();
-
         layout.setBackgroundColor(Color.BLACK);
 
-        if (mPlayButton == null || mPlayer == null) {
-
+        if (mPlayButton == null || mPlayer == null)
+        {
             mPlayButton = new Button(activity.getApplicationContext());
             mPlayButton.setText("Play");
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-                    200,
-                    200);
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(200, 200);
             lp.setMargins(200, 300, 0, 0);
             mPlayButton.setLayoutParams(lp);
 
@@ -58,7 +57,7 @@ public class VideoSlide extends Slide {
                 public void onPrepared(MediaPlayer mediaPlayer) {
                     mediaPlayer.start();
                     mediaPlayer.pause();
-                    mediaPlayer.seekTo(videoPosition); // it works, because of we called start(
+                    mediaPlayer.seekTo(videoPosition);
                 }
             });
 
@@ -93,8 +92,7 @@ public class VideoSlide extends Slide {
         @Override
         public void onClick(View v) {
             mPlayer.start();
-            // hide button once playback starts
-            mPlayButton.setVisibility(View.GONE);
+            mPlayButton.setVisibility(View.GONE); // hide button once playback starts
         }
     };
 

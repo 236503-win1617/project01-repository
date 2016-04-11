@@ -3,6 +3,9 @@ package com.example.ohad.dynamicex;
 /**
  * Created by Ohad on 26/12/2015.
  */
+
+// Dynamic Texts are not supported by desktop app yet - Here I'm already supporting them for later versions
+
 public class DynamicText {
 
     private String text;

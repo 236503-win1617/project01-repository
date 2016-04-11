@@ -20,6 +20,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created by Ohad.
+ */
+
 public class MenuActivity extends AppCompatActivity {
 
     // main folder contains all the lessons (as folders)
