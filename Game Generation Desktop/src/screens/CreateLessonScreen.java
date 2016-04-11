@@ -149,6 +149,21 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
         }
     }
 
+    private void loadGameSlide(GameSlide gameSlide) {
+        GameSlide.GameType type = gameSlide.getGameType();
+        switch(type){
+            case Animals:
+                currentSlideManager.loadPicture(".\\resources\\animals.jpg");
+                break;
+            case Colors:
+                currentSlideManager.loadPicture(".\\resources\\colors.png");
+                break;
+            case Numbers:
+                currentSlideManager.loadPicture(".\\resources\\numbers.jpg");
+                break;
+        }
+    }
+
     private void deleteSlide() {
         if (currentSlideIndex != _slidesButtons.size() - 1) {
             //TODO: implement delete in the middle
@@ -343,6 +358,7 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
         setConstraints(currentSlideIndex, 0, 0, 0);
         lessonSlidesPanel.add(newSlideButton, constraints);
         lessonSlidesPanel.revalidate();
+        loadGameSlide(newGameSlide);
     }
 
     private void saveCurrentSlide() {
@@ -378,6 +394,9 @@ public class CreateLessonScreen extends AbstractApplicationScreen {
         AbstractSlide slide = _slides.get(index);
         if (slide instanceof PictureSlide) {
             loadPictureSlide((PictureSlide) slide);
+        } else if (slide instanceof GameSlide) {
+            loadGameSlide((GameSlide) slide);
+            //loadPictureSlide((PictureSlide) slide);
         } else {
             showErrorMessage("slide is not supported type" + slide.getClass().getTypeName());
         }
