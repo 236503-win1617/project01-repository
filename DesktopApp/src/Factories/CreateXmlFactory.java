@@ -71,13 +71,24 @@ public class CreateXmlFactory {
                                 .addText(Integer.toString(soundItem.width));
                     }
                     index++;
-                } else {
+                } if(slide instanceof  GameSlide) {
                     GameSlide item = (GameSlide) slide;
                     Element GameElement = root.addElement("slide");
                     GameElement.addElement("order").addText(Integer.toString((index)));
                     GameElement.addElement("slide_type").addText("game");
                     GameElement.addElement("gameType").addText(item.getGameType().name());
+                    GameElement.addElement("game").addText(item.getGameType().name());
                     index++;
+                }
+                if(slide instanceof VideoSlide) {
+                    VideoSlide item = (VideoSlide) slide;
+                    Element GameElement = root.addElement("slide");
+                    GameElement.addElement("order").addText(Integer.toString((index)));
+                    GameElement.addElement("slide_type").addText("video");
+                    //GameElement.addElement("videoLength").addText(item.getVideoLength());
+                    //
+                    index++;
+
                 }
             }
 		boolean success = (new File(".//xmlDir")).mkdirs();
@@ -86,13 +97,20 @@ public class CreateXmlFactory {
 		}
 		OutputFormat format = OutputFormat.createPrettyPrint();
 		XMLWriter writer;
-	    Random random = new Random();
-	    File f = new File(".\\xmlDir\\db"+Integer.toString(random.nextInt())+".xml");
-	    while(f.exists()) { 
-	    	random = new Random();
-	    	 f = new File(".\\xmlDir\\db"+Integer.toString(random.nextInt())+".xml");
-	    }
-		OutputStream output = new FileOutputStream(f.getPath());
+            int counter=0;
+//	    Random random = new Random();
+//	    File f = new File(".\\xmlDir\\db"+Integer.toString(random.nextInt())+".xml");
+//	    while(f.exists()) {
+//	    	random = new Random();
+//	    	 f = new File(".\\xmlDir\\db"+Integer.toString(random.nextInt())+".xml");
+//	    }
+        File f = new File(".\\xmlDir\\"+name+".xml");
+            while(f.exists()) {
+                counter++;
+            f = new File(".\\xmlDir\\"+name+Integer.toString(counter)+".xml");
+            }
+//	    }
+            OutputStream output = new FileOutputStream(f.getPath());
 		writer = new XMLWriter( output, format );
 		writer.write( document );
         } catch (Exception e) {
