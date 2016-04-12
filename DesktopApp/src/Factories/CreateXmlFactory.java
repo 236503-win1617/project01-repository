@@ -6,6 +6,7 @@ package Factories;
 
 import AdditionalClasses.SoundElement;
 import SlideObjects.AbstractSlide;
+import SlideObjects.GameSlide;
 import SlideObjects.PictureSlide;
 
 import org.dom4j.Document;
@@ -19,7 +20,12 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Random;
-
+import SlideObjects.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import Factories.*;
+import AdditionalClasses.*;
 public class CreateXmlFactory {
     //TODO: start using the name
     //TODO: what is the index for ?
@@ -32,7 +38,6 @@ public class CreateXmlFactory {
                 if (slide instanceof PictureSlide) {
                     PictureSlide item = (PictureSlide) slide;
                     Element pictureElement = root.addElement("slide");
-
                     pictureElement.addElement("order").addText(Integer.toString((index)));
                     pictureElement.addElement("slide_type").addText("Picture");
 
@@ -65,6 +70,13 @@ public class CreateXmlFactory {
                         soundButton.addElement("height")
                                 .addText(Integer.toString(soundItem.width));
                     }
+                    index++;
+                } else {
+                    GameSlide item = (GameSlide) slide;
+                    Element GameElement = root.addElement("slide");
+                    GameElement.addElement("order").addText(Integer.toString((index)));
+                    GameElement.addElement("slide_type").addText("game");
+                    GameElement.addElement("gameType").addText(item.getGameType().name());
                     index++;
                 }
             }
