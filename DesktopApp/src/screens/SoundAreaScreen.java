@@ -36,10 +36,10 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 	private final JTextPane isFileSelectedPane;
 
 	private final String [] sizesArray = {"0","1/8","1/4","3/8","1/2","5/8","3/4","7/8"};
-	private final JComboBox start_x_ComboBox;
-	private final JComboBox start_y_ComboBox;
-	private final JComboBox widthComboBox;
-	private final JComboBox heightComboBox;
+	private final JComboBox<String> start_x_ComboBox;
+	private final JComboBox<String> start_y_ComboBox;
+	private final JComboBox<String> widthComboBox;
+	private final JComboBox<String> heightComboBox;
 
 	private Integer _start_x;
 	private Integer _start_y;
@@ -58,7 +58,8 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
 
 		setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
-
+		
+		JTextPane instructions = ComponentsFactory.createBasicTextPane("Instructions:");
 		JTextPane start_x_pane = ComponentsFactory.createBasicTextPane("Start X:");
 		JTextPane start_y_pane = ComponentsFactory.createBasicTextPane("Start Y:");
 		JTextPane widthPane = ComponentsFactory.createBasicTextPane("Width:");
@@ -72,10 +73,10 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 		widthTextField = ComponentsFactory.createBasicTextField(INSERT_INTEGER);
 		heightTextField = ComponentsFactory.createBasicTextField(INSERT_INTEGER);
 
-		start_x_ComboBox = new JComboBox(sizesArray);
-		start_y_ComboBox = new JComboBox(sizesArray);
-		widthComboBox = new JComboBox(sizesArray);
-		heightComboBox = new JComboBox(sizesArray);
+		start_x_ComboBox = new JComboBox<String>(sizesArray);
+		start_y_ComboBox = new JComboBox<String>(sizesArray);
+		widthComboBox = new JComboBox<String>(sizesArray);
+		heightComboBox = new JComboBox<String>(sizesArray);
 
 		start_x_ComboBox.setSelectedIndex(0);
 		start_y_ComboBox.setSelectedIndex(0);
@@ -94,7 +95,7 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 		heightComboBox.setForeground(Color.BLACK);
 		heightComboBox.setFont(new Font("Arial", Font.BOLD, 14));
 		heightComboBox.setMaximumRowCount(10);
-
+		
 		start_x_ComboBox.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e) 
@@ -102,6 +103,8 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 				JComboBox<String> cb = (JComboBox<String>)e.getSource();
 				String size = (String)cb.getSelectedItem();
 				//Double tmp = Double.parseDouble(size)*resulotion_X;
+				//start_x_TextField.setText(Double.toString(tmp));
+				//start_x_TextField.repaint();
 				//_start_x = tmp.intValue();
 			}
 		});
@@ -200,27 +203,28 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 		//TODO: add sound file verification
 
 		//setSquareInsets(DEFAULT_BUTTONS_INSETS);
+		
+		addInstructionTextPane(0, instructions);
+		addPaneAndTextField(1, start_x_pane, start_x_TextField);
+		addPaneAndTextField(2, start_y_pane, start_y_TextField);
+		addPaneAndTextField(3, widthPane, widthTextField);
+		addPaneAndTextField(4, heightPane, heightTextField);
 
-		addPaneAndTextField(0, start_x_pane, start_x_TextField);
-		addPaneAndTextField(1, start_y_pane, start_y_TextField);
-		addPaneAndTextField(2, widthPane, widthTextField);
-		addPaneAndTextField(3, heightPane, heightTextField);
-
-		addTitleAndComboBox(0, start_x_pane, start_x_ComboBox);
-		addTitleAndComboBox(1, start_y_pane, start_y_ComboBox);
-		addTitleAndComboBox(2, widthPane, widthComboBox);
-		addTitleAndComboBox(3, heightPane, heightComboBox);
-
+		addTitleAndComboBox(1, start_x_ComboBox);
+		addTitleAndComboBox(2, start_y_ComboBox);
+		addTitleAndComboBox(3, widthComboBox);
+		addTitleAndComboBox(4, heightComboBox);
+		
 		JButton chooseFileButton = new JButton("Select Audio File");
 		chooseFileButton.addActionListener(e -> onSelectAudioFile());
 
-		setConstraints(0, 4, 1, 1);
+		setConstraints(0, 5, 1, 1);
 		add(isFileSelectedPane, constraints);
 
-		setConstraints(1, 4, 1, 1);
+		setConstraints(1, 5, 1, 1);
 		add(chooseFileButton, constraints);
 
-		setConstraints(0, 5, 1, 1);
+		setConstraints(0, 6, 1, 1);
 		constraints.gridwidth = 3;
 		add(selectedFilePane, constraints);
 
@@ -229,13 +233,13 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 		JButton okButton = new JButton("OK");
 		okButton.addActionListener(e -> onOkButtonPressed());
 
-		setConstraints(0, 6, 1, 1);
+		setConstraints(0, 7, 1, 1);
 		add(okButton, constraints);
 
 		JButton cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(e -> onCancelButtonPressed());
 
-		setConstraints(1, 6, 1, 1);
+		setConstraints(1, 7, 1, 1);
 		add(cancelButton, constraints);
 
 		addWindowListener(new WindowAdapter()
@@ -312,7 +316,7 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 
 			SoundElement soundElement = new SoundElement(_soundFile, _start_x, _start_y, _height, _width);
 
-			//Screens.CreateLessonScreen.addNewSoundElementToCurrentSlide(soundElement);
+			Screens.CreateLessonScreen.addNewSoundElement(soundElement);
 
 			//TODO: change this for using the same screen for multiple lessons
 
@@ -338,11 +342,13 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 		setConstraints(1, row, 1, 1);
 		add(textField, constraints);
 	}
-	private void addTitleAndComboBox(int row, JTextPane textPane, JComboBox<String> JCB)
+	private void addInstructionTextPane(int row, JTextPane textPane)
 	{
-		setConstraints(1, row, 1, 1);
+		setConstraints(0, row, 1, 1);
 		add(textPane, constraints);
-
+	}
+	private void addTitleAndComboBox(int row, JComboBox<String> JCB)
+	{		
 		setConstraints(2, row, 1, 1);
 		add(JCB, constraints);
 	}
