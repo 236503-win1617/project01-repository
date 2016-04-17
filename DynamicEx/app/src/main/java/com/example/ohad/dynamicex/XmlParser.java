@@ -18,7 +18,7 @@ import org.xml.sax.InputSource;
 
 public class XmlParser {
 
-	void parse(String xmlPath, String lessonPath, Lesson lesson) {
+	public void parse(String xmlPath, String lessonPath, Lesson lesson) {
 
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		try {
@@ -33,51 +33,15 @@ public class XmlParser {
 				Node n = nodes.item(i);
 				if (n.getNodeType() == Node.ELEMENT_NODE) {
 
-					//create list for all buttons and texts for this slide
-					ArrayList<DynamicButton> dynamicButtonsArr = new ArrayList<>();
-					ArrayList<DynamicText> dynamicTextsArr = new ArrayList<>();
-
 					Element e = (Element) n;
-
-					//Get the type of slide
 					String type = e.getElementsByTagName("slide_type").item(0).getTextContent();
 
 					if (type.equals("Picture")) {
-						//Get the path of picture
-						String picturePath = e.getElementsByTagName("image_file").item(0).getTextContent();
-						picturePath = lessonPath + picturePath;
+						handlePictureSlide(e, lessonPath, lesson);
+					}
 
-						//Get rotation - not supported by XML generators yet
-						// String rotation = Integer.parseInt(e.getElementsByTagName("rotation").item(0).getTextContent());
-						Rotation rotation = null;
-
-						//Iterate over all the buttons
-						NodeList nButtons = e.getElementsByTagName("sound_button");
-						for (int j = 0; j < nButtons.getLength(); ++j) {
-							Node nBut = nButtons.item(j);
-							if (nBut.getNodeType() == Node.ELEMENT_NODE) {
-								Element eBut = (Element) nBut;
-
-								//Get the path for sound file
-								String bSoundPath = eBut.getElementsByTagName("sound_file").item(0).getTextContent();
-								bSoundPath = lessonPath + bSoundPath;
-
-								//Get x and y position
-								int bStartX = Integer.parseInt(eBut.getElementsByTagName("start_x").item(0).getTextContent());
-								int bStartY = Integer.parseInt(eBut.getElementsByTagName("start_y").item(0).getTextContent());
-
-								//Get width and height of button
-								int bWidth = Integer.parseInt(eBut.getElementsByTagName("width").item(0).getTextContent());
-								int bHeight = Integer.parseInt(eBut.getElementsByTagName("height").item(0).getTextContent());
-
-								//create DynamicButton
-								DynamicButton newDynamicButton = new DynamicButton("Push Me", bStartX, bStartY, bWidth, bHeight, bSoundPath);
-								dynamicButtonsArr.add(newDynamicButton);
-							}
-						}
-
-						Slide newSlide = new PictureSlide(picturePath, dynamicButtonsArr, dynamicTextsArr, rotation);
-						lesson.addSlide(newSlide);
+					else if (type.equals("Video")) {
+						handleVideoSlide(e, lessonPath, lesson);
 					}
 				}
 			}
@@ -85,5 +49,54 @@ public class XmlParser {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	private void handlePictureSlide(Element e, String lessonPath, Lesson lesson) {
+		//create list for all buttons and texts for this slide
+		ArrayList<DynamicButton> dynamicButtonsArr = new ArrayList<>();
+		ArrayList<DynamicText> dynamicTextsArr = new ArrayList<>();
+
+		//Get the path of picture
+		String picturePath = e.getElementsByTagName("image_file").item(0).getTextContent();
+		picturePath = lessonPath + picturePath;
+
+		//Get rotation - not supported by XML generators yet
+		// String rotation = Integer.parseInt(e.getElementsByTagName("rotation").item(0).getTextContent());
+		Rotation rotation = null;
+
+		//Iterate over all the buttons
+		NodeList nButtons = e.getElementsByTagName("sound_button");
+		for (int j = 0; j < nButtons.getLength(); ++j) {
+			Node nBut = nButtons.item(j);
+			if (nBut.getNodeType() == Node.ELEMENT_NODE) {
+				Element eBut = (Element) nBut;
+
+				//Get the path for sound file
+				String bSoundPath = eBut.getElementsByTagName("sound_file").item(0).getTextContent();
+				bSoundPath = lessonPath + bSoundPath;
+
+				//Get x and y position
+				int bStartX = Integer.parseInt(eBut.getElementsByTagName("start_x").item(0).getTextContent());
+				int bStartY = Integer.parseInt(eBut.getElementsByTagName("start_y").item(0).getTextContent());
+
+				//Get width and height of button
+				int bWidth = Integer.parseInt(eBut.getElementsByTagName("width").item(0).getTextContent());
+				int bHeight = Integer.parseInt(eBut.getElementsByTagName("height").item(0).getTextContent());
+
+				//create DynamicButton
+				DynamicButton newDynamicButton = new DynamicButton("Push Me", bStartX, bStartY, bWidth, bHeight, bSoundPath);
+				dynamicButtonsArr.add(newDynamicButton);
+			}
+		}
+
+		Slide newSlide = new PictureSlide(picturePath, dynamicButtonsArr, dynamicTextsArr, rotation);
+		lesson.addSlide(newSlide);
+	}
+
+	private void handleVideoSlide(Element e, String lessonPath, Lesson lesson) {
+		String videoPath = e.getElementsByTagName("video_file").item(0).getTextContent();
+		videoPath = lessonPath + videoPath;
+		Slide newSlide = new VideoSlide(videoPath);
+		lesson.addSlide(newSlide);
 	}
 }

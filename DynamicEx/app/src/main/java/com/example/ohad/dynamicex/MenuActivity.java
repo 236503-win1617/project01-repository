@@ -1,7 +1,6 @@
 package com.example.ohad.dynamicex;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
 import android.os.Bundle;
@@ -27,7 +26,7 @@ import java.util.List;
 public class MenuActivity extends AppCompatActivity {
 
     // main folder contains all the lessons (as folders)
-    String mainFolderPath = Environment.getExternalStorageDirectory().getPath() + "/AALessons";
+    private String mainFolderPath = Environment.getExternalStorageDirectory().getPath() + "/AALessons";
     private ListView myList;
     private String selectedLessonName = null;
 
@@ -38,6 +37,8 @@ public class MenuActivity extends AppCompatActivity {
 
         File mainFolder = new File(mainFolderPath);
         File[] lessonsFolders = mainFolder.listFiles();
+        if (lessonsFolders == null)
+            lessonsFolders = new File[0];
         List<String> data = new ArrayList<String>();
 
         for (int i = 0; i < lessonsFolders.length; ++i) {
@@ -47,6 +48,7 @@ public class MenuActivity extends AppCompatActivity {
 
         myList = (ListView)findViewById(R.id.list);
         myList.setAdapter(new dataListAdapter(data));
+        myList.setEmptyView(findViewById(R.id.emptyView));
 
         myList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

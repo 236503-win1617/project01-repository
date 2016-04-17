@@ -23,19 +23,23 @@ import java.util.ArrayList;
  */
 public class PictureSlide extends Slide {
 
-    String path;
-    ArrayList<Button> buttons = new ArrayList<>();
-    ArrayList<TextView> texts = new ArrayList<>();
-    ArrayList<DynamicButton> dynamicButtons = new ArrayList<>();
-    ArrayList<DynamicText> dynamicTexts = new ArrayList<>();
-    boolean firstShow = true;
-    Rotation rotation;
+    private String path;
+    private ArrayList<Button> buttons;
+    private ArrayList<TextView> texts;
+    private ArrayList<DynamicButton> dynamicButtons;
+    private ArrayList<DynamicText> dynamicTexts;    // Not supported in desktop yet
+    private boolean firstShow;
+    private Rotation rotation;
 
 
     public PictureSlide(String path, ArrayList<DynamicButton> dynamicButtons, ArrayList<DynamicText> dynamicTexts, Rotation rotation) {
+        buttons = new ArrayList<>();
+        texts = new ArrayList<>();
+        firstShow = true;
+
         this.path = path;
-        this.dynamicButtons = dynamicButtons;
-        this.dynamicTexts = dynamicTexts;
+        this.dynamicButtons = dynamicButtons != null ? dynamicButtons : new ArrayList<DynamicButton>();
+        this.dynamicTexts = dynamicTexts != null ? dynamicTexts : new ArrayList<DynamicText>();
         this.rotation = rotation != null ? rotation : Rotation.NO_ROTATION; // portrait by default
     }
 

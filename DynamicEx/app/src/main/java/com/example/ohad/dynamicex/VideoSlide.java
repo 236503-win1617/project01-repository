@@ -1,12 +1,16 @@
 package com.example.ohad.dynamicex;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.VideoView;
 
@@ -20,38 +24,30 @@ public class VideoSlide extends Slide {
 
     protected VideoView mPlayer = null;
     protected Button mPlayButton = null;
-    private Integer videoID = null;
+    private String path = null;
     protected Integer videoPosition = 500;
 
-    public VideoSlide(Integer videoID) {
-        this.videoID = videoID;
+    public VideoSlide(String path) {
+        this.path = path;
     }
 
 
     @Override
     public void show(Activity activity) {
 
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         RelativeLayout layout = (RelativeLayout)activity.findViewById(R.id.content_main);
         layout.setBackgroundColor(Color.BLACK);
 
         if (mPlayButton == null || mPlayer == null)
         {
-            mPlayButton = new Button(activity.getApplicationContext());
-            mPlayButton.setText("Play");
-            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(200, 200);
-            lp.setMargins(200, 300, 0, 0);
-            mPlayButton.setLayoutParams(lp);
-
-            layout.addView(mPlayButton);
-
             mPlayer = new VideoView(activity.getApplicationContext());
-            mPlayer.setLayoutParams(new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.MATCH_PARENT));
-
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
+            lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+            mPlayer.setLayoutParams(lp);
             layout.addView(mPlayer);
 
-            mPlayer.setVideoURI(Uri.parse("android.resource://" + activity.getPackageName() + "/" + videoID));
+            mPlayer.setVideoURI(Uri.parse(path));
             mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
@@ -60,9 +56,15 @@ public class VideoSlide extends Slide {
                     mediaPlayer.seekTo(videoPosition);
                 }
             });
-
             mPlayer.setOnCompletionListener(mPlayerOnComplete);
             mPlayer.setOnTouchListener(mPlayerOnTouch);
+
+            mPlayButton = new Button(activity.getApplicationContext());
+            mPlayButton.setText("Play Video");
+            lp = new RelativeLayout.LayoutParams(250, 250);
+            lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+            mPlayButton.setLayoutParams(lp);
+            layout.addView(mPlayButton);
 
             mPlayButton.setOnClickListener(mButtonClick);
         }
@@ -71,7 +73,6 @@ public class VideoSlide extends Slide {
             mPlayButton.setVisibility(View.VISIBLE);
             mPlayer.setVisibility(View.VISIBLE);
         }
-
     }
 
     @Override
@@ -87,6 +88,21 @@ public class VideoSlide extends Slide {
             //finish();
         }
     };
+
+//    private class PlayListener implements View.OnClickListener {
+//        Activity activity;
+//
+//        public PlayListener(Activity activity) {
+//            this.activity = activity;
+//        }
+//
+//        @Override
+//        public void onClick(View v) {
+//            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+//            mPlayer.start();
+//            mPlayButton.setVisibility(View.GONE); // hide button once playback starts
+//        }
+//    }
 
     private View.OnClickListener mButtonClick = new View.OnClickListener() {
         @Override
