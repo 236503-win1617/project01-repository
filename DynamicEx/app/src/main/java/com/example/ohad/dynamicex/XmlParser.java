@@ -102,7 +102,11 @@ public class XmlParser {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		Slide newSlide = new GameSlide(Game.NUMBERS,lesson.activity);
+		Slide newSlide = new GameSlide(Game.COLORS,lesson.activity);
+		Slide newSlide2 = new GameSlide(Game.ANIMALS,lesson.activity);
+		Slide newSlide3 = new GameSlide(Game.NUMBERS,lesson.activity);
 		lesson.addSlide(newSlide);
+		lesson.addSlide(newSlide2);
+		lesson.addSlide(newSlide3);
 	}
 }

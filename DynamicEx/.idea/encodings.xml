@@ -1,78 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/animal_button.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/background.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/black.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/blue.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/cat.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/color_button.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/dog.jpg" charset="windows-1255" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/giraffe.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/green.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/grey.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/ic_launcher.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/kangaroo.jpg" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/lion.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/monkey.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/number0.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/number1.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/number10.jpg" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/number2.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/number3.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/number4.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/number5.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/number6.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/number7.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/number8.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/number9.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/number_button.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/orange.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/panda.jpg" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/pink.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/playagain.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/purple.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/red.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/sayagain.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/snake.jpg" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/tiger.jpg" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/turtle.jpg" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/white.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/yellow.png" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_game_animals.xml" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_game_colors.xml" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/activity_game_numbers.xml" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/black.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/blue.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/cat.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/dog.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/giraffe.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/gray.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/green.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/kangaroo.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/lion.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/monkey.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/orange.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/panda.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/pink.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/purple.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/red.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/s0.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/s1.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/s10.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/s2.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/s3.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/s4.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/s5.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/s6.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/s7.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/s8.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/s9.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/snake.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/tiger.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/turtle.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/white.wav" charset="windows-1255" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/raw/yellow.wav" charset="windows-1255" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable/giraffe.png" charset="windows-1255" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

@@ -27,6 +27,7 @@ public class GameColors extends GameFragment {
     int[] rand_nums = new int[4];
 
     int numOfChoice;
+    View mainView;
 
     public void initNums(View v){
         Random rand = new Random();
@@ -100,6 +101,12 @@ public class GameColors extends GameFragment {
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.activity_game_colors,container,false);
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+        initNums(mainView);
     }
 
 //

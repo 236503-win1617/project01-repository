@@ -28,6 +28,7 @@ public class GameAnimals extends GameFragment {
     int[] rand_nums = new int[4];
 
     int numOfChoice;
+    View mainView;
 
     public void initNums(View v){
         Random rand = new Random();
@@ -48,16 +49,16 @@ public class GameAnimals extends GameFragment {
             rand_nums[i]=j;
             j++;
         }
-        ImageView view = (ImageView)getView().findViewById(R.id.color1);
+        ImageView view = (ImageView)getView().findViewById(R.id.animal1);
         view.setImageResource(images[rand_nums[0]]);
         view.setTag(rand_nums[0]);
-        view = (ImageView)getView().findViewById(R.id.color2);
+        view = (ImageView)getView().findViewById(R.id.animal2);
         view.setImageResource(images[rand_nums[1]]);
         view.setTag(rand_nums[1]);
-        view = (ImageView)getView().findViewById(R.id.color3);
+        view = (ImageView)getView().findViewById(R.id.animal3);
         view.setImageResource(images[rand_nums[2]]);
         view.setTag(rand_nums[2]);
-        view = (ImageView)getView().findViewById(R.id.color4);
+        view = (ImageView)getView().findViewById(R.id.animal4);
         view.setImageResource(images[rand_nums[3]]);
         view.setTag(rand_nums[3]);
         numOfChoice = rand_nums[rand.nextInt(4)];
@@ -101,6 +102,12 @@ public class GameAnimals extends GameFragment {
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.activity_game_animals,container,false);
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+        initNums(mainView);
     }
 
 
