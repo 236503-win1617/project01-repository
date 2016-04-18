@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
+/**
+ * Created by Samuel on 28/03/2016.
+ */
 public class GameFragment extends Fragment {
 
     @Override

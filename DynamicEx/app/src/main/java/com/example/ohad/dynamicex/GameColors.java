@@ -13,7 +13,7 @@ import android.view.LayoutInflater;
 
 import java.util.Random;
 
-
+//author: Avi Kozokin
 public class GameColors extends GameFragment {
 
 
