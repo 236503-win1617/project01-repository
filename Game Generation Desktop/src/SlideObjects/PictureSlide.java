@@ -8,22 +8,22 @@ import java.io.File;
  * Created by Evgeniy on 11/26/2015.
  */
 public class PictureSlide extends AbstractSlide {
-    private SoundElement[] soundElements;
+    private SoundElement[] soundElements = new SoundElement[0];
     private File pictureFile;
-
-    public PictureSlide() {
-        soundElements = new SoundElement[0];
-        pictureFile = null;
-    }
 
     public File getPictureFile() {
         return pictureFile;
     }
 
-    public void setPictureFile(File pictureFile) {
-        validateNotNull(pictureFile);
+    @Override
+    public void setSlideFile(File file) {
+        validateNotNull(file);
+        this.pictureFile = file;
+    }
 
-        this.pictureFile = pictureFile;
+    @Override
+    protected String[] getSupportedFormats() {
+        return new String[]{"png", "jpg", "jpeg"};
     }
 
     public SoundElement[] getSoundElements() {

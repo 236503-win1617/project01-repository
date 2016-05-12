@@ -1,5 +1,7 @@
 package SlideObjects;
 
+import java.io.File;
+
 /**
  * Created by Evgeniy on 11/26/2015.
  */
@@ -27,4 +29,9 @@ public class GameSlide extends AbstractSlide
         return SlideType.Game;
     }
 
+    protected String[] getSupportedFormats(){
+        return null;
+    }
+
+    public void setSlideFile(File file){}
 }

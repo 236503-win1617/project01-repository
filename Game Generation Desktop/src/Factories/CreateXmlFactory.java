@@ -6,7 +6,6 @@ package Factories;
 
 import AdditionalClasses.SoundElement;
 import SlideObjects.AbstractSlide;
-import SlideObjects.GameSlide;
 import SlideObjects.PictureSlide;
 
 import org.dom4j.Document;
@@ -67,9 +66,6 @@ public class CreateXmlFactory {
                                 .addText(Integer.toString(soundItem.width));
                     }
                     index++;
-                } else {
-                    GameSlide item = (GameSlide) slide;
-                    //TODO: Just write in the xml the type of the Game Slide (item.getGameType())
                 }
             }
 		boolean success = (new File(".//xmlDir")).mkdirs();
@@ -78,12 +74,14 @@ public class CreateXmlFactory {
 		}
 		OutputFormat format = OutputFormat.createPrettyPrint();
 		XMLWriter writer;
-	    Random random = new Random();
-	    File f = new File(".\\xmlDir\\db"+Integer.toString(random.nextInt())+".xml");
-	    while(f.exists()) { 
-	    	random = new Random();
-	    	 f = new File(".\\xmlDir\\db"+Integer.toString(random.nextInt())+".xml");
-	    }
+	    //Random random = new Random();
+
+	    File f = new File(".\\xmlDir\\" + name + "\\"+name+".xml");
+        //f.createNewFile();
+	    //while(f.exists()) {
+	    //	random = new Random();
+	    //	 f = new File(".\\xmlDir\\db"+Integer.toString(random.nextInt())+".xml");
+	    //}
 		OutputStream output = new FileOutputStream(f.getPath());
 		writer = new XMLWriter( output, format );
 		writer.write( document );
