@@ -348,7 +348,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
                                                addNewSlide(newGameSlide);
                                            }
                                        });
-        setConstraints(0, 0, 1, 1);
+        setConstraints(0, 0, 1, 1);//What should be here?
         commandsPanel.add(addGameSlide, constraints);
     }
 

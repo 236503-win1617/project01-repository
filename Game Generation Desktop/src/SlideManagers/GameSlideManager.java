@@ -26,6 +26,8 @@ public class GameSlideManager extends AbstractSlideManager {
     public void onRotateCommand() throws IOException{}
 
     public void loadSlide(AbstractSlide slide) throws IOException{
+        //How do I make this work?
+        // There should be a default image on slide depending on game type.
         this.type = ((GameSlide)slide).getGameType();
         switch(type){
             case Animals:
