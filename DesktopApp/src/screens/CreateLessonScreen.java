@@ -7,10 +7,12 @@ import Resources.MessageErrors;
 import SlideManagers.AbstractSlideManager;
 import SlideManagers.PictureSlideManager;
 import SlideManagers.VideoSlideManager;
+import SlideManagers.GameSlideManager;
 import SlideObjects.AbstractSlide;
 import SlideObjects.PictureSlide;
 import SlideObjects.SlideType;
 import SlideObjects.VideoSlide;
+import SlideObjects.GameSlide;
 
 import java.io.File;
 import javax.swing.*;
@@ -48,7 +50,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
     private ArrayList<AbstractSlide> _slides = new ArrayList<>();
 
     private int currentSlideIndex = -1;
-
+    private String lessonName = "";
     public CreateLessonScreen() {
         super();
         addWindowListener(new WindowAdapter() {
@@ -66,12 +68,12 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
 
         slideTypeToManager.put(SlideType.Picture, new PictureSlideManager(currentSlidePanel, commandsPanel, soundsPanel));
         slideTypeToManager.put(SlideType.Video, new VideoSlideManager(currentSlidePanel, commandsPanel));
+        slideTypeToManager.put(SlideType.Game, new GameSlideManager(currentSlidePanel, commandsPanel));
     }
 
-    public void loadExistingLesson(Lesson toLoad){
+    public void loadExistingLesson(Lesson toLoad,String lessonName){
         for(Slide s: toLoad.slides){
-            //if its a picture slide
-            //instanceof
+
             if(s instanceof Factories.PictureSlide){
                 PictureSlide picSlide = new PictureSlide();
 
@@ -79,6 +81,8 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
                 try {
                     SlideType slideType = picSlide.getType();
                     currentSlideManager = slideTypeToManager.get(slideType);
+                    String toLoadPath = s.getPath();
+
                     currentSlideManager.loadPictureFile(new File(s.getPath()));
                     for(DynamicButton b: s.getDynamicButtons()){
                         SoundElement soundElement = new SoundElement(new File(b.getPath()),b.getStartX(), b.getStartY(), b.getHeight(), b.getWidth());
@@ -89,7 +93,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
 
 
                     //Screens.CreateLessonScreen.addNewSoundElement(soundElement);
-
+                    this.lessonName = lessonName;
                 } catch (Exception ex) {
                     showErrorMessage(MessageErrors.UNEXPECTED_ERROR + ex.getMessage());
                 }
@@ -97,8 +101,21 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         }
 
     }
-
-
+//
+//    private void loadGameSlide(GameSlide gameSlide) {
+//        GameSlide.GameType type = gameSlide.getGameType();
+//        switch(type){
+//            case Animals:
+//                currentSlideManager.loadPicture(".\\resources\\animals.jpg");
+//                break;
+//            case Colors:
+//                currentSlideManager.loadPicture(".\\resources\\colors.png");
+//                break;
+//            case Numbers:
+//                currentSlideManager.loadPicture(".\\resources\\numbers.jpg");
+//                break;
+//        }
+//    }
 
     //TODO: remove this method when switching to different sound selecting
     //TODO: make a nicer text display
@@ -111,7 +128,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         PictureSlideManager manager = (PictureSlideManager) currentSlideManager;
         manager.addNewSoundElement(soundElement);
     }
-
+	
     //TODO: implement delete in the middle
     private void deleteSlide() {
         if (currentSlideIndex != _slidesButtons.size() - 1) {
@@ -180,7 +197,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
                 return;
             }
 
-            String lessonName = showInputMessage("Insert Lesson Name:");
+            //String lessonName = showInputMessage("Insert Lesson Name:");
 
             if (lessonName != null) {
                 CreateXmlFactory.generate(_slides, lessonName);
@@ -271,12 +288,13 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
     private void setCommandsPanelButtons() {
         setAddPictureSlideButton();
         setAddVideoSlideButton();
+        setAddGameSlideButton();
         setDeleteCurrentSlideButton();
         setRotateSlideButton();
     }
 
     private void setDeleteCurrentSlideButton() {
-        setConstraints(0, 2, 1, 1);
+        setConstraints(0, 3, 1, 1);
         JButton deleteButton = new JButton("Delete Slide");
 
         deleteButton.addActionListener(e -> deleteSlide());
@@ -296,7 +314,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
                 }
             }
         });
-        setConstraints(0, 3, 1, 1);
+        setConstraints(0, 4, 1, 1);
         commandsPanel.add(rotateImage, constraints);
     }
 
@@ -307,10 +325,37 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         commandsPanel.add(addPictureSlide, constraints);
     }
 
+    private void setAddGameSlideButton(){
+        JButton addGameSlide = new JButton("Add Game Slide");
+        addGameSlide.addActionListener(new ActionListener() {
+
+                                           public void actionPerformed(ActionEvent e) {
+                                               String[] gameTypes = { "Animals", "Colors", "Numbers"};
+                                               String choice = (String) JOptionPane.showInputDialog(null, "What game do you want?",
+                                                       "Choose Type of Game", JOptionPane.QUESTION_MESSAGE, null, // Use
+                                                       gameTypes, // Array of choices
+                                                       gameTypes[0]); // Initial choice
+
+                                               GameSlide.GameType type = null;
+                                               if (choice.equals("Animals")){
+                                                   type = GameSlide.GameType.Animals;
+                                               } else if (choice.equals("Colors")){
+                                                   type = GameSlide.GameType.Colors;
+                                               } else if (choice.equals("Numbers")){
+                                                   type = GameSlide.GameType.Numbers;
+                                               }
+                                               GameSlide newGameSlide = new GameSlide(type);
+                                               addNewSlide(newGameSlide);
+                                           }
+                                       });
+        setConstraints(0, 1, 1, 1);//What should be here?
+        commandsPanel.add(addGameSlide, constraints);
+    }
+
     private void setAddVideoSlideButton() {
         JButton addPictureSlide = new JButton("Add Video Slide");
         addPictureSlide.addActionListener(e -> addNewSlide(new VideoSlide()));
-        setConstraints(0, 1, 1, 1);
+        setConstraints(0, 2, 1, 1);
         commandsPanel.add(addPictureSlide, constraints);
     }
 
@@ -386,5 +431,13 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         } else {
             //TODO: implement for a small screen
         }
+    }
+
+
+    public void setLessonName(String name){
+        this.lessonName = name;
+    }
+    public String getLessonName(){
+        return this.lessonName;
     }
 }
