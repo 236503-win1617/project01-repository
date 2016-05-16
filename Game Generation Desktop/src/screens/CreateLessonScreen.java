@@ -286,7 +286,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
     }
 
     private void setCommandsPanelButtons() {
-        //setAddPictureSlideButton();
+        setAddPictureSlideButton();
         setAddVideoSlideButton();
         setAddGameSlideButton();
         setDeleteCurrentSlideButton();
@@ -294,7 +294,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
     }
 
     private void setDeleteCurrentSlideButton() {
-        setConstraints(0, 2, 1, 1);
+        setConstraints(0, 3, 1, 1);
         JButton deleteButton = new JButton("Delete Slide");
 
         deleteButton.addActionListener(e -> deleteSlide());
@@ -314,7 +314,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
                 }
             }
         });
-        setConstraints(0, 3, 1, 1);
+        setConstraints(0, 4, 1, 1);
         commandsPanel.add(rotateImage, constraints);
     }
 
@@ -348,14 +348,14 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
                                                addNewSlide(newGameSlide);
                                            }
                                        });
-        setConstraints(0, 0, 1, 1);//What should be here?
+        setConstraints(0, 1, 1, 1);//What should be here?
         commandsPanel.add(addGameSlide, constraints);
     }
 
     private void setAddVideoSlideButton() {
         JButton addPictureSlide = new JButton("Add Video Slide");
         addPictureSlide.addActionListener(e -> addNewSlide(new VideoSlide()));
-        setConstraints(0, 1, 1, 1);
+        setConstraints(0, 2, 1, 1);
         commandsPanel.add(addPictureSlide, constraints);
     }
 

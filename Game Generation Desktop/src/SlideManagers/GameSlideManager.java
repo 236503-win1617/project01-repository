@@ -3,6 +3,7 @@ package SlideManagers;
 import AdditionalClasses.SoundElement;
 import SlideObjects.AbstractSlide;
 import SlideObjects.GameSlide;
+import SlideObjects.Rotation;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,6 +12,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 /**
@@ -31,13 +33,13 @@ public class GameSlideManager extends AbstractSlideManager {
         this.type = ((GameSlide)slide).getGameType();
         switch(type){
             case Animals:
-                loadPictureFile(new File(".\\resources\\animals.jpg"));
+                loadPictureFromFile(new FileInputStream(".\\resources\\animals.jpg"), Rotation.NO_ROTATION);
                 break;
             case Colors:
-                loadPictureFile(new File(".\\resources\\colors.jpg"));
+                loadPictureFromFile(new FileInputStream(".\\resources\\colors.png"), Rotation.NO_ROTATION);
                 break;
             case Numbers:
-                loadPictureFile(new File(".\\resources\\numbers.jpg"));
+                loadPictureFromFile(new FileInputStream(".\\resources\\numbers.jpg"), Rotation.NO_ROTATION);
                 break;
         }
     }
