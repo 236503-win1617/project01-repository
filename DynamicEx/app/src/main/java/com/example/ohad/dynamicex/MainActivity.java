@@ -1,45 +1,53 @@
 package com.example.ohad.dynamicex;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Toast;
 
 import java.io.File;
+import java.io.FilenameFilter;
+
+
+/**
+ * Created by Ohad.
+ */
 
 public class MainActivity extends AppCompatActivity {
 
-    //String xmlPath = Environment.getExternalStorageDirectory().getPath() + "/AAXml/lessonExample.xml";
-    final File xmlFolder = new File(Environment.getExternalStorageDirectory().getPath() + "/AAXml");
-
-    Lesson lesson;
+    Lesson lesson = new Lesson(MainActivity.this);
+    XmlParser parser = new XmlParser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        lesson = new Lesson(MainActivity.this);
+        Bundle b = getIntent().getExtras();
+        String lessonPath = b.getString("lessonPath");
+        File lessonFolder = new File(lessonPath);
 
-        String xmlPath = xmlFolder.listFiles()[0].getPath(); // For now, just take the first file in the xml folder
-        XmlParser parser = new XmlParser(xmlPath);
-        parser.parse(lesson); // Loads the data from the XML into the lesson
+        File[] xmlFiles = lessonFolder.listFiles(new FilenameFilter() {
+            public boolean accept(File dir, String filename) {
+                return filename.endsWith(".xml");
+            }
+        });
+
+        File xmlFile = xmlFiles[0]; // Take the first XML file in the lesson's folder
+        parser.parse(xmlFile.getAbsolutePath(), lessonPath, lesson); // Loads the data from the XML into the lesson
         lesson.showFirstSlide();
 
-
-//        for (final File fileEntry : xmlFolder.listFiles()) {
-//            if (fileEntry.isDirectory()) {
-//                listFilesForFolder(fileEntry);
-//            xmlPath = xmlFolder.getPath() + "/" + fileEntry.getName();
-//
-//
-//                System.out.println(fileEntry.getName());
-//        }
-
+        FloatingActionButton fab_exit = (FloatingActionButton) findViewById(R.id.fab_exit);
+        fab_exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         FloatingActionButton fab_next = (FloatingActionButton) findViewById(R.id.fab_next);
         fab_next.setOnClickListener(new View.OnClickListener() {

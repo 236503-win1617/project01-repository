@@ -2,312 +2,468 @@ package screens;
 
 import AdditionalClasses.SoundElement;
 import Factories.ComponentsFactory;
+import SlideObjects.Rotation;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.nio.file.Files;
 
 /**
  * Created by Evgeniy on 12/7/2015.
+ * Last Edited by Eliran on 4/10/2016
  */
 public class SoundAreaScreen extends AbstractEmptyScreen
 {
-    protected final String[] SUPPORTED_AUDIO_FORMATS = {".wav", ".mp3"};
-    private final String NO_FILE_IS_SELECTED = "No File Selected";
-    private final String INSERT_INTEGER = "Insert Integer Number";
+	protected final String[] SUPPORTED_AUDIO_FORMATS = {".wav", ".mp3"};
+	private final String NO_FILE_IS_SELECTED = "No File Selected";
+	private final String INSERT_INTEGER = "Insert Integer Number";
+	protected final Integer resulotion_X = 1920;
+	protected final Integer resulotion_Y = 1080;
+	private final JTextField start_x_TextField;
+	private final JTextField start_y_TextField;
+	private final JTextField widthTextField;
+	private final JTextField heightTextField;
 
-    private final JTextField start_x_TextField;
-    private final JTextField start_y_TextField;
-    private final JTextField widthTextField;
-    private final JTextField heightTextField;
+	private final JTextPane selectedFilePane;
+	private final JTextPane isFileSelectedPane;
 
-    private final JTextPane selectedFilePane;
-    private final JTextPane isFileSelectedPane;
+	private final String [] sizesArray = {"0","1/8","1/4","3/8","1/2","5/8","3/4","7/8"};
+	private final JComboBox<String> start_x_ComboBox;
+	private final JComboBox<String> start_y_ComboBox;
+	private final JComboBox<String> widthComboBox;
+	private final JComboBox<String> heightComboBox;
 
-    private Integer _start_x;
-    private Integer _start_y;
-    private Integer _height;
-    private Integer _width;
+	private Integer _start_x;
+	private Integer _start_y;
+	private Integer _height;
+	private Integer _width;
 
-    private File _soundFile;
+	private File _soundFile;
 
-    protected SoundAreaScreen() throws HeadlessException
-    {
-        super();
+	protected SoundAreaScreen() throws HeadlessException
+	{
+		super();
 
-        //TODO: remove to parent
-        setLayout(new GridBagLayout());
+		//TODO: remove to parent
+		setLayout(new GridBagLayout());
 
-        setDefaultCloseOperation(HIDE_ON_CLOSE);
+		setDefaultCloseOperation(HIDE_ON_CLOSE);
 
-        setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
+		setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 
-        JTextPane start_x_pane = ComponentsFactory.createBasicTextPane("Start X:");
-        JTextPane start_y_pane = ComponentsFactory.createBasicTextPane("Start Y:");
-        JTextPane widthPane = ComponentsFactory.createBasicTextPane("Width:");
-        JTextPane heightPane = ComponentsFactory.createBasicTextPane("Height:");
-        selectedFilePane = ComponentsFactory.createBasicTextPane("");
-        isFileSelectedPane = ComponentsFactory.createBasicTextPane(NO_FILE_IS_SELECTED);
-        isFileSelectedPane.setForeground(Color.RED);
+		JTextPane instructions = ComponentsFactory.createBasicTextPane("Instructions: Please Choose "
+				+ "from the ComboBoxess below"+"\n"+ "the coordiantes and size you would like the sound component to have");
+		JScrollPane instructionsScrollPane = new JScrollPane(instructions);
+		JTextPane start_x_pane = ComponentsFactory.createBasicTextPane("Start X:");
+		JTextPane start_y_pane = ComponentsFactory.createBasicTextPane("Start Y:");
+		JTextPane widthPane = ComponentsFactory.createBasicTextPane("Width:");
+		JTextPane heightPane = ComponentsFactory.createBasicTextPane("Height:");
+		selectedFilePane = ComponentsFactory.createBasicTextPane("");
+		isFileSelectedPane = ComponentsFactory.createBasicTextPane(NO_FILE_IS_SELECTED);
+		isFileSelectedPane.setForeground(Color.RED);
 
-        start_x_TextField = ComponentsFactory.createBasicTextField(INSERT_INTEGER);
-        start_y_TextField = ComponentsFactory.createBasicTextField(INSERT_INTEGER);
-        widthTextField = ComponentsFactory.createBasicTextField(INSERT_INTEGER);
-        heightTextField = ComponentsFactory.createBasicTextField(INSERT_INTEGER);
+		start_x_TextField = ComponentsFactory.createBasicTextField(INSERT_INTEGER);
+		start_y_TextField = ComponentsFactory.createBasicTextField(INSERT_INTEGER);
+		widthTextField = ComponentsFactory.createBasicTextField(INSERT_INTEGER);
+		heightTextField = ComponentsFactory.createBasicTextField(INSERT_INTEGER);
 
-        start_x_TextField.addFocusListener(new FocusListener()
-        {
-            @Override
-            public void focusGained(FocusEvent e)
-            {
-            }
+		start_x_ComboBox = new JComboBox<String>(sizesArray);
+		start_y_ComboBox = new JComboBox<String>(sizesArray);
+		widthComboBox = new JComboBox<String>(sizesArray);
+		heightComboBox = new JComboBox<String>(sizesArray);
 
-            @Override
-            public void focusLost(FocusEvent e)
-            {
-                String input = ((JTextField) e.getSource()).getText();
-                _start_x = getIntValue(input);
-            }
-        });
+		start_x_ComboBox.setSelectedIndex(0);
+		start_y_ComboBox.setSelectedIndex(0);
+		widthComboBox.setSelectedIndex(0);
+		heightComboBox.setSelectedIndex(0);
 
-        start_y_TextField.addFocusListener(new FocusListener()
-        {
-            @Override
-            public void focusGained(FocusEvent e)
-            {
-            }
+		start_x_ComboBox.setForeground(Color.BLACK);
+		start_x_ComboBox.setFont(new Font("Arial", Font.BOLD, 14));
+		start_x_ComboBox.setMaximumRowCount(10);
+		start_y_ComboBox.setForeground(Color.BLACK);
+		start_y_ComboBox.setFont(new Font("Arial", Font.BOLD, 14));
+		start_y_ComboBox.setMaximumRowCount(10);
+		widthComboBox.setForeground(Color.BLACK);
+		widthComboBox.setFont(new Font("Arial", Font.BOLD, 14));
+		widthComboBox.setMaximumRowCount(10);
+		heightComboBox.setForeground(Color.BLACK);
+		heightComboBox.setFont(new Font("Arial", Font.BOLD, 14));
+		heightComboBox.setMaximumRowCount(10);
 
-            @Override
-            public void focusLost(FocusEvent e)
-            {
-                String input = ((JTextField) e.getSource()).getText();
-                _start_y = getIntValue(input);
-            }
-        });
+		start_x_ComboBox.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				JComboBox<String> cb = (JComboBox<String>)e.getSource();
+				String size = (String)cb.getSelectedItem();
+				Double tmp = getSizeByString(size)*resulotion_X;
+				int iSize = tmp.intValue();
+				start_x_TextField.setText(String.valueOf(iSize));
+				start_x_TextField.setEditable(false);
+				start_x_TextField.repaint();
+				_start_x = iSize;
+			}
+		});
+		start_y_ComboBox.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				JComboBox<String> cb = (JComboBox<String>)e.getSource();
+				String size = (String)cb.getSelectedItem();
+				Double tmp = getSizeByString(size)*resulotion_Y;
+				int iSize = tmp.intValue();
+				start_y_TextField.setText(String.valueOf(iSize));
+				start_y_TextField.setEditable(false);
+				start_y_TextField.repaint();
+				_start_y = iSize;
+			}
+		});
+		widthComboBox.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				JComboBox<String> cb = (JComboBox<String>)e.getSource();
+				String size = (String)cb.getSelectedItem();
+				Double tmp = getSizeByString(size)*resulotion_X;
+				int iSize = tmp.intValue();
+				widthTextField.setText(String.valueOf(iSize));
+				widthTextField.setEditable(false);
+				widthTextField.repaint();
+				_width = iSize;
+			}
+		});
+		heightComboBox.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				JComboBox<String> cb = (JComboBox<String>)e.getSource();
+				String size = (String)cb.getSelectedItem();
+				Double tmp = getSizeByString(size)*resulotion_Y;
+				int iSize = tmp.intValue();
+				heightTextField.setText(String.valueOf(iSize));
+				heightTextField.setEditable(false);
+				heightTextField.repaint();
+				_height = iSize;
+			}
+		});
 
-        widthTextField.addFocusListener(new FocusListener()
-        {
-            @Override
-            public void focusGained(FocusEvent e)
-            {
-            }
+		start_x_TextField.addFocusListener(new FocusListener()
+		{
+			@Override
+			public void focusGained(FocusEvent e)
+			{
+			}
 
-            @Override
-            public void focusLost(FocusEvent e)
-            {
-                String input = ((JTextField) e.getSource()).getText();
-                _width = getIntValue(input);
-            }
-        });
+			@Override
+			public void focusLost(FocusEvent e)
+			{
+				String input = ((JTextField) e.getSource()).getText();
+				_start_x = getIntValue(input);
+			}
+		});
 
-        heightTextField.addFocusListener(new FocusListener()
-        {
-            @Override
-            public void focusGained(FocusEvent e)
-            {
-            }
+		start_y_TextField.addFocusListener(new FocusListener()
+		{
+			@Override
+			public void focusGained(FocusEvent e)
+			{
+			}
 
-            @Override
-            public void focusLost(FocusEvent e)
-            {
-                String input = ((JTextField) e.getSource()).getText();
-                _height = getIntValue(input);
-            }
-        });
+			@Override
+			public void focusLost(FocusEvent e)
+			{
+				String input = ((JTextField) e.getSource()).getText();
+				_start_y = getIntValue(input);
+			}
+		});
 
-        //TODO: add sound file verification
+		widthTextField.addFocusListener(new FocusListener()
+		{
+			@Override
+			public void focusGained(FocusEvent e)
+			{
+			}
 
-        setSquareInsets(DEFAULT_BUTTONS_INSETS);
+			@Override
+			public void focusLost(FocusEvent e)
+			{
+				String input = ((JTextField) e.getSource()).getText();
+				_width = getIntValue(input);
+			}
+		});
 
-        addPaneAndTextField(0, start_x_pane, start_x_TextField);
-        addPaneAndTextField(1, start_y_pane, start_y_TextField);
-        addPaneAndTextField(2, widthPane, widthTextField);
-        addPaneAndTextField(3, heightPane, heightTextField);
+		heightTextField.addFocusListener(new FocusListener()
+		{
+			@Override
+			public void focusGained(FocusEvent e)
+			{
+			}
 
-        JButton chooseFileButton = new JButton("Select Audio File");
-        chooseFileButton.addActionListener(e -> onSelectAudioFile());
+			@Override
+			public void focusLost(FocusEvent e)
+			{
+				String input = ((JTextField) e.getSource()).getText();
+				_height = getIntValue(input);
+			}
+		});
 
-        setConstraints(0, 4, 1, 1);
-        add(isFileSelectedPane, constraints);
+		//TODO: add sound file verification
 
-        setConstraints(1, 4, 1, 1);
-        add(chooseFileButton, constraints);
+		//setSquareInsets(DEFAULT_BUTTONS_INSETS);
 
-        setConstraints(0, 5, 1, 1);
-        constraints.gridwidth = 3;
-        add(selectedFilePane, constraints);
+		addInstructionScrollPane(0, instructionsScrollPane);
+		addPaneAndTextField(1, start_x_pane, start_x_TextField);
+		addPaneAndTextField(2, start_y_pane, start_y_TextField);
+		addPaneAndTextField(3, widthPane, widthTextField);
+		addPaneAndTextField(4, heightPane, heightTextField);
 
-        constraints.gridwidth = 1;
+		addTitleAndComboBox(1, start_x_ComboBox);
+		addTitleAndComboBox(2, start_y_ComboBox);
+		addTitleAndComboBox(3, widthComboBox);
+		addTitleAndComboBox(4, heightComboBox);
 
-        JButton okButton = new JButton("OK");
-        okButton.addActionListener(e -> onOkButtonPressed());
+		JButton chooseFileButton = new JButton("Select Audio File");
+		chooseFileButton.addActionListener(e -> onSelectAudioFile());
 
-        setConstraints(0, 6, 1, 1);
-        add(okButton, constraints);
+		setConstraints(0, 5, 1, 1);
+		add(isFileSelectedPane, constraints);
 
-        JButton cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(e -> onCancelButtonPressed());
+		setConstraints(1, 5, 1, 1);
+		add(chooseFileButton, constraints);
 
-        setConstraints(1, 6, 1, 1);
-        add(cancelButton, constraints);
+		setConstraints(0, 6, 1, 1);
+		constraints.gridwidth = 3;
+		add(selectedFilePane, constraints);
 
-        addWindowListener(new WindowAdapter()
-        {
-            @Override
-            public void windowClosing(WindowEvent e)
-            {
-                onClosingWindow();
-            }
-        });
+		constraints.gridwidth = 1;
 
-        setLocationRelativeTo(null);
-    }
+		JButton okButton = new JButton("OK");
+		okButton.addActionListener(e -> onOkButtonPressed());
 
-    private void onSelectAudioFile()
-    {
-        JFileChooser chooser = new JFileChooser();
-        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
-        {
-            File selectedFile = chooser.getSelectedFile();
-            String filePathToShow = selectedFile.getAbsolutePath();
-            String fileIsSelected = "Selected Audio File";
-            Color selectedColor = Color.GREEN;
+		setConstraints(0, 7, 1, 1);
+		add(okButton, constraints);
 
-            //TODO: validate it can be played
+		JButton cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener(e -> onCancelButtonPressed());
 
-            if (!isFileSupportedType(filePathToShow))
-            {
-                showErrorMessage("The file format isn't supported");
-                filePathToShow = "";
-                selectedFile = null;
-                fileIsSelected = NO_FILE_IS_SELECTED;
-                selectedColor = Color.RED;
-            }
+		setConstraints(1, 7, 1, 1);
+		add(cancelButton, constraints);
 
-            _soundFile = selectedFile;
-            isFileSelectedPane.setText(fileIsSelected);
-            isFileSelectedPane.setForeground(selectedColor);
-            selectedFilePane.setText(filePathToShow);
-        }
-    }
+		addWindowListener(new WindowAdapter()
+		{
+			@Override
+			public void windowClosing(WindowEvent e)
+			{
+				onClosingWindow();
+			}
+		});
 
-    private boolean isFileSupportedType(String filePath)
-    {
-        for (int i = 0; i < SUPPORTED_AUDIO_FORMATS.length; i++)
-        {
-            if (filePath.endsWith(SUPPORTED_AUDIO_FORMATS[i]))
-            {
-                return true;
-            }
-        }
+		setLocationRelativeTo(null);
+	}
 
-        return false;
-    }
+	private void onSelectAudioFile()
+	{
+		JFileChooser chooser = new JFileChooser();
+		if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+		{
+			File selectedFile = chooser.getSelectedFile();
+			String filePathToShow = selectedFile.getAbsolutePath();
+			String fileIsSelected = "Selected Audio File";
+			Color selectedColor = Color.GREEN;
+			try {
+				File NewLocation = new File(".\\xmlDir\\AASounds\\" + selectedFile.getName());
+				Files.copy(selectedFile.toPath(),NewLocation.toPath());
+			} catch (Exception ex) {
+				Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());
+			}
+			//TODO: validate it can be played
 
-    private void onCancelButtonPressed()
-    {
-        //Same as on closing window
-        onClosingWindow();
-    }
+			if (!isFileSupportedType(filePathToShow))
+			{
+				showErrorMessage("The file format isn't supported");
+				filePathToShow = "";
+				selectedFile = null;
+				fileIsSelected = NO_FILE_IS_SELECTED;
+				selectedColor = Color.RED;
+			}
 
-    private void onOkButtonPressed()
-    {
-        boolean success = allValuesNotNull() && allValuesLegit();
+			_soundFile = selectedFile;
+			isFileSelectedPane.setText(fileIsSelected);
+			isFileSelectedPane.setForeground(selectedColor);
+			selectedFilePane.setText(filePathToShow);
+		}
+	}
 
-        if (success)
-        {
-            //TODO: maybe switch to a swing worker instead of this
+	private boolean isFileSupportedType(String filePath)
+	{
+		for (int i = 0; i < SUPPORTED_AUDIO_FORMATS.length; i++)
+		{
+			if (filePath.endsWith(SUPPORTED_AUDIO_FORMATS[i]))
+			{
+				return true;
+			}
+		}
 
-            SoundElement soundElement = new SoundElement(_soundFile, _start_x, _start_y, _height, _width);
+		return false;
+	}
 
-            Screens.CreateLessonScreen.addNewSoundElementToCurrentSlide(soundElement);
+	private void onCancelButtonPressed()
+	{
+		//Same as on closing window
+		onClosingWindow();
+	}
 
-            //TODO: change this for using the same screen for multiple lessons
+	private void onOkButtonPressed()
+	{
+		boolean success = allValuesNotNull() && allValuesLegit();
 
-            hideFrame();
-        }
-        else
-        {
-            showErrorMessage("Unable to create sound area - Not all values were correct");
-        }
-    }
+		if (success)
+		{
+			//TODO: maybe switch to a swing worker instead of this
 
-    private boolean allValuesLegit()
-    {
-        // TODO: implement check for the sizes according to 7 inch pixels sizes
-        return true;
-    }
+			SoundElement soundElement = new SoundElement(_soundFile, _start_x, _start_y, _height, _width);
 
-    private void addPaneAndTextField(int row, JTextPane textPane, JTextField textField)
-    {
-        setConstraints(0, row, 1, 1);
-        add(textPane, constraints);
+			Screens.CreateLessonScreen.addNewSoundElement(soundElement);
 
-        setConstraints(1, row, 1, 1);
-        add(textField, constraints);
-    }
+			//TODO: change this for using the same screen for multiple lessons
 
-    protected void onClosingWindow()
-    {
-        // Should do nothing - only clear values and hide
-        hideFrame();
-    }
+			hideFrame();
+		}
+		else
+		{
+			showErrorMessage("Unable to create sound area - Not all values were correct");
+		}
+	}
 
-    private void hideFrame()
-    {
-        Screens.CreateLessonScreen.setVisible(true);
-        clearValues();
-        setVisible(false);
-    }
+	private boolean allValuesLegit()
+	{
+		// TODO: implement check for the sizes according to 7 inch pixels sizes
+		return true;
+	}
 
-    private Integer getIntValue(String input)
-    {
-        if (input == null || input.isEmpty())
-        {
-            return null;
-        }
+	private void addPaneAndTextField(int row, JTextPane textPane, JTextField textField)
+	{
+		setConstraints(0, row, 1, 1);
+		add(textPane, constraints);
 
-        input = input.trim();
-        Integer tmp;
+		setConstraints(1, row, 1, 1);
+		add(textField, constraints);
+	}
+	private void addInstructionTextPane(int row, JTextPane textPane)
+	{
+		setConstraints(0, row, 1, 1);
+		add(textPane, constraints);
+	}
+	private void addInstructionScrollPane(int row, JScrollPane scrollPane)
+	{
+		setConstraints(0, row, 20, 20);
+		add(scrollPane, constraints);
+	}
+	private void addTitleAndComboBox(int row, JComboBox<String> JCB)
+	{		
+		setConstraints(2, row, 1, 1);
+		add(JCB, constraints);
+	}
 
-        try
-        {
-            tmp = Integer.valueOf(input);
-        }
-        catch (Exception ex)
-        {
-            tmp = null;
-            showErrorMessage(input + " isn't a supported integer value" + "\n" + ex.getMessage());
-        }
+	protected void onClosingWindow()
+	{
+		// Should do nothing - only clear values and hide
+		hideFrame();
+	}
 
-        return tmp;
-    }
+	private void hideFrame()
+	{
+		Screens.CreateLessonScreen.setVisible(true);
+		clearValues();
+		setVisible(false);
+	}
 
-    private boolean allValuesNotNull()
-    {
-        return ((_start_x != null) && (_start_y != null) && (_width != null) && (_height != null) && (_soundFile != null));
-    }
+	private Integer getIntValue(String input)
+	{
+		if (input == null || input.isEmpty())
+		{
+			return null;
+		}
 
-    private void clearValues()
-    {
-        start_x_TextField.setText("");
-        start_y_TextField.setText("");
-        widthTextField.setText("");
-        heightTextField.setText("");
-        selectedFilePane.setText("");
+		input = input.trim();
+		Integer tmp;
 
-        isFileSelectedPane.setText(NO_FILE_IS_SELECTED);
-        isFileSelectedPane.setForeground(Color.RED);
+		try
+		{
+			tmp = Integer.valueOf(input);
+		}
+		catch (Exception ex)
+		{
+			tmp = null;
+			showErrorMessage(input + " isn't a supported integer value" + "\n" + ex.getMessage());
+		}
 
-        _height = null;
-        _width = null;
-        _start_x = null;
-        _start_y = null;
+		return tmp;
+	}
 
-        _soundFile = null;
-    }
+	private boolean allValuesNotNull()
+	{
+		return ((_start_x != null) && (_start_y != null) && (_width != null) && (_height != null) && (_soundFile != null));
+	}
+	private double getSizeByString(String str){
+		double res = 0;
+		switch (str){
+		case "1/8":
+			res = 0.125;
+			break;
+		case "1/4": 
+			res = 0.25;
+			break;
+		case "3/8": 
+			res = 0.375;
+			break;
+		case "1/2": 
+			res = 0.5;
+			break;
+		case "5/8": 
+			res = 0.625;
+			break;
+		case "3/4": 
+			res = 0.75;
+			break;
+		case "7/8": 
+			res = 0.875;
+			break;
+		default: 
+			res = 0;
+			break;
+		}
+		return res;
+	}
+	private void clearValues()
+	{
+		start_x_TextField.setText("");
+		start_y_TextField.setText("");
+		widthTextField.setText("");
+		heightTextField.setText("");
+		selectedFilePane.setText("");
+
+		isFileSelectedPane.setText(NO_FILE_IS_SELECTED);
+		isFileSelectedPane.setForeground(Color.RED);
+
+		_height = null;
+		_width = null;
+		_start_x = null;
+		_start_y = null;
+
+		_soundFile = null;
+	}
+
 }

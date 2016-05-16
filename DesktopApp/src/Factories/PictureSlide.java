@@ -1,40 +1,35 @@
 package Factories;
-import Factories.SoundElement;
+
 
 import java.io.File;
-import java.util.Collection;
-import java.util.List;
-
+import java.util.ArrayList;
 
 /**
- * Created by Evgeniy on 11/26/2015.
+ * Created by Ohad on 11/12/2015.
  */
-public class PictureSlide extends AbstractSlide
-{
-	private SoundElement[] soundElements;
-    File pictureFile;
+public class PictureSlide extends Slide {
 
-    public void setPictureFile(File pictureFile)
-    {
-        validateNotNull(pictureFile);
+    String path;
+    //ArrayList<Button> buttons = new ArrayList<>();
+    //ArrayList<TextView> texts = new ArrayList<>();
+    ArrayList<DynamicButton> dynamicButtons = new ArrayList<>();
+    ArrayList<DynamicText> dynamicTexts = new ArrayList<>();
+    boolean firstShow = true;
 
-        this.pictureFile = pictureFile;
+    public PictureSlide(String path, ArrayList<DynamicButton> dynamicButtons, ArrayList<DynamicText> dynamicTexts) {
+        this.path = path;
+        this.dynamicButtons = dynamicButtons;
+        this.dynamicTexts = dynamicTexts;
     }
 
-    public File getPictureFile()
-    {
-        return pictureFile;
+    public String getPath(){
+        return this.path;
     }
 
-    public void setSoundElements(SoundElement[] elements)
-    {
-        validateNotNull(elements);
-
-        soundElements = elements;
+    public ArrayList<DynamicButton> getDynamicButtons(){
+        return this.dynamicButtons;
     }
 
-    public SoundElement[] getSoundElements()
-    {
-        return soundElements;
-    }
+
+
 }
