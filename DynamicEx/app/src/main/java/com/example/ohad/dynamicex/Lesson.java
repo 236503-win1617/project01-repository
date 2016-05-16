@@ -1,9 +1,7 @@
 package com.example.ohad.dynamicex;
 
 import android.app.Activity;
-import android.os.Environment;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;

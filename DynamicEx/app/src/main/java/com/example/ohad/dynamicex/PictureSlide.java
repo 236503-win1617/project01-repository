@@ -2,6 +2,7 @@ package com.example.ohad.dynamicex;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -22,43 +23,60 @@ import java.util.ArrayList;
  */
 public class PictureSlide extends Slide {
 
-    String path;
-    ArrayList<Button> buttons = new ArrayList<>();
-    ArrayList<TextView> texts = new ArrayList<>();
-    ArrayList<DynamicButton> dynamicButtons = new ArrayList<>();
-    ArrayList<DynamicText> dynamicTexts = new ArrayList<>();
-    boolean firstShow = true;
+    private String path;
+    private ArrayList<Button> buttons;
+    private ArrayList<TextView> texts;
+    private ArrayList<DynamicButton> dynamicButtons;
+    private ArrayList<DynamicText> dynamicTexts;    // Not supported in desktop yet
+    private boolean firstShow;
+    private Rotation rotation;
 
-    public PictureSlide(String path, ArrayList<DynamicButton> dynamicButtons, ArrayList<DynamicText> dynamicTexts) {
+
+    public PictureSlide(String path, ArrayList<DynamicButton> dynamicButtons, ArrayList<DynamicText> dynamicTexts, Rotation rotation) {
+        buttons = new ArrayList<>();
+        texts = new ArrayList<>();
+        firstShow = true;
+
         this.path = path;
-        this.dynamicButtons = dynamicButtons;
-        this.dynamicTexts = dynamicTexts;
+        this.dynamicButtons = dynamicButtons != null ? dynamicButtons : new ArrayList<DynamicButton>();
+        this.dynamicTexts = dynamicTexts != null ? dynamicTexts : new ArrayList<DynamicText>();
+        this.rotation = rotation != null ? rotation : Rotation.NO_ROTATION; // portrait by default
     }
 
     public void show(Activity activity) {
+        switch (rotation) {
+            case NO_ROTATION:
+                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                break;
+            case ROTATE_LEFT:
+                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                break;
+            case ROTATE_RIGHT:
+                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+                break;
+            case UPSIDE_DOWN:
+                activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+                break;
+        }
+
 
         RelativeLayout layout = (RelativeLayout)activity.findViewById(R.id.content_main);
-        //layout.removeAllViews();
 
         // Set background
-
         File imgFile = new File(path);
         if(imgFile.exists()){
-            //Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             Bitmap myBitmap = decodeSampledBitmapFromFile(imgFile.getAbsolutePath(), 250, 250);
             setBackground(activity, layout, myBitmap);
         }
 
         // On the first show of the slide - create the buttons and texts
         if (firstShow) {
-            // Create all dynamic texts
             for (final DynamicText dynamicText : dynamicTexts) {
                 TextView tv = createTV(activity, dynamicText);
                 texts.add(tv);
                 layout.addView(tv);
             }
 
-            // Create all dynamic audio buttons
             for (final DynamicButton dynamicButton : dynamicButtons) {
                 Button b = createButton(activity, dynamicButton);
                 buttons.add(b);
@@ -88,15 +106,16 @@ public class PictureSlide extends Slide {
 
 
     @SuppressWarnings("deprecation")
-    private void setBackground(Activity activity, RelativeLayout rl, Bitmap bitmap) {
+    private void setBackground(Activity activity, RelativeLayout rl, Bitmap bitmap)
+    {
         if(Build.VERSION.SDK_INT >= 16)
             rl.setBackground(new BitmapDrawable(activity.getResources(), bitmap));
         else
             rl.setBackgroundDrawable(new BitmapDrawable(bitmap));
     }
 
-    private TextView createTV(Activity activity, final DynamicText text) {
-
+    private TextView createTV(Activity activity, final DynamicText text)
+    {
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -109,8 +128,8 @@ public class PictureSlide extends Slide {
         return tv;
     }
 
-    private Button createButton(Activity activity, final DynamicButton button) {
-
+    private Button createButton(Activity activity, final DynamicButton button)
+    {
         Button myButton = new Button(activity.getApplicationContext());
         myButton.setText(button.getText());
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(button.getWidth(), button.getHeight());
@@ -137,7 +156,8 @@ public class PictureSlide extends Slide {
 
     //////////////////// Loading Large Bitmaps ///////////////////
 
-    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight)
+    {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
@@ -159,8 +179,8 @@ public class PictureSlide extends Slide {
         return inSampleSize;
     }
 
-    public static Bitmap decodeSampledBitmapFromFile(String path, int reqWidth, int reqHeight) {
-
+    public static Bitmap decodeSampledBitmapFromFile(String path, int reqWidth, int reqHeight)
+    {
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
