@@ -7,12 +7,9 @@ import Resources.MessageErrors;
 import SlideManagers.AbstractSlideManager;
 import SlideManagers.PictureSlideManager;
 import SlideManagers.VideoSlideManager;
-import SlideManagers.GameSlideManager;
-import SlideObjects.AbstractSlide;
-import SlideObjects.PictureSlide;
-import SlideObjects.SlideType;
-import SlideObjects.VideoSlide;
-import SlideObjects.GameSlide;
+import SlideManagers.ListenAndFindGameSlideManager;
+import SlideManagers.OrderGameSlideManager;
+import SlideObjects.*;
 
 import java.io.File;
 import javax.swing.*;
@@ -68,14 +65,16 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
 
         slideTypeToManager.put(SlideType.Picture, new PictureSlideManager(currentSlidePanel, commandsPanel, soundsPanel));
         slideTypeToManager.put(SlideType.Video, new VideoSlideManager(currentSlidePanel, commandsPanel));
-        slideTypeToManager.put(SlideType.Game, new GameSlideManager(currentSlidePanel, commandsPanel));
+        //slideTypeToManager.put(SlideType.Game, new GameSlideManager(currentSlidePanel, commandsPanel));
+        slideTypeToManager.put(SlideType.OrderGame, new OrderGameSlideManager(currentSlidePanel, commandsPanel));
+        slideTypeToManager.put(SlideType.ListenAndFindGame, new ListenAndFindGameSlideManager(currentSlidePanel, commandsPanel));
     }
 
     public void loadExistingLesson(Lesson toLoad,String lessonName){
         for(Slide s: toLoad.slides){
 
             if(s instanceof Factories.PictureSlide){
-                PictureSlide picSlide = new PictureSlide();
+                SlideObjects.PictureSlide picSlide = new SlideObjects.PictureSlide();
 
                 addNewSlide(picSlide);
                 try {
@@ -320,7 +319,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
 
     private void setAddPictureSlideButton() {
         JButton addPictureSlide = new JButton("Add Picture Slide");
-        addPictureSlide.addActionListener(e -> addNewSlide(new PictureSlide()));
+        addPictureSlide.addActionListener(e -> addNewSlide(new SlideObjects.PictureSlide()));
         setConstraints(0, 0, 1, 1);
         commandsPanel.add(addPictureSlide, constraints);
     }
@@ -330,25 +329,39 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         addGameSlide.addActionListener(new ActionListener() {
 
                                            public void actionPerformed(ActionEvent e) {
-                                               String[] gameTypes = { "Animals", "Colors", "Numbers"};
+//                                               String[] gameTypes = { "Animals", "Colors", "Numbers"};
+//                                               String choice = (String) JOptionPane.showInputDialog(null, "What game do you want?",
+//                                                       "Choose Type of Game", JOptionPane.QUESTION_MESSAGE, null, // Use
+//                                                       gameTypes, // Array of choices
+//                                                       gameTypes[0]); // Initial choice
+//
+//                                               GameSlide.GameType type = null;
+//                                               if (choice == null) return;
+//                                               if (choice.equals("Animals")){
+//                                                   type = GameSlide.GameType.Animals;
+//                                               } else if (choice.equals("Colors")){
+//                                                   type = GameSlide.GameType.Colors;
+//                                               } else if (choice.equals("Numbers")){
+//                                                   type = GameSlide.GameType.Numbers;
+//                                               }
+//                                               GameSlide newGameSlide = new GameSlide(type);
+                                               String[] gameTypes = { "Listen and Order", "Listen and Find"};
                                                String choice = (String) JOptionPane.showInputDialog(null, "What game do you want?",
                                                        "Choose Type of Game", JOptionPane.QUESTION_MESSAGE, null, // Use
                                                        gameTypes, // Array of choices
                                                        gameTypes[0]); // Initial choice
 
-                                               GameSlide.GameType type = null;
-                                               if (choice.equals("Animals")){
-                                                   type = GameSlide.GameType.Animals;
-                                               } else if (choice.equals("Colors")){
-                                                   type = GameSlide.GameType.Colors;
-                                               } else if (choice.equals("Numbers")){
-                                                   type = GameSlide.GameType.Numbers;
+                                               GameSlide newGameSlide = null;
+                                               if (choice == null) return;
+                                               if (choice.equals("Listen and Order")){
+                                                   newGameSlide = new OrderGameSlide();
+                                               } else if (choice.equals("Listen and Find")) {
+                                                   newGameSlide = new ListenAndFindGameSlide();
                                                }
-                                               GameSlide newGameSlide = new GameSlide(type);
                                                addNewSlide(newGameSlide);
                                            }
                                        });
-        setConstraints(0, 1, 1, 1);//What should be here?
+        setConstraints(0, 1, 1, 1);
         commandsPanel.add(addGameSlide, constraints);
     }
 
