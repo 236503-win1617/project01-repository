@@ -41,7 +41,7 @@ public class VideoSlide extends Slide {
 
         if (mPlayButton == null || mPlayer == null)
         {
-            mPlayer = new VideoView(activity.getApplicationContext());
+            mPlayer = new VideoView(activity);
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
             lp.addRule(RelativeLayout.CENTER_IN_PARENT);
             mPlayer.setLayoutParams(lp);
@@ -59,7 +59,7 @@ public class VideoSlide extends Slide {
             mPlayer.setOnCompletionListener(mPlayerOnComplete);
             mPlayer.setOnTouchListener(mPlayerOnTouch);
 
-            mPlayButton = new Button(activity.getApplicationContext());
+            mPlayButton = new Button(activity);
             mPlayButton.setText("Play Video");
             lp = new RelativeLayout.LayoutParams(250, 250);
             lp.addRule(RelativeLayout.CENTER_IN_PARENT);
@@ -76,7 +76,7 @@ public class VideoSlide extends Slide {
     }
 
     @Override
-    public void hide() {
+    public void hide(Activity a) {
         mPlayButton.setVisibility(View.INVISIBLE);
         mPlayer.setVisibility(View.INVISIBLE);
     }
