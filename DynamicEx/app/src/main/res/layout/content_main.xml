@@ -10,22 +10,4 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_main" tools:context=".MainActivity">
 
-    <!--<TextView-->
-        <!--android:id="@+id/title"-->
-        <!--android:text="Example"-->
-        <!--android:layout_alignParentLeft="true"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textStyle="bold"-->
-        <!--android:textSize="50sp"/>-->
-
-    <!--<TextView-->
-        <!--android:id="@+id/slide_num"-->
-        <!--android:text="slide 1/10"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textStyle="bold"-->
-        <!--android:textSize="20sp"/>-->
-
 </RelativeLayout>

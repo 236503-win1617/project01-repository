@@ -18,6 +18,10 @@ import org.xml.sax.InputSource;
 
 public class XmlParser {
 
+	public enum Game {
+		COLORS,NUMBERS,ANIMALS,ORDER
+	};
+
 	public void parse(String xmlPath, String lessonPath, Lesson lesson) {
 
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -43,12 +47,21 @@ public class XmlParser {
 					else if (type.equals("Video")) {
 						handleVideoSlide(e, lessonPath, lesson);
 					}
+					else if(type.equals("game")){
+						handleGameSlide(e, lesson);
+					}
 				}
 			}
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	private void handleGameSlide(Element e, Lesson lesson) {
+		XmlParser.Game gameType = XmlParser.Game.valueOf(e.getElementsByTagName("gameType").item(0).getTextContent());
+		Slide newSlide = new GameSlide(gameType,lesson.activity);
+		lesson.addSlide(newSlide);
 	}
 
 	private void handlePictureSlide(Element e, String lessonPath, Lesson lesson) {

@@ -34,7 +34,7 @@ public class Lesson {
         if (currSlideIdx >= slides.size() - 1)
             return false;
 
-        slides.get(currSlideIdx).hide();
+        slides.get(currSlideIdx).hide(activity);
         slides.get(++currSlideIdx).show(activity);
 
         ((TextView)activity.findViewById(R.id.slide_num)).setText((currSlideIdx + 1) + "/" + slides.size());
@@ -45,11 +45,15 @@ public class Lesson {
         if (currSlideIdx <= 0)
             return false;
 
-        slides.get(currSlideIdx).hide();
+        slides.get(currSlideIdx).hide(activity);
         slides.get(--currSlideIdx).show(activity);
 
         ((TextView)activity.findViewById(R.id.slide_num)).setText((currSlideIdx + 1) + "/" + slides.size());
         return true;
+    }
+
+    public Slide getCurrSlide(){
+        return slides.get(currSlideIdx);
     }
 
 }

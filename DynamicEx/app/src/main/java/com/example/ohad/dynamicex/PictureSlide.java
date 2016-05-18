@@ -96,7 +96,7 @@ public class PictureSlide extends Slide {
         }
     }
 
-    public void hide() {
+    public void hide(Activity activity) {
         for (final TextView tv : texts)
             tv.setVisibility(View.INVISIBLE);
 
@@ -120,7 +120,7 @@ public class PictureSlide extends Slide {
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
         lp.setMargins(text.getStartX(), text.getStartY(), 0, 0);
-        TextView tv = new TextView(activity.getApplicationContext());
+        TextView tv = new TextView(activity);
         tv.setLayoutParams(lp);
         tv.setText(text.getText());
         tv.setTextSize(text.getTextSize());
@@ -130,14 +130,14 @@ public class PictureSlide extends Slide {
 
     private Button createButton(Activity activity, final DynamicButton button)
     {
-        Button myButton = new Button(activity.getApplicationContext());
+        Button myButton = new Button(activity);
         myButton.setText(button.getText());
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(button.getWidth(), button.getHeight());
         lp.setMargins(button.getStartX(), button.getStartY(), 0, 0);
         myButton.setLayoutParams(lp);
 
         // Add sound
-        final Context context = activity.getApplicationContext();
+        final Context context = activity;
         myButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 MediaPlayer mp = button.getMp();

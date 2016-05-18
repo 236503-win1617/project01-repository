@@ -7,5 +7,5 @@ import android.app.Activity;
  */
 public abstract class Slide {
     abstract void show(Activity activity);
-    abstract void hide();
+    abstract void hide(Activity activity);
 }

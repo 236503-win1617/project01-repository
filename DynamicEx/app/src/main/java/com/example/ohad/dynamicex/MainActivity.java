@@ -67,4 +67,23 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void sayNum(View v){
+        Slide curr = lesson.getCurrSlide();
+        if (curr instanceof GameSlide){
+            ((GameSlide)curr).getGameFragment().sayNum(v);
+        }
+    }
+    public void checkNum(View v){
+        Slide curr = lesson.getCurrSlide();
+        if (curr instanceof GameSlide){
+            ((GameSlide)curr).getGameFragment().checkNum(v);
+        }
+    }
+    public void initNums(View v){
+        Slide curr = lesson.getCurrSlide();
+        if (curr instanceof GameSlide){
+            ((GameSlide)curr).getGameFragment().initNums(v);
+        }
+    }
+
 }

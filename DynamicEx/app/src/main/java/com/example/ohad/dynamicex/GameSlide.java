@@ -1,12 +1,8 @@
 package com.example.ohad.dynamicex;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.os.Environment;
-import android.view.View;
-import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.app.FragmentManager;
+
 
 import java.io.File;
 
@@ -14,26 +10,50 @@ import java.io.File;
  * Created by Samuel on 28/03/2016.
  */
 public class GameSlide extends Slide {
-    private Activity gameActivity;
+    private GameFragment gameFragment;
 
-    public GameSlide(XmlParser.Game game){
+    public GameSlide(XmlParser.Game game,Activity activity){
         switch (game) {
             case NUMBERS:
-                gameActivity = new GameNumbers();
+                gameFragment = new GameNumbers();
+                break;
             case COLORS:
-                gameActivity = new GameColors();
+                gameFragment = new GameColors();
+                break;
             case ANIMALS:
-                gameActivity = new GameAnimals();
+                gameFragment = new GameAnimals();
+                break;
+            case ORDER:
+                gameFragment = new GameOrder();
+                break;
             default:
-                gameActivity = new GameNumbers();
+                gameFragment = new GameNumbers();
         }
+        activity.getFragmentManager().beginTransaction().add(R.id.main_container, gameFragment).commit();
+        FragmentManager fm = activity.getFragmentManager();
+        fm.beginTransaction()
+                .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                .hide(gameFragment)
+                .commit();
     }
 
     public void show(Activity activity) {
-        //TODO add startActivity of gameActivity and add to each activity the arrow buttons
+        FragmentManager fm = activity.getFragmentManager();
+        fm.beginTransaction()
+                .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                .show(gameFragment)
+                .commit();
     }
 
-    public void hide() {
-        //TODO kill an activity of the game. check if it will have any impact or it needs to move inside the activity of each game itself!
+    public void hide(Activity activity) {
+        FragmentManager fm = activity.getFragmentManager();
+        fm.beginTransaction()
+                .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                .hide(gameFragment)
+                .commit();
+    }
+
+    public GameFragment getGameFragment(){
+        return gameFragment;
     }
 }
