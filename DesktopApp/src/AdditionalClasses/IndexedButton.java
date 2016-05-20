@@ -7,17 +7,16 @@ import javax.swing.*;
  */
 public class IndexedButton extends JButton
 {
-    private final int _index;
+    private final int index;
 
-    public IndexedButton(int index, String text)
+    public IndexedButton(int index)
     {
-        super(text);
-
-        _index = index;
+        super();
+        this.index = index;
     }
 
     public int getIndex()
     {
-        return _index;
+        return index;
     }
 }
