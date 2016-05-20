@@ -5,14 +5,14 @@
 package Factories;
 
 import AdditionalClasses.SoundElement;
-import SlideObjects.AbstractSlide;
-import SlideObjects.PictureSlide;
-import SlideObjects.VideoSlide;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
+import slides.AbstractSlide;
+import slides.PictureSlide;
+import slides.VideoSlide;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -107,8 +107,8 @@ public class LessonsFactory {
 		}
 	}
 
+	//TODO: implement
 	public static List<AbstractSlide> generateLessonFromXml(Document document) {
-		//TODO: implement
-		return null;
+		throw new UnsupportedOperationException();
 	}
 }
