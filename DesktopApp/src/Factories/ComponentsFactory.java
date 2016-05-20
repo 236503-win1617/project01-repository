@@ -1,10 +1,12 @@
 package Factories;
 
+import AdditionalClasses.RotatedIcon;
 import AdditionalClasses.UniqueTextPane;
 import Resources.DefaultSizes;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.UUID;
 
 /**
@@ -69,6 +71,30 @@ public class ComponentsFactory {
         element.setPreferredSize(dimension);
         element.setMaximumSize(dimension);
         element.setMinimumSize(dimension);
+    }
+
+    public static void setButtonImage(Image image, JButton button, double rotationRadians) {
+        button.removeAll();
+        RotatedIcon rotatedIcon = new RotatedIcon(image, rotationRadians);
+        button.setIcon(rotatedIcon);
+    }
+
+    public static Image getResizedImage(BufferedImage image, int toHeight, int toWidth) {
+        int originalHeight = image.getHeight();
+        int originalWidth = image.getWidth();
+
+        if ((originalHeight <= toHeight) && (originalWidth <= toWidth)) {
+            return image;
+        }
+
+        double heightFactor = ((double) toHeight / originalHeight);
+        double widthFactor = ((double) toWidth / originalWidth);
+        double factor = Double.min(heightFactor, widthFactor);
+
+        int newWidth = (int) (originalWidth * factor);
+        int newHeight = (int) (originalHeight * factor);
+
+        return image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
     }
 
     public static JComboBox createComboBox(Object[] values, String helperText, int start_x, int start_y, int width, int height) {

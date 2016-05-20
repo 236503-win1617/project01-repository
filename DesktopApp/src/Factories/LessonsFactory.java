@@ -8,7 +8,6 @@ import AdditionalClasses.SoundElement;
 import SlideObjects.AbstractSlide;
 import SlideObjects.PictureSlide;
 import SlideObjects.VideoSlide;
-
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -18,13 +17,13 @@ import org.dom4j.io.XMLWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.List;
 
-public class CreateXmlFactory {
+public class LessonsFactory {
 	//TODO: start using the name
 	//TODO: what is the index for ?
-	public static void generate(ArrayList<AbstractSlide> list, String name) {
+	//TODO: the file saving shouldn't be there
+	public static void generateXmlFromLesson(List<AbstractSlide> list, String name) {
 		try {
 			Document document = DocumentHelper.createDocument();
 			Element root = document.addElement("lesson");
@@ -89,6 +88,9 @@ public class CreateXmlFactory {
 			if (!success) {
 				// Directory already exists which is good
 			}
+
+			//TODO: Delete the creating of file from this method
+
 			OutputFormat format = OutputFormat.createPrettyPrint();
 			XMLWriter writer;
 			int counter = 0;
@@ -103,5 +105,10 @@ public class CreateXmlFactory {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public static List<AbstractSlide> generateLessonFromXml(Document document) {
+		//TODO: implement
+		return null;
 	}
 }
