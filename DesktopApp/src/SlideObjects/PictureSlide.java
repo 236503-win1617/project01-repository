@@ -23,7 +23,7 @@ public class PictureSlide extends AbstractSlide {
 
     @Override
     protected String[] getSupportedFormats() {
-        return new String[]{"png", "jpg", "jpeg"};
+        return new String[]{"png", "jpg", "jpeg", "bmp",};
     }
 
     public SoundElement[] getSoundElements() {

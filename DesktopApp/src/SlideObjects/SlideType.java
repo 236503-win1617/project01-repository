@@ -6,5 +6,6 @@ package SlideObjects;
 public enum SlideType {
     Picture,
     Video,
-    Game
+    OrderGame,
+    ListenAndFindGame
 }

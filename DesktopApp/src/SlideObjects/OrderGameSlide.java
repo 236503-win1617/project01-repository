@@ -1,9 +1,11 @@
 package SlideObjects;
 
+import java.io.File;
+
 /**
  * Created by dan on 16/05/2016.
  */
-public class OrderGameSlide extends GameSlide{
+public class OrderGameSlide extends AbstractSlide {
     private int max_num;
 
     public OrderGameSlide(){
@@ -23,5 +25,15 @@ public class OrderGameSlide extends GameSlide{
     @Override
     public SlideType getType() {
         return SlideType.OrderGame;
+    }
+
+    @Override
+    public void setSlideFile(File file) {
+
+    }
+
+    @Override
+    protected String[] getSupportedFormats() {
+        return new String[0];
     }
 }
