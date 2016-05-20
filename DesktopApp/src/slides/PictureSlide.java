@@ -1,4 +1,4 @@
-package SlideObjects;
+package slides;
 
 import AdditionalClasses.SoundElement;
 

@@ -1,4 +1,4 @@
-package SlideObjects;
+package slides;
 
 /**
  * Created by Evgeniy on 4/1/2016.
