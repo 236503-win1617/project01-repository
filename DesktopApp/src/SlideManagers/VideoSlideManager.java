@@ -63,16 +63,15 @@ public class VideoSlideManager extends AbstractSlideManager {
 
     private void setPlayVideoButton() {
         playVideoButton = new JButton("Play Video");
-        playVideoButton.addActionListener(e -> playVideo());
+        playVideoButton.addActionListener(e -> playVideo(currentSlide.getVideoFile()));
         setConstraints(0, 6, 1, 1);
         playVideoButton.setVisible(false);
         commandsPanel.add(playVideoButton, constraints);
     }
 
     //TODO: TBD maybe switch to VLCJ play ???
-    private void playVideo() {
+    private void playVideo(File videoFile) {
         try {
-            File videoFile = currentSlide.getVideoFile();
             if (videoFile != null) {
                 Desktop.getDesktop().open(videoFile);
             } else {
