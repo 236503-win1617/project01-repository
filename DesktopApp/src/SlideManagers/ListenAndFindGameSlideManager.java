@@ -1,13 +1,12 @@
 package SlideManagers;
 
 import AdditionalClasses.SoundElement;
-import SlideObjects.AbstractSlide;
-import SlideObjects.GameSlide;
-import SlideObjects.ListenAndFindGameSlide;
-import SlideObjects.Rotation;
+import slides.AbstractSlide;
+import slides.ListenAndFindGameSlide;
+import slides.Rotation;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -16,13 +15,16 @@ import java.io.IOException;
  */
 public class ListenAndFindGameSlideManager extends AbstractSlideManager {
     private boolean first = true;
-    public ListenAndFindGameSlideManager(JPanel currentSlide, JPanel commandsPanel){
+
+    public ListenAndFindGameSlideManager(JPanel currentSlide, JPanel commandsPanel) {
         super(currentSlide, commandsPanel);
     }
 
-    public void onRotateCommand() throws IOException {}
+    public void onRotateCommand() throws IOException {
+    }
 
-    public void loadSlide(AbstractSlide slide) throws IOException{
+    public void loadSlide(AbstractSlide slide, JButton button) throws IOException {
+        this.slideButton = button;
         if (first) {
             String[] gameTypes = {"Animals", "Colors", "Numbers"};
             String choice = (String) JOptionPane.showInputDialog(null, "What game do you want?",
@@ -42,29 +44,34 @@ public class ListenAndFindGameSlideManager extends AbstractSlideManager {
             ((ListenAndFindGameSlide) slide).setGameType(type);
             first = false;
         }
-        ListenAndFindGameSlide.GameType type =  ((ListenAndFindGameSlide) slide).getGameType();
-        switch(type){
+        ListenAndFindGameSlide.GameType type = ((ListenAndFindGameSlide) slide).getGameType();
+        String path = "";
+        switch (type) {
             case Animals:
-                loadPictureFromFile(new FileInputStream(".\\resources\\animals.jpg"), Rotation.NO_ROTATION);
+                path = ".\\resources\\animals.jpg";
                 break;
             case Colors:
-                loadPictureFromFile(new FileInputStream(".\\resources\\colors.png"), Rotation.NO_ROTATION);
+                path = ".\\resources\\colors.png";
                 break;
             case Numbers:
-                loadPictureFromFile(new FileInputStream(".\\resources\\numbers.jpg"), Rotation.NO_ROTATION);
+                path = ".\\resources\\numbers.jpg";
                 break;
         }
+        loadImageToSlidePanel(ImageIO.read(new FileInputStream(path)), Rotation.NO_ROTATION.getRotationInRadians());
     }
 
-    public void saveDataToCurrentSlide(){}
+    public void saveDataToCurrentSlide() {
+    }
 
-    protected void setSpecificCommandsButtons(){}
+    protected void setSpecificCommandsButtons() {
+    }
 
-    protected void specificClearContent(){}
+    protected void specificClearContent() {
+    }
 
-    protected void setSpecificButtonsVisibility(boolean visibility){}
+    protected void setSpecificButtonsVisibility(boolean visibility) {
+    }
 
-    public void loadPictureFile(File imageFile){}
-
-    public void addNewSoundElement(SoundElement soundElement){}
+    public void addNewSoundElement(SoundElement soundElement) {
+    }
 }
