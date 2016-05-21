@@ -191,10 +191,6 @@ public class PictureSlideManager extends AbstractSlideManager {
             try {
                 BufferedImage image = ImageIO.read(new FileInputStream(selectedFile));
                 loadSameImageToPanelAndButton(image, Rotation.NO_ROTATION.getRotationInRadians());
-
-                //TODO: remove this code to the save method - saving shouldn't be done on selecting
-//                File NewLocation = new File(".\\xmlDir\\AAImages\\" + selectedFile.getName());
-//                Files.copy(selectedFile.toPath(), NewLocation.toPath());
             } catch (Exception ex) {
                 Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());
                 ex.printStackTrace();

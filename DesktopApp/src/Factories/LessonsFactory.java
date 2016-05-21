@@ -23,6 +23,8 @@ public class LessonsFactory {
 	//TODO: start using the name
 	//TODO: what is the index for ?
 	//TODO: the file saving shouldn't be there
+	//TODO: Delete the creating of file from this method
+	//TODO: Stop using the xmlDir and switch to ../LessonNameDir
 	public static void generateXmlFromLesson(List<AbstractSlide> list, String name) {
 		try {
 			Document document = DocumentHelper.createDocument();
@@ -88,8 +90,6 @@ public class LessonsFactory {
 			if (!success) {
 				// Directory already exists which is good
 			}
-
-			//TODO: Delete the creating of file from this method
 
 			OutputFormat format = OutputFormat.createPrettyPrint();
 			XMLWriter writer;

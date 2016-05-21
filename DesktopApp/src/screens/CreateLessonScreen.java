@@ -166,8 +166,9 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         LessonsFactory.generateXmlFromLesson(_slides, name);
     }
 
+    //TODO: Refactor
+    //TODO: implement a check that lesson doesn't exists or overwrite the previous one
     private void onSaveCurrentLesson(boolean autosave) {
-        //TODO: Refactor
         if (!autosave) {
             if (_slides.size() == 0) {
                 showInformationMessage("Cannot save empty lesson !");
@@ -180,7 +181,6 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
                 LessonsFactory.generateXmlFromLesson(_slides, lessonName);
                 showInformationMessage("Lesson '" + lessonName + "' was saved !");
             }
-            //TODO: implement a check that lesson doesn't exists or overwrite the previous one
             return;
         }
         if (SettingScreen.a == 1) {
@@ -368,8 +368,6 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         screenMenuPanel.add(sendFeedbackButton, constraints);
     }
 
-    //TODO: Implement good saving
-    //TODO: maybe implement auto save feature
     private void setSaveLessonButton() {
         JButton saveButton = new JButton("Save Lesson");
         saveButton.addActionListener(e -> onSaveCurrentLesson(false));
@@ -422,13 +420,5 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         } else {
             //TODO: implement for a small screen
         }
-    }
-
-    public String getLessonName() {
-        return this.lessonName;
-    }
-
-    public void setLessonName(String name){
-        this.lessonName = name;
     }
 }
