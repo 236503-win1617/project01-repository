@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.nio.file.Files;
 
 /**
  * Created by Evgeniy on 12/7/2015.
@@ -16,9 +15,9 @@ import java.nio.file.Files;
 public class SoundAreaScreen extends AbstractEmptyScreen
 {
 	protected final String[] SUPPORTED_AUDIO_FORMATS = {".wav", ".mp3"};
-	protected final Integer resulotion_X = 1920;
-	protected final Integer resulotion_Y = 1080;
-	private final String NO_FILE_IS_SELECTED = "No File Selected";
+    protected final Integer resolution_X = 1920;
+    protected final Integer resolution_Y = 1080;
+    private final String NO_FILE_IS_SELECTED = "No File Selected";
 	private final String INSERT_INTEGER = "Insert Integer Number";
 	private final JTextField start_x_TextField;
 	private final JTextField start_y_TextField;
@@ -50,11 +49,11 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 
 		setDefaultCloseOperation(HIDE_ON_CLOSE);
 
-		setSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
+        setSize(new Dimension(DEFAULT_WIDTH + 50, DEFAULT_HEIGHT + 50));
 
-		JTextPane instructions = ComponentsFactory.createBasicTextPane("Instructions: Please Choose "
-				+ "from the ComboBoxess below"+"\n"+ "the coordiantes and size you would like the sound component to have");
-		JScrollPane instructionsScrollPane = new JScrollPane(instructions);
+        JTextPane instructions = ComponentsFactory.createBasicTextPane("Please Choose from the ComboBoxes below the " +
+                "coordinates and size you would like the sound component to have");
+        JScrollPane instructionsScrollPane = new JScrollPane(instructions);
 		JTextPane start_x_pane = ComponentsFactory.createBasicTextPane("Start X:");
 		JTextPane start_y_pane = ComponentsFactory.createBasicTextPane("Start Y:");
 		JTextPane widthPane = ComponentsFactory.createBasicTextPane("Width:");
@@ -98,8 +97,8 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 			{
 				JComboBox<String> cb = (JComboBox<String>)e.getSource();
 				String size = (String)cb.getSelectedItem();
-				Double tmp = getSizeByString(size)*resulotion_X;
-				int iSize = tmp.intValue();
+                Double tmp = getSizeByString(size) * resolution_X;
+                int iSize = tmp.intValue();
 				start_x_TextField.setText(String.valueOf(iSize));
 				start_x_TextField.setEditable(false);
 				start_x_TextField.repaint();
@@ -113,8 +112,8 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 			{
 				JComboBox<String> cb = (JComboBox<String>)e.getSource();
 				String size = (String)cb.getSelectedItem();
-				Double tmp = getSizeByString(size)*resulotion_Y;
-				int iSize = tmp.intValue();
+                Double tmp = getSizeByString(size) * resolution_Y;
+                int iSize = tmp.intValue();
 				start_y_TextField.setText(String.valueOf(iSize));
 				start_y_TextField.setEditable(false);
 				start_y_TextField.repaint();
@@ -128,8 +127,8 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 			{
 				JComboBox<String> cb = (JComboBox<String>)e.getSource();
 				String size = (String)cb.getSelectedItem();
-				Double tmp = getSizeByString(size)*resulotion_X;
-				int iSize = tmp.intValue();
+                Double tmp = getSizeByString(size) * resolution_X;
+                int iSize = tmp.intValue();
 				widthTextField.setText(String.valueOf(iSize));
 				widthTextField.setEditable(false);
 				widthTextField.repaint();
@@ -143,8 +142,8 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 			{
 				JComboBox<String> cb = (JComboBox<String>)e.getSource();
 				String size = (String)cb.getSelectedItem();
-				Double tmp = getSizeByString(size)*resulotion_Y;
-				int iSize = tmp.intValue();
+                Double tmp = getSizeByString(size) * resolution_Y;
+                int iSize = tmp.intValue();
 				heightTextField.setText(String.valueOf(iSize));
 				heightTextField.setEditable(false);
 				heightTextField.repaint();
@@ -266,8 +265,9 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 		setLocationRelativeTo(null);
 	}
 
-	private void onSelectAudioFile()
-	{
+    //TODO: validate it can be played
+    //TODO: remove the copy of audio files to the save method
+    private void onSelectAudioFile() {
 		JFileChooser chooser = new JFileChooser();
 		if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
 		{
@@ -275,13 +275,6 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 			String filePathToShow = selectedFile.getAbsolutePath();
 			String fileIsSelected = "Selected Audio File";
 			Color selectedColor = Color.GREEN;
-			try {
-				File NewLocation = new File(".\\xmlDir\\AASounds\\" + selectedFile.getName());
-				Files.copy(selectedFile.toPath(),NewLocation.toPath());
-			} catch (Exception ex) {
-				Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());
-			}
-			//TODO: validate it can be played
 
 			if (!isFileSupportedType(filePathToShow))
 			{
@@ -340,9 +333,8 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 		}
 	}
 
-	private boolean allValuesLegit()
-	{
-		// TODO: implement check for the sizes according to 7 inch pixels sizes
+    // TODO: implement check for the sizes according to 7 inch pixels sizes
+    private boolean allValuesLegit() {
 		return true;
 	}
 
@@ -354,18 +346,16 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 		setConstraints(1, row, 1, 1);
 		add(textField, constraints);
 	}
-	private void addInstructionTextPane(int row, JTextPane textPane)
-	{
-		setConstraints(0, row, 1, 1);
-		add(textPane, constraints);
-	}
+
 	private void addInstructionScrollPane(int row, JScrollPane scrollPane)
 	{
-		setConstraints(0, row, 20, 20);
-		add(scrollPane, constraints);
-	}
-	private void addTitleAndComboBox(int row, JComboBox<String> JCB)
-	{		
+        setConstraints(0, row, 2, 2);
+        constraints.gridwidth = 3;
+        add(scrollPane, constraints);
+        constraints.gridwidth = 1;
+    }
+
+    private void addTitleAndComboBox(int row, JComboBox<String> JCB) {
 		setConstraints(2, row, 1, 1);
 		add(JCB, constraints);
 	}
@@ -410,7 +400,8 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 	{
 		return ((_start_x != null) && (_start_y != null) && (_width != null) && (_height != null) && (_soundFile != null));
 	}
-	private double getSizeByString(String str){
+
+    private double getSizeByString(String str){
 		double res = 0;
 		switch (str){
 		case "1/8":
@@ -440,8 +431,8 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 		}
 		return res;
 	}
-	private void clearValues()
-	{
+
+    private void clearValues() {
 		start_x_TextField.setText("");
 		start_y_TextField.setText("");
 		widthTextField.setText("");
@@ -458,5 +449,4 @@ public class SoundAreaScreen extends AbstractEmptyScreen
 
 		_soundFile = null;
 	}
-
 }
