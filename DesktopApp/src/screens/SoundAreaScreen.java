@@ -2,18 +2,11 @@ package screens;
 
 import AdditionalClasses.SoundElement;
 import Factories.ComponentsFactory;
-import SlideObjects.Rotation;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.io.File;
-import java.io.FileInputStream;
 import java.nio.file.Files;
 
 /**
@@ -23,10 +16,10 @@ import java.nio.file.Files;
 public class SoundAreaScreen extends AbstractEmptyScreen
 {
 	protected final String[] SUPPORTED_AUDIO_FORMATS = {".wav", ".mp3"};
-	private final String NO_FILE_IS_SELECTED = "No File Selected";
-	private final String INSERT_INTEGER = "Insert Integer Number";
 	protected final Integer resulotion_X = 1920;
 	protected final Integer resulotion_Y = 1080;
+	private final String NO_FILE_IS_SELECTED = "No File Selected";
+	private final String INSERT_INTEGER = "Insert Integer Number";
 	private final JTextField start_x_TextField;
 	private final JTextField start_y_TextField;
 	private final JTextField widthTextField;

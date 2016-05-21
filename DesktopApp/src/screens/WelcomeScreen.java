@@ -1,10 +1,7 @@
 package screens;
 
-import Factories.*;
-
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 
 /**
  * Created by Evgeniy on 11/21/2015.
@@ -66,7 +63,7 @@ public class WelcomeScreen extends AbstractEmptyScreen {
 //            Screens.CreateLessonScreen =  new CreateLessonScreen();
 //            Screens.CreateLessonScreen.setVisible(true);
 //            Screens.WelcomeScreen.setVisible(false);
-//            Screens.CreateLessonScreen.loadExistingLesson(LoadedLeson);
+//            Screens.CreateLessonScreen.loadLesson(LoadedLeson);
             //showInformationMessage("Not supported yet !");
         });
         setConstraints(0, 1, 1, 1);
