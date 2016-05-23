@@ -69,22 +69,7 @@ public class LessonsFactory {
 						.addText(Integer.toString(soundItem.width));
 					}
 					index++;
-				}if(slide instanceof  ListenAndFindGameSlide) {
-                    ListenAndFindGameSlide item = (ListenAndFindGameSlide) slide;
-                    Element GameElement = root.addElement("slide");
-                    GameElement.addElement("order").addText(Integer.toString((index)));
-                    GameElement.addElement("slide_type").addText("game");
-                    GameElement.addElement("gameType").addText(item.getGameType().name());
-                    GameElement.addElement("game").addText(item.getGameType().name());
-                    index++;
-                } if (slide instanceof  OrderGameSlide) {
-                    OrderGameSlide item = (OrderGameSlide) slide;
-                    Element GameElement = root.addElement("slide");
-                    GameElement.addElement("order").addText(Integer.toString((index)));
-                    GameElement.addElement("slide_type").addText("game");
-                    GameElement.addElement("max_num").addText(Integer.toString(item.getMaxNum()));
-                    //GameElement.addElement("game").addText(item.getGameType().name());
-                }
+				}
 				if(slide instanceof VideoSlide)
 				{
 					VideoSlide item = (VideoSlide) slide;
