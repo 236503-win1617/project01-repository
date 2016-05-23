@@ -37,6 +37,13 @@ public class GameSlide extends Slide {
                 .commit();
     }
 
+    void setOrderGameNum(int maxNum){
+        if (!this.gameFragment instanceof GameOrder){
+            return;
+        }
+        (GameOrder)this.gameFragment.setMaxNum(maxNum);
+    }
+
     public void show(Activity activity) {
         FragmentManager fm = activity.getFragmentManager();
         fm.beginTransaction()
