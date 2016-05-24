@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:fitsSystemWindows="true"
+    android:layoutDirection="ltr"
+    tools:context=".MainActivity">
+
+    <android.support.design.widget.FloatingActionButton android:id="@+id/fab_exit"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_gravity="top|left" android:layout_margin="@dimen/fab_margin"
+        android:src="@android:drawable/ic_menu_revert" />
+
+    <android.support.design.widget.FloatingActionButton android:id="@+id/fab_next"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right" android:layout_margin="@dimen/fab_margin"
+        android:src="@android:drawable/ic_media_next" />
+
+    <android.support.design.widget.FloatingActionButton android:id="@+id/fab_prev"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left" android:layout_margin="@dimen/fab_margin"
+        android:src="@android:drawable/ic_media_previous" />
+
+    <TextView
+        android:id="@+id/slide_num"
+        android:text="slide 1/10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_gravity="top|right"/>
+
+</android.support.design.widget.CoordinatorLayout>
