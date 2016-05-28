@@ -1,7 +1,8 @@
 package screens;
 
-import javax.swing.*;
 import AdditionalClasses.ComboBoxes;
+
+import javax.swing.*;
 /**
  * Created by apluda on 4/9/2016.
  */
@@ -13,7 +14,7 @@ public class ModifyLesson {
 
     public  void run_aux(JApplet applet, int width, int height) {
         frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         frame.getContentPane().add(applet);
         frame.setSize(width, height);
         applet.init();

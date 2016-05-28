@@ -13,6 +13,13 @@ public class FileResources {
     private static final String NO_VIDEO_BUTTON_FILE_NAME = "no-video-button.jpg";
     private static final String VIDEO_SELECTED_BUTTON_FILE_NAME = "video-selected-button.jpg";
 
+    private static final String HOME_BUTTON_IMAGE = "home.png";
+    private static final String HELP_BUTTON_IMAGE = "help.png";
+    private static final String EMAIL_BUTTON_IMAGE = "email.png";
+    private static final String BUG_REPORT_BUTTON_IMAGE = "bug.png";
+    private static final String SAVE_BUTTON_IMAGE = "save.png";
+    private static final String USB_BUTTON_IMAGE = "usb.png";
+
     private static InputStream getFileSource(String filename) {
         return FileResources.class.getResourceAsStream(filename);
     }
@@ -39,5 +46,29 @@ public class FileResources {
 
     public static InputStream getVideoSelectedButton() {
         return getFileSource(VIDEO_SELECTED_BUTTON_FILE_NAME);
+    }
+
+    public static InputStream getHomeButtonImage() {
+        return getFileSource(HOME_BUTTON_IMAGE);
+    }
+
+    public static InputStream getHelpButtonImage() {
+        return getFileSource(HELP_BUTTON_IMAGE);
+    }
+
+    public static InputStream getEmailButtonImage() {
+        return getFileSource(EMAIL_BUTTON_IMAGE);
+    }
+
+    public static InputStream getBugReportButtonImage() {
+        return getFileSource(BUG_REPORT_BUTTON_IMAGE);
+    }
+
+    public static InputStream getSaveButtonImage() {
+        return getFileSource(SAVE_BUTTON_IMAGE);
+    }
+
+    public static InputStream getUsbButtonImage() {
+        return getFileSource(USB_BUTTON_IMAGE);
     }
 }
