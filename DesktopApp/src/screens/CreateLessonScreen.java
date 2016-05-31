@@ -412,7 +412,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
 
     private void setSendToPhoneButton() {
         JButton reportBugButton = getButtonWithImage(FileResources.getUsbButtonImage(), "Send To Phone");
-        reportBugButton.addActionListener(e -> showInformationMessage("Phone Integration Not Supported Yet"));
+        reportBugButton.addActionListener(e -> showInformationMessage("Phone Integration is not supported yet"));
 
         setConstraints(2, 0, 0.5, 0.5);
         screenMenuPanel.add(reportBugButton, constraints);
