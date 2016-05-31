@@ -390,7 +390,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
     private void setSendFeedbackButton() {
         JButton button = getButtonWithImage(FileResources.getEmailButtonImage(), "Send Feedback");
         button.addActionListener(e -> sendMail("Send%20Feedback"));
-        setConstraints(2, 0, 0.5, 0.5);
+        setConstraints(3, 0, 0.5, 0.5);
         screenMenuPanel.add(button, constraints);
     }
 
@@ -414,7 +414,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         JButton reportBugButton = getButtonWithImage(FileResources.getUsbButtonImage(), "Send To Phone");
         reportBugButton.addActionListener(e -> showInformationMessage("Phone Integration Not Supported Yet"));
 
-        setConstraints(4, 0, 0.5, 0.5);
+        setConstraints(2, 0, 0.5, 0.5);
         screenMenuPanel.add(reportBugButton, constraints);
     }
 
@@ -422,7 +422,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         JButton reportBugButton = getButtonWithImage(FileResources.getBugReportButtonImage(), "Report A Bug");
         reportBugButton.addActionListener(e -> sendMail("Report%20Bug"));
 
-        setConstraints(3, 0, 0.5, 0.5);
+        setConstraints(4, 0, 0.5, 0.5);
         screenMenuPanel.add(reportBugButton, constraints);
     }
 
