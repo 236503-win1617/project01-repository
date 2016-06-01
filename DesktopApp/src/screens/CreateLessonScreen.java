@@ -379,7 +379,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
             button.setToolTipText(description);
 
             ComponentsFactory.setElementConstSize(button, new Dimension(130, 130));
-            ComponentsFactory.setButtonImage(resized, button, 0);
+            ComponentsFactory.setImageOnButton(resized, button, 0);
         } catch (IOException e) {
             e.printStackTrace();
         }

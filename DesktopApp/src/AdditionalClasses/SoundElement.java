@@ -27,8 +27,8 @@ public class SoundElement
     public String toString()
     {
         String fileName = (soundFile != null) ? soundFile.getName() : "";
-        return "Start X: " + start_x + ", Start Y: " + start_y +
-                "\n" + "Width: " + width + ", Height: " + height +
-                "\n" + "FileName: "+ fileName;
+        return "Start X: " + start_x + ",  Start Y: " + start_y +
+                "\n" + "Width: " + width + ",  Height: " + height +
+                "\n" + "File: " + fileName;
     }
 }

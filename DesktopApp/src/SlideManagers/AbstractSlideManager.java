@@ -80,7 +80,7 @@ public abstract class AbstractSlideManager {
     protected void setImageOnSlideButton(BufferedImage image, double radianRotation) {
         int size = CreateLessonScreen.SLIDE_BUTTON_SIZE - 5;
         Image resizedImage = ComponentsFactory.getResizedImage(image, size, size);
-        ComponentsFactory.setButtonImage(resizedImage, slideButton, radianRotation);
+        ComponentsFactory.setImageOnButton(resizedImage, slideButton, radianRotation);
     }
 
     protected void loadSameImageToPanelAndButton(BufferedImage image, double rotationRadians) throws IOException {
