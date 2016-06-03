@@ -1,5 +1,7 @@
 package com.example.ohad.dynamicex;
 
+import android.app.Activity;
+
 import java.io.FileInputStream;
 import java.util.ArrayList;
 
@@ -17,10 +19,15 @@ import org.xml.sax.InputSource;
  */
 
 public class XmlParser {
+    Activity activity;
 
-	public enum Game {
+    public enum GameType {
 		COLORS,NUMBERS,ANIMALS,ORDER
 	};
+
+	public XmlParser(Activity a) {
+		activity = a;
+	}
 
 	public void parse(String xmlPath, String lessonPath, Lesson lesson) {
 
@@ -58,17 +65,25 @@ public class XmlParser {
 		}
 	}
 
-	private void handleGameSlide(Element e, Lesson lesson) {
-		XmlParser.Game gameType = XmlParser.Game.valueOf(e.getElementsByTagName("gameType").item(0).getTextContent());
-		Slide newSlide = new GameSlide(gameType,lesson.activity);
-		if (gameType == XmlParser.Game.ORDER){
+
+	private void handleGameSlide(Element e, Lesson lesson)
+    {
+        Slide newSlide;
+		GameType gameType = GameType.valueOf(e.getElementsByTagName("gameType").item(0).getTextContent());
+
+		if (gameType == GameType.ORDER){
 			int maxNum = Integer.parseInt(e.getElementsByTagName("max_num").item(0).getTextContent());
-			((GameSlide)newSlide).setOrderGameNum(maxNum);
-		}
+            newSlide = new GameSlide(lesson.activity, maxNum);
+		} else { // GameBase (colors/numbers/animals)
+            newSlide = new GameSlide(lesson.activity, gameType);
+        }
+
 		lesson.addSlide(newSlide);
 	}
 
-	private void handlePictureSlide(Element e, String lessonPath, Lesson lesson) {
+
+	private void handlePictureSlide(Element e, String lessonPath, Lesson lesson)
+    {
 		//create list for all buttons and texts for this slide
 		ArrayList<DynamicButton> dynamicButtonsArr = new ArrayList<>();
 		ArrayList<DynamicText> dynamicTextsArr = new ArrayList<>();
@@ -106,14 +121,16 @@ public class XmlParser {
 			}
 		}
 
-		Slide newSlide = new PictureSlide(picturePath, dynamicButtonsArr, dynamicTextsArr, rotation);
+		Slide newSlide = new PictureSlide(activity, picturePath, dynamicButtonsArr, dynamicTextsArr, rotation);
 		lesson.addSlide(newSlide);
 	}
 
-	private void handleVideoSlide(Element e, String lessonPath, Lesson lesson) {
+
+	private void handleVideoSlide(Element e, String lessonPath, Lesson lesson)
+    {
 		String videoPath = e.getElementsByTagName("video_file").item(0).getTextContent();
 		videoPath = lessonPath + videoPath;
-		Slide newSlide = new VideoSlide(videoPath);
+		Slide newSlide = new VideoSlide(activity, videoPath);
 		lesson.addSlide(newSlide);
 	}
 }

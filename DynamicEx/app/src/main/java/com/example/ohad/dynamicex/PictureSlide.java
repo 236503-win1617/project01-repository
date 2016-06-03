@@ -9,7 +9,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -23,6 +22,8 @@ import java.util.ArrayList;
  */
 public class PictureSlide extends Slide {
 
+    private Activity activity;
+
     private String path;
     private ArrayList<Button> buttons;
     private ArrayList<TextView> texts;
@@ -32,7 +33,8 @@ public class PictureSlide extends Slide {
     private Rotation rotation;
 
 
-    public PictureSlide(String path, ArrayList<DynamicButton> dynamicButtons, ArrayList<DynamicText> dynamicTexts, Rotation rotation) {
+    public PictureSlide(Activity a, String path, ArrayList<DynamicButton> dynamicButtons, ArrayList<DynamicText> dynamicTexts, Rotation rotation) {
+        activity = a;
         buttons = new ArrayList<>();
         texts = new ArrayList<>();
         firstShow = true;
@@ -43,7 +45,8 @@ public class PictureSlide extends Slide {
         this.rotation = rotation != null ? rotation : Rotation.NO_ROTATION; // portrait by default
     }
 
-    public void show(Activity activity) {
+    public void show()
+    {
         switch (rotation) {
             case NO_ROTATION:
                 activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -66,37 +69,42 @@ public class PictureSlide extends Slide {
         File imgFile = new File(path);
         if(imgFile.exists()){
             Bitmap myBitmap = decodeSampledBitmapFromFile(imgFile.getAbsolutePath(), 250, 250);
-            setBackground(activity, layout, myBitmap);
+            setBackground(layout, myBitmap);
         }
 
-        // On the first show of the slide - create the buttons and texts
-        if (firstShow) {
-            for (final DynamicText dynamicText : dynamicTexts) {
-                TextView tv = createTV(activity, dynamicText);
-                texts.add(tv);
-                layout.addView(tv);
-            }
-
-            for (final DynamicButton dynamicButton : dynamicButtons) {
-                Button b = createButton(activity, dynamicButton);
-                buttons.add(b);
-                layout.addView(b);
-            }
-
-            firstShow = false;
-        }
-
-        // If elements are already created, just show them
-        else {
-            for (final TextView tv : texts)
-                tv.setVisibility(View.VISIBLE);
-
-            for (final Button button : buttons)
-                button.setVisibility(View.VISIBLE);
-        }
+        // On the first show of the slide - create the buttons and texts, otherwise - just show them
+        if (firstShow)
+            createElements(layout);
+        else showElements();
     }
 
-    public void hide(Activity activity) {
+
+    private void createElements(RelativeLayout layout) {
+        for (final DynamicText dynamicText : dynamicTexts) {
+            TextView tv = createTV(dynamicText);
+            texts.add(tv);
+            layout.addView(tv);
+        }
+
+        for (final DynamicButton dynamicButton : dynamicButtons) {
+            Button b = createButton(dynamicButton);
+            buttons.add(b);
+            layout.addView(b);
+        }
+
+        firstShow = false;
+    }
+
+    private void showElements() {
+        for (final TextView tv : texts)
+            tv.setVisibility(View.VISIBLE);
+
+        for (final Button button : buttons)
+            button.setVisibility(View.VISIBLE);
+    }
+
+
+    public void hide() {
         for (final TextView tv : texts)
             tv.setVisibility(View.INVISIBLE);
 
@@ -106,7 +114,7 @@ public class PictureSlide extends Slide {
 
 
     @SuppressWarnings("deprecation")
-    private void setBackground(Activity activity, RelativeLayout rl, Bitmap bitmap)
+    private void setBackground(RelativeLayout rl, Bitmap bitmap)
     {
         if(Build.VERSION.SDK_INT >= 16)
             rl.setBackground(new BitmapDrawable(activity.getResources(), bitmap));
@@ -114,7 +122,7 @@ public class PictureSlide extends Slide {
             rl.setBackgroundDrawable(new BitmapDrawable(bitmap));
     }
 
-    private TextView createTV(Activity activity, final DynamicText text)
+    private TextView createTV(final DynamicText text)
     {
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
@@ -128,12 +136,12 @@ public class PictureSlide extends Slide {
         return tv;
     }
 
-    private Button createButton(Activity activity, final DynamicButton button)
+    private Button createButton(final DynamicButton button)
     {
         Button myButton = new Button(activity);
         myButton.setText(button.getText());
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(button.getWidth(), button.getHeight());
-        lp.setMargins(button.getStartX(), button.getStartY(), 0, 0);
+        lp.setMargins(button.getStartX(), button.getStartY(), 0, 0); // right/left switched.. dont know why
         myButton.setLayoutParams(lp);
 
         // Add sound

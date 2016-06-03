@@ -1,6 +1,7 @@
 package com.example.ohad.dynamicex;
 
 import android.app.Activity;
+import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class Lesson {
     Activity activity;
 
     public Lesson(Activity activity) {
-        slides = new ArrayList<Slide>();
+        slides = new ArrayList<>();
         currSlideIdx = 0;
         this.activity = activity;
     }
@@ -26,18 +27,17 @@ public class Lesson {
     }
 
     public void showFirstSlide() {
-        slides.get(0).show(activity);
-        ((TextView)activity.findViewById(R.id.slide_num)).setText("1/" + slides.size());
+        slides.get(0).show();
+        updateSlideNum();
     }
 
     public boolean showNextSlide() {
         if (currSlideIdx >= slides.size() - 1)
             return false;
 
-        slides.get(currSlideIdx).hide(activity);
-        slides.get(++currSlideIdx).show(activity);
-
-        ((TextView)activity.findViewById(R.id.slide_num)).setText((currSlideIdx + 1) + "/" + slides.size());
+        slides.get(currSlideIdx).hide();
+        slides.get(++currSlideIdx).show();
+        updateSlideNum();
         return true;
     }
 
@@ -45,15 +45,13 @@ public class Lesson {
         if (currSlideIdx <= 0)
             return false;
 
-        slides.get(currSlideIdx).hide(activity);
-        slides.get(--currSlideIdx).show(activity);
-
-        ((TextView)activity.findViewById(R.id.slide_num)).setText((currSlideIdx + 1) + "/" + slides.size());
+        slides.get(currSlideIdx).hide();
+        slides.get(--currSlideIdx).show();
+        updateSlideNum();
         return true;
     }
 
-    public Slide getCurrSlide(){
-        return slides.get(currSlideIdx);
+    private void updateSlideNum() {
+        ((TextView)activity.findViewById(R.id.slide_num)).setText((currSlideIdx + 1) + "/" + slides.size());
     }
-
 }
