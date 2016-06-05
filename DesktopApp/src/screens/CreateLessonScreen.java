@@ -4,6 +4,7 @@ import AdditionalClasses.IndexedButton;
 import AdditionalClasses.SoundElement;
 import Factories.ComponentsFactory;
 import Factories.LessonsFactory;
+import Factories.USBTransfertMain;
 import Resources.MessageErrors;
 import SlideManagers.*;
 import slides.*;
@@ -169,18 +170,28 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
     //TODO: Refactor
     //TODO: implement a check that lesson doesn't exists or overwrite the previous one
     private void onSaveCurrentLesson(boolean autosave) {
+        System.loadLibrary("jmtp");
         if (!autosave) {
             if (_slides.size() == 0) {
                 showInformationMessage("Cannot save empty lesson !");
                 return;
             }
-
-            //String lessonName = showInputMessage("Insert Lesson Name:");
+            jmtp.PortableDeviceFolderObject targetFolder = null;
+            jmtp.PortableDeviceManager manager = new jmtp.PortableDeviceManager();
+            jmtp.PortableDevice device = null;
+            if(manager.getDevices().length==0){
+                showInformationMessage("The tablet is not connected properly");
+                return;
+            }
+            String lessonName = showInputMessage("Insert Lesson Name:");
 
             if (lessonName != null) {
                 LessonsFactory.generateXmlFromLesson(_slides, lessonName);
+
+                USBTransfertMain.jMTPeMethode(lessonName);
                 showInformationMessage("Lesson '" + lessonName + "' was saved !");
             }
+            //TODO: implement a check that lesson doesn't exists or overwrite the previous one
             return;
         }
         if (SettingScreen.a == 1) {
@@ -312,7 +323,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
                         gameTypes, // Array of choices
                         gameTypes[0]); // Initial choice
 
-                GameSlide newGameSlide = null;
+                AbstractSlide newGameSlide = null;
                 if (choice == null) return;
                 if (choice.equals("Listen and Order")) {
                     newGameSlide = new OrderGameSlide();

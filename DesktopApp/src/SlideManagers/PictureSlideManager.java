@@ -6,16 +6,17 @@ import Factories.ComponentsFactory;
 import Resources.DefaultSizes;
 import Resources.FileResources;
 import Resources.MessageErrors;
-import SlideObjects.AbstractSlide;
-import SlideObjects.PictureSlide;
-import SlideObjects.Rotation;
 import screens.Screens;
+import slides.AbstractSlide;
+import slides.PictureSlide;
+import slides.Rotation;
 
-import java.nio.file.Files;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -28,10 +29,9 @@ import java.util.UUID;
  * Created by Evgeniy on 4/2/2016.
  */
 public class PictureSlideManager extends AbstractSlideManager {
+    private final JPanel soundsPanel;
     private Map<UUID, UniqueTextPane> slideSoundAreas = new HashMap<>();
     private Map<UUID, SoundElement> slideSoundElements = new HashMap<>();
-
-    private final JPanel soundsPanel;
     private PictureSlide currentSlide;
     private UUID selectedSoundId;
 
@@ -53,18 +53,17 @@ public class PictureSlideManager extends AbstractSlideManager {
 
         File pictureFile = currentSlide.getPictureFile();
         if (pictureFile == null) {
-            return; // No picture was selected
+            Screens.CreateLessonScreen.showErrorMessage("No picture to rotate");
+            return;
         }
+        currentSlide.rotateSlide();
 
         InputStream pictureStream = new FileInputStream(pictureFile);
-        currentSlide.rotateSlide();
-        Rotation pictureRotation = currentSlide.getRotation();
-
-        loadPictureFromFile(pictureStream, pictureRotation);
+        loadSameImageToPanelAndButton(ImageIO.read(pictureStream), currentSlide.getRotation().getRotationInRadians());
     }
 
     @Override
-    public void loadSlide(AbstractSlide slide) throws IOException {
+    public void loadSlide(AbstractSlide slide, JButton slideButton) throws IOException {
         setSpecificButtonsVisibility(true);
 
         if (!slide.getClass().equals(PictureSlide.class)) {
@@ -72,14 +71,19 @@ public class PictureSlideManager extends AbstractSlideManager {
         }
 
         currentSlide = (PictureSlide) slide;
+        this.slideButton = slideButton;
 
-        InputStream streamToLoad = FileResources.getNoPictureStream();
         File pictureFile = currentSlide.getPictureFile();
-        if (pictureFile != null) {
-            streamToLoad = new FileInputStream(pictureFile);
-        }
+        Rotation rotation = currentSlide.getRotation();
 
-        loadPictureFromFile(streamToLoad, currentSlide.getRotation());
+        if (pictureFile != null) {
+            InputStream pictureStream = new FileInputStream(pictureFile);
+            loadSameImageToPanelAndButton(ImageIO.read(pictureStream), rotation.getRotationInRadians());
+        } else { // Load defaults
+            double rotationRadians = Rotation.NO_ROTATION.getRotationInRadians();
+            loadImageToSlidePanel(ImageIO.read(FileResources.getNoPictureStream()), rotationRadians);
+            setImageOnSlideButton(ImageIO.read(FileResources.getButtonNoPicture()), rotationRadians);
+        }
 
         for (SoundElement element : currentSlide.getSoundElements()) {
             addNewSoundElement(element);
@@ -157,8 +161,8 @@ public class PictureSlideManager extends AbstractSlideManager {
         selectedSoundId = null;
     }
 
+    //TODO: change this method
     private void addSound() {
-        //TODO: change this method
         if (currentSlide == null) {
             Screens.CreateLessonScreen.showErrorMessage(MessageErrors.NO_SLIDE_TO_EXECUTE_ON);
             return;
@@ -166,17 +170,6 @@ public class PictureSlideManager extends AbstractSlideManager {
 
         Screens.SoundAreaScreen.setVisible(true);
         Screens.CreateLessonScreen.setVisible(false);
-    }
-
-
-    //new
-    public void loadPictureFile(File PictureToLoad){
-        currentSlide.setSlideFile(PictureToLoad);
-        try {
-            loadPictureFromFile(new FileInputStream(PictureToLoad), Rotation.NO_ROTATION);
-        } catch (Exception ex) {
-            Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());
-        }
     }
 
     private void selectPictureFile() {
@@ -196,14 +189,11 @@ public class PictureSlideManager extends AbstractSlideManager {
 
             currentSlide.setSlideFile(selectedFile);
             try {
-                loadPictureFromFile(new FileInputStream(selectedFile), Rotation.NO_ROTATION);
-
-
-
-                File NewLocation = new File(".\\xmlDir\\"+ Screens.CreateLessonScreen.getLessonName() + "\\AAImages\\" + selectedFile.getName());
-                Files.copy(selectedFile.toPath(),NewLocation.toPath());
+                BufferedImage image = ImageIO.read(new FileInputStream(selectedFile));
+                loadSameImageToPanelAndButton(image, Rotation.NO_ROTATION.getRotationInRadians());
             } catch (Exception ex) {
                 Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());
+                ex.printStackTrace();
             }
         }
     }
