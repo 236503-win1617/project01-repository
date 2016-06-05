@@ -1,11 +1,11 @@
 package SlideManagers;
 
 import AdditionalClasses.SoundElement;
-import slides.AbstractSlide;
-import slides.ListenAndFindGameSlide;
-import slides.Rotation;
+import SlideObjects.AbstractSlide;
+import SlideObjects.GameSlide;
+import SlideObjects.ListenAndFindGameSlide;
+import SlideObjects.Rotation;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,7 +22,7 @@ public class ListenAndFindGameSlideManager extends AbstractSlideManager {
 
     public void onRotateCommand() throws IOException {}
 
-    public void loadSlide(AbstractSlide slide, JButton button) throws IOException{
+    public void loadSlide(AbstractSlide slide) throws IOException{
         if (first) {
             String[] gameTypes = {"Animals", "Colors", "Numbers"};
             String choice = (String) JOptionPane.showInputDialog(null, "What game do you want?",
@@ -45,16 +45,13 @@ public class ListenAndFindGameSlideManager extends AbstractSlideManager {
         ListenAndFindGameSlide.GameType type =  ((ListenAndFindGameSlide) slide).getGameType();
         switch(type){
             case Animals:
-                loadImageToSlidePanel(ImageIO.read(new FileInputStream(".\\src\\Resources\\animals.jpg")),
-                        Rotation.NO_ROTATION.getRotationInRadians());
+                loadPictureFromFile(new FileInputStream(".\\src\\Resources\\animals.jpg"), Rotation.NO_ROTATION);
                 break;
             case Colors:
-                loadImageToSlidePanel(ImageIO.read(new FileInputStream(".\\src\\Resources\\colors.png")),
-                        Rotation.NO_ROTATION.getRotationInRadians());
+                loadPictureFromFile(new FileInputStream(".\\src\\Resources\\colors.png"), Rotation.NO_ROTATION);
                 break;
             case Numbers:
-                loadImageToSlidePanel(ImageIO.read(new FileInputStream(".\\src\\Resources\\numbers.png")),
-                        Rotation.NO_ROTATION.getRotationInRadians());
+                loadPictureFromFile(new FileInputStream(".\\src\\Resources\\numbers.jpg"), Rotation.NO_ROTATION);
                 break;
         }
     }

@@ -1,15 +1,15 @@
 package SlideManagers;
 
 import AdditionalClasses.SoundElement;
-import slides.AbstractSlide;
-import slides.Rotation;
+import SlideObjects.AbstractSlide;
+import SlideObjects.ListenAndFindGameSlide;
+import SlideObjects.Rotation;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import slides.OrderGameSlide;
+import SlideObjects.OrderGameSlide;
 
 /**
  * Created by dan on 17/05/2016.
@@ -22,7 +22,7 @@ public class OrderGameSlideManager extends AbstractSlideManager{
 
     public void onRotateCommand() throws IOException {}
 
-    public void loadSlide(AbstractSlide slide, JButton button) throws IOException{
+    public void loadSlide(AbstractSlide slide) throws IOException{
         if (first) {
             String[] gameTypes = {"5", "10", "15", "20"};
             String choice = (String) JOptionPane.showInputDialog(null, "What range of numbers do you want?",
@@ -35,8 +35,7 @@ public class OrderGameSlideManager extends AbstractSlideManager{
             ((OrderGameSlide) slide).setMaxNum(maxNum);
             first = false;
         }
-        loadImageToSlidePanel(ImageIO.read(new FileInputStream(".\\src\\Resources\\order.png")),
-                Rotation.NO_ROTATION.getRotationInRadians());
+        loadPictureFromFile(new FileInputStream(".\\src\\Resources\\order.png"), Rotation.NO_ROTATION);
     }
 
     public void saveDataToCurrentSlide(){}
