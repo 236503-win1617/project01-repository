@@ -1,102 +1,81 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
-   android:background="@drawable/order_background">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/order_background"
+    tools:context=".MainActivity">
 
     <EditText
-        android:layout_width="50dp"
-        android:layout_height="50dp"
         android:id="@+id/editText1"
-        android:background="@drawable/back"
-        android:inputType="number"
-        android:maxLength="2"
-        android:layout_marginTop="69dp"
-        android:layout_below="@+id/imageButton3"
-        android:layout_alignParentLeft="true" />
-
-
-
-    <EditText
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:id="@+id/editText2"
-        android:background="@drawable/back"
-        android:inputType="number"
-        android:layout_alignTop="@+id/editText1"
-        android:layout_alignLeft="@+id/imageButton3"
-        android:maxLength="2"/>
-
-    <EditText
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/editText3"
-        android:background="@drawable/back"
-        android:inputType="number"
-        android:maxLength="2"
-        android:layout_alignTop="@+id/editText2"
-        android:layout_alignRight="@+id/imageButton3"
-         />
-
-    <EditText
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/editText4"
-        android:background="@drawable/back"
-        android:inputType="number"
-        android:maxLength="2"
-        android:layout_alignTop="@+id/editText3"
-        android:layout_alignParentRight="true" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/numbersPlayAgain"
-        android:src="@drawable/playagain"
-        android:onClick="initNums"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/imageButton3"
-         />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/sayagain"
-        android:onClick="sayNum"
-        android:id="@+id/imageButton3"
-        android:layout_below="@+id/numbersPlayAgain"
-        android:layout_centerHorizontal="true" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/done"
-        android:onClick="checkNum"
-        android:id="@+id/doneButton"
-        android:layout_marginTop="42dp"
-        android:layout_below="@+id/editText2"
-        android:layout_centerHorizontal="true" />
-
-    <ImageView
-        android:id="@+id/fab_next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:src="@android:drawable/ic_media_next"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        />
-
-    <ImageView
-        android:id="@+id/fab_prev"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|left"
-        android:src="@android:drawable/ic_media_previous"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-         />
+        android:layout_below="@+id/sayAgain"
+        android:layout_marginTop="69dp"
+        android:background="@drawable/back"
+        android:inputType="number"
+        android:maxLength="2" />
+
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/sayAgain"
+        android:layout_alignTop="@+id/editText1"
+        android:background="@drawable/back"
+        android:inputType="number"
+        android:maxLength="2" />
+
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignRight="@+id/sayAgain"
+        android:layout_alignTop="@+id/editText2"
+        android:background="@drawable/back"
+        android:inputType="number"
+        android:maxLength="2" />
+
+    <EditText
+        android:id="@+id/editText4"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/editText3"
+        android:background="@drawable/back"
+        android:inputType="number"
+        android:maxLength="2" />
+
+
+    <!-- Play/say buttons -->
+
+    <ImageButton
+        android:id="@+id/playAgain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/sayAgain"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/playagain" />
+
+    <ImageButton
+        android:id="@+id/sayAgain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/playAgain"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/sayagain" />
+
+    <ImageButton
+        android:id="@+id/doneButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="42dp"
+        android:src="@drawable/done" />
+
+
+    <include layout="@layout/constants_layout" />
 
 </RelativeLayout>

@@ -5,54 +5,56 @@ import android.content.DialogInterface;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.view.LayoutInflater;
 
 import java.util.Random;
 
 public class GameOrder extends GameFragment {
 
-    private final int CHOSEN_NUM_AMOUNT = 4;
-
-    int[] chosen;
-    int[] rand_nums = new int[CHOSEN_NUM_AMOUNT];
+    private int AMOUNT_OF_OBJECTS = 10;
+    private final int AMOUNT_TO_CHOOSE = 4;
 
     int[] sounds = {R.raw.s0, R.raw.s1, R.raw.s2,R.raw.s3,
             R.raw.s4, R.raw.s5, R.raw.s6, R.raw.s7, R.raw.s8,
             R.raw.s9, R.raw.s10, R.raw.s11, R.raw.s12, R.raw.s13, R.raw.s14, R.raw.s15, R.raw.s16,
             R.raw.s17, R.raw.s18, R.raw.s19, R.raw.s20};
 
+    int[] editTextIds ={R.id.editText1, R.id.editText2, R.id.editText3, R.id.editText4};
+
+    boolean[] alreadyChosen;
+    int[] chosenGroup = new int[AMOUNT_TO_CHOOSE];
 
     int playlistPos = 0;
-    int[] editTextIds ={R.id.editText1, R.id.editText2, R.id.editText3, R.id.editText4};
     MediaPlayer mp = null;
-    int maxNum;
-    View mainView;
 
-    public void initNums(View v){
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        chosen = new int[maxNum+1];
+        Bundle bundle = this.getArguments();
+        int maxNum = bundle.getInt("maxNum", 10); // 10 - default maxNum
+        AMOUNT_OF_OBJECTS = maxNum+1;
+        alreadyChosen = new boolean[AMOUNT_OF_OBJECTS];
+    }
+
+
+    public void initNums(){
+        for (int i = 0; i < AMOUNT_OF_OBJECTS; i++)
+            alreadyChosen[i] = false;
 
         Random rand = new Random();
+        int nextFreeIdx = 0;
         int randNum;
-        for (int i = 0; i < maxNum+1; i++) chosen[i]=0;
-        for (int i = 0; i < CHOSEN_NUM_AMOUNT; i++) {
-            randNum = rand.nextInt(maxNum+1);
-            while(chosen[randNum]==1){
-                randNum = rand.nextInt(maxNum+1);
-            }
-            chosen[randNum] = 1;
-        }
+        for (int i = 0; i < AMOUNT_TO_CHOOSE; i++) {
+            randNum = rand.nextInt(AMOUNT_OF_OBJECTS);
+            while(alreadyChosen[randNum])
+                randNum = rand.nextInt(AMOUNT_OF_OBJECTS);
 
-        int j=0;
-        for(int i=0;i<4;i++){
-            while(chosen[j]!=1){
-                j++;
-            }
-            rand_nums[i]=j;
-            j++;
+            chosenGroup[nextFreeIdx++] = randNum;
+            alreadyChosen[randNum] = true;
         }
 
         for (int id : editTextIds) {
@@ -61,23 +63,19 @@ public class GameOrder extends GameFragment {
         }
     }
 
-    public void setMaxNum(int maxNum){
-        this.maxNum = maxNum;
-    }
-
-    public void sayNum(View v) {
+    public void sayNum() {
         playlistPos = 0;
-        mp = MediaPlayer.create(getActivity(), sounds[rand_nums[playlistPos]]);
+        mp = MediaPlayer.create(getActivity(), sounds[chosenGroup[playlistPos]]);
         mp.start();
 
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 playlistPos++;
-                if (playlistPos == rand_nums.length)
+                if (playlistPos == chosenGroup.length)
                     return;
 
-                AssetFileDescriptor afd = getResources().openRawResourceFd(sounds[rand_nums[playlistPos]]);
+                AssetFileDescriptor afd = getResources().openRawResourceFd(sounds[chosenGroup[playlistPos]]);
 
                 try {
                     mp.reset();
@@ -93,10 +91,8 @@ public class GameOrder extends GameFragment {
 
     }
 
-    private void wrongAnswer() {
+    public void checkNum(){
         AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(getActivity());
-        dlgAlert.setMessage("Please try again.");
-        dlgAlert.setTitle("Wrong Answer");
         dlgAlert.setPositiveButton("Ok",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -104,44 +100,53 @@ public class GameOrder extends GameFragment {
                     }
                 });
         dlgAlert.setCancelable(true);
-        dlgAlert.create().show();
-    }
 
-    public void checkNum(View view){
-
-        for (int i=0; i < CHOSEN_NUM_AMOUNT; ++i) {
+        for (int i=0; i < AMOUNT_TO_CHOOSE; ++i) {
             EditText v = (EditText)getView().findViewById(editTextIds[i]);
             String val = v.getText().toString();
-            if (val.equals("") || Integer.parseInt(val) != rand_nums[i]) {
-                wrongAnswer();
+            if (val.equals("") || Integer.parseInt(val) != chosenGroup[i]) {
+                dlgAlert.setMessage("Please try again.");
+                dlgAlert.setTitle("Wrong Answer");
+                dlgAlert.create().show();
                 return;
             }
         }
 
-        AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(getActivity());
         dlgAlert.setMessage("You did it!");
         dlgAlert.setTitle("Good Job");
-        dlgAlert.setPositiveButton("Ok",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        //dismiss the dialog
-                    }
-                });
-        dlgAlert.setCancelable(true);
         dlgAlert.create().show();
     }
 
-    @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View view = inflater.inflate(R.layout.game_order_layout,container,false);
-        mainView = view;
+        View view = inflater.inflate(R.layout.game_order_layout, container,false);
         return view;
     }
 
-    @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
-        initNums(mainView);
+
+        getView().findViewById(R.id.doneButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkNum();
+            }
+        });
+
+        getView().findViewById(R.id.playAgain).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initNums();
+            }
+        });
+
+        getView().findViewById(R.id.sayAgain).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sayNum();
+            }
+        });
+
+        initNums();
     }
 
 }

@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 /**
  * Created by Samuel on 28/03/2016.
@@ -18,8 +19,16 @@ public class GameFragment extends Fragment {
         return view;
     }
 
-    public void sayNum(View v){}
-    public void checkNum(View view){}
-    public void initNums(View v){}
+//    @Override
+//    public void onHiddenChanged(boolean hidden) {
+//        super.onHiddenChanged(hidden);
+//        if (hidden) {
+//            //do when hidden
+//        } else {
+//            //do when show
+//            ((TextView)getView().findViewById(R.id.slide_num)).setText((0 + 1) + "/" +2);
+//
+//        }
+//    }
 
 }
