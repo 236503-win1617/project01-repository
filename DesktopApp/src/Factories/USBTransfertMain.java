@@ -43,7 +43,7 @@ public class USBTransfertMain {
 
                 for (jmtp.PortableDeviceObject o2 : storage.getChildObjects())
                 {
-                    if(o2.getOriginalFileName().equalsIgnoreCase("AAXml")) {
+                    if(o2.getOriginalFileName().equalsIgnoreCase("AALessons/"+name)) {
                         targetFolder = (jmtp.PortableDeviceFolderObject) o2;
                     }
                     System.out.println(o2.getOriginalFileName());
