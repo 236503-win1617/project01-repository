@@ -1,5 +1,6 @@
 package slides;
 
+import javax.swing.*;
 import java.io.File;
 
 /**
@@ -8,13 +9,27 @@ import java.io.File;
 public class ListenAndFindGameSlide extends AbstractSlide {
     private GameType type;
 
-    public ListenAndFindGameSlide(){}
+    public ListenAndFindGameSlide() {
+        String[] gameTypes = {"Animals", "Colors", "Numbers"};
+        String choice = (String) JOptionPane.showInputDialog(null, "What game do you want?",
+                "Choose Type of Game", JOptionPane.QUESTION_MESSAGE, null, // Use
+                gameTypes, // Array of choices
+                gameTypes[0]); // Initial choice
+        if (choice == null) return;
+        if (choice.equals("Animals")) {
+            type = ListenAndFindGameSlide.GameType.Animals;
+        } else if (choice.equals("Colors")) {
+            type = ListenAndFindGameSlide.GameType.Colors;
+        } else if (choice.equals("Numbers")) {
+            type = ListenAndFindGameSlide.GameType.Numbers;
+        }
+    }
 
-    public ListenAndFindGameSlide(GameType type){
+    public ListenAndFindGameSlide(GameType type) {
         this.type = type;
     }
 
-    public GameType getGameType(){
+    public GameType getGameType() {
         return this.type;
     }
 

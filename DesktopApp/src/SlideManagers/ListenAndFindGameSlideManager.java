@@ -15,34 +15,16 @@ import java.io.IOException;
  * Created by dan on 17/05/2016.
  */
 public class ListenAndFindGameSlideManager extends AbstractSlideManager {
-    private boolean first = true;
+    private boolean first;
     public ListenAndFindGameSlideManager(JPanel currentSlide, JPanel commandsPanel){
         super(currentSlide, commandsPanel);
+        first = true;
     }
 
     public void onRotateCommand() throws IOException {}
 
     public void loadSlide(AbstractSlide slide, JButton button) throws IOException{
-        if (first) {
-            String[] gameTypes = {"Animals", "Colors", "Numbers"};
-            String choice = (String) JOptionPane.showInputDialog(null, "What game do you want?",
-                    "Choose Type of Game", JOptionPane.QUESTION_MESSAGE, null, // Use
-                    gameTypes, // Array of choices
-                    gameTypes[0]); // Initial choice
-
-            ListenAndFindGameSlide.GameType type = null;
-            if (choice == null) return;
-            if (choice.equals("Animals")) {
-                type = ListenAndFindGameSlide.GameType.Animals;
-            } else if (choice.equals("Colors")) {
-                type = ListenAndFindGameSlide.GameType.Colors;
-            } else if (choice.equals("Numbers")) {
-                type = ListenAndFindGameSlide.GameType.Numbers;
-            }
-            ((ListenAndFindGameSlide) slide).setGameType(type);
-            first = false;
-        }
-        ListenAndFindGameSlide.GameType type =  ((ListenAndFindGameSlide) slide).getGameType();
+        ListenAndFindGameSlide.GameType type = ((ListenAndFindGameSlide) slide).getGameType();
         FileInputStream fis = null;
         switch(type){
             case Animals:
