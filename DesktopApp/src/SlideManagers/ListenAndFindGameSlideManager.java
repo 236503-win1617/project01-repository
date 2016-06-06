@@ -46,13 +46,13 @@ public class ListenAndFindGameSlideManager extends AbstractSlideManager {
         FileInputStream fis = null;
         switch(type){
             case Animals:
-                fis = new FileInputStream(".\\resources\\animals.jpg");
+                fis = new FileInputStream("resources/animals.jpg");
                 break;
             case Colors:
-                fis = new FileInputStream(".\\resources\\colors.jpg");
+                fis = new FileInputStream("resources/colors.jpg");
                 break;
             case Numbers:
-                fis = new FileInputStream(".\\resources\\numbers.jpg");
+                fis = new FileInputStream("resources/numbers.jpg");
                 break;
         }
         loadImageToSlidePanel(ImageIO.read(fis), Rotation.NO_ROTATION.getRotationInRadians());
