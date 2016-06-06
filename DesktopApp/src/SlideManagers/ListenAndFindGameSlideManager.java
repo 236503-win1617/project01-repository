@@ -43,24 +43,19 @@ public class ListenAndFindGameSlideManager extends AbstractSlideManager {
             first = false;
         }
         ListenAndFindGameSlide.GameType type =  ((ListenAndFindGameSlide) slide).getGameType();
-        FileInputStream fis;
+        FileInputStream fis = null;
         switch(type){
             case Animals:
-                fis = (FileInputStream)this.getClass().getResourceAsStream(".\\resources\\animals.jpg");
-                loadImageToSlidePanel(ImageIO.read(fis),
-                        Rotation.NO_ROTATION.getRotationInRadians());
+                fis = new FileInputStream(".\\resources\\animals.jpg");
                 break;
             case Colors:
-                fis = (FileInputStream)this.getClass().getResourceAsStream(".\\resources\\colors.jpg");
-                loadImageToSlidePanel(ImageIO.read(fis),
-                        Rotation.NO_ROTATION.getRotationInRadians());
+                fis = new FileInputStream(".\\resources\\colors.jpg");
                 break;
             case Numbers:
-                fis = (FileInputStream)this.getClass().getResourceAsStream(".\\resources\\numbers.jpg");
-                loadImageToSlidePanel(ImageIO.read(fis),
-                        Rotation.NO_ROTATION.getRotationInRadians());
+                fis = new FileInputStream(".\\resources\\numbers.jpg");
                 break;
         }
+        loadImageToSlidePanel(ImageIO.read(fis), Rotation.NO_ROTATION.getRotationInRadians());
     }
 
     public void saveDataToCurrentSlide(){}
