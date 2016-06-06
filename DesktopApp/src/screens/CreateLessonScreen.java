@@ -66,7 +66,9 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         slideTypeToManager.put(SlideType.OrderGame, new OrderGameSlideManager(currentSlidePanel, commandsPanel));
         slideTypeToManager.put(SlideType.ListenAndFindGame, new ListenAndFindGameSlideManager(currentSlidePanel, commandsPanel));
     }
-
+    public void setLessonName(String name){
+        this.lessonName = name;
+    }
     public void loadLesson(List<AbstractSlide> slides) {
         //TODO reimplement
 //        for(Slide s: toLoad.slides){
@@ -164,7 +166,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
     private void onAutoSaveCurrentLesson(boolean autosave) {
         showInformationMessage("Autosave - Saving lesson");
         String name = "Default name ";
-        LessonsFactory.generateXmlFromLesson(_slides, name);
+        LessonsFactory.generate(_slides, name);
     }
 
     //TODO: Refactor
@@ -183,10 +185,10 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
                 showInformationMessage("The tablet is not connected properly");
                 return;
             }
-            String lessonName = showInputMessage("Insert Lesson Name:");
+            //String lessonName = showInputMessage("Insert Lesson Name:");
 
             if (lessonName != null) {
-                LessonsFactory.generateXmlFromLesson(_slides, lessonName);
+                LessonsFactory.generate(_slides, lessonName);
 
                 USBTransfertMain.jMTPeMethode(lessonName);
                 showInformationMessage("Lesson '" + lessonName + "' was saved !");
@@ -414,5 +416,8 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         } else {
             //TODO: implement for a small screen
         }
+    }
+    public String getLessonName(){
+        return this.lessonName;
     }
 }

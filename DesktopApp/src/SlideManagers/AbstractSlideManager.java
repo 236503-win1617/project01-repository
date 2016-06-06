@@ -6,10 +6,15 @@ import Factories.ComponentsFactory;
 import screens.CreateLessonScreen;
 import slides.AbstractSlide;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
+import slides.Rotation;
 
 /**
  * Created by Evgeniy on 4/2/2016.
@@ -87,6 +92,48 @@ public abstract class AbstractSlideManager {
         loadImageToSlidePanel(image, rotationRadians);
         setImageOnSlideButton(image, rotationRadians);
     }
+    protected void loadPictureFromFile(InputStream imageFile, Rotation pictureRotation) throws IOException {
+        currentSlidePanel.removeAll();
+
+        BufferedImage image = ImageIO.read(imageFile);
+
+        int imageHeight = image.getHeight();
+        int imageWidth = image.getWidth();
+
+        AffineTransform tx = new AffineTransform();
+        tx.rotate(pictureRotation.getRotationInRadians(), imageWidth / 2, imageHeight / 2);
+        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+        image = op.filter(image, null);
+
+        Image resizedImage = getResizedImage(image, imageHeight, imageWidth);
+
+        ImageIcon imageIcon = new ImageIcon(resizedImage);
+        JLabel imageLabel = new JLabel("", imageIcon, JLabel.CENTER);
+
+        setConstraints(0, 0, 1, 1);
+
+        currentSlidePanel.add(imageLabel, constraints);
+        currentSlidePanel.revalidate();
+        currentSlidePanel.repaint();
+    }
+    private Image getResizedImage(BufferedImage image, int imageHeight, int imageWidth) {
+        int panelHeight = currentSlidePanel.getHeight();
+        int panelWidth = currentSlidePanel.getWidth();
+
+        if ((imageHeight <= panelHeight) && (imageWidth <= panelWidth)) {
+            return image;
+        }
+
+        double heightFactor = ((double) panelHeight / imageHeight);
+        double widthFactor = ((double) panelWidth / imageWidth);
+        double factor = Double.max(heightFactor, widthFactor);
+
+        int newWidth = (int) (imageWidth * factor);
+        int newHeight = (int) (imageHeight * factor);
+
+        return image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+    }
 
     public abstract void addNewSoundElement(SoundElement soundElement);
 }
+

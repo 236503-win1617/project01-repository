@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
+import java.nio.file.Files;
 
 /**
  * Created by Evgeniy on 12/7/2015.
@@ -243,7 +244,16 @@ public class SoundAreaScreen extends AbstractEmptyScreen {
             String filePathToShow = selectedFile.getAbsolutePath();
             String fileIsSelected = "Selected Audio File";
             Color selectedColor = Color.GREEN;
+            try {
+                File NewLocation = new File(".\\xmlDir\\"+ Screens.CreateLessonScreen.getLessonName() + "\\AASounds\\" + selectedFile.getName());
 
+
+                //File NewLocation = new File(".\\xmlDir\\"+ Screens.CreateLessonScreen.getLessonName() + "\\AASounds\\" + selectedFile.getName());
+
+                Files.copy(selectedFile.toPath(),NewLocation.toPath());
+            } catch (Exception ex) {
+                Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());
+            }
             if (!isFileSupportedType(filePathToShow)) {
                 showErrorMessage("The file format isn't supported");
                 filePathToShow = "";
