@@ -35,7 +35,8 @@ public class OrderGameSlideManager extends AbstractSlideManager{
             ((OrderGameSlide) slide).setMaxNum(maxNum);
             first = false;
         }
-        loadImageToSlidePanel(ImageIO.read(new FileInputStream(".\\resources\\order.png")),
+        FileInputStream fis = (FileInputStream)this.getClass().getResourceAsStream(".\\resources\\order.png");
+        loadImageToSlidePanel(ImageIO.read(fis),
                 Rotation.NO_ROTATION.getRotationInRadians());
     }
 
