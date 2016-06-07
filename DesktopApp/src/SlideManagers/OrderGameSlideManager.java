@@ -9,7 +9,6 @@ import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import slides.OrderGameSlide;
 
 /**
  * Created by dan on 17/05/2016.
@@ -23,7 +22,7 @@ public class OrderGameSlideManager extends AbstractSlideManager{
 
     public void onRotateCommand() throws IOException {}
 
-    public void loadSlide(AbstractSlide slide, JButton button) throws IOException{
+    public void loadSlide(AbstractSlide slide, JButton button) throws IOException {
         FileInputStream fis = new FileInputStream("resources/order.png");
         loadImageToSlidePanel(ImageIO.read(fis), Rotation.NO_ROTATION.getRotationInRadians());
     }
@@ -36,7 +35,8 @@ public class OrderGameSlideManager extends AbstractSlideManager{
 
     protected void setSpecificButtonsVisibility(boolean visibility){}
 
-    public void loadPictureFile(File imageFile){}
+    public void loadPictureFile(File imageFile) {
+    }
 
     public void addNewSoundElement(SoundElement soundElement){}
 }

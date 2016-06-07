@@ -5,42 +5,20 @@
 package Factories;
 
 import AdditionalClasses.SoundElement;
-import slides.*;
-import SlideManagers.*;
-
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Random;
-import screens.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import Factories.*;
-import AdditionalClasses.*;
-
-import AdditionalClasses.SoundElement;
 import slides.AbstractSlide;
+import slides.ListenAndFindGameSlide;
+import slides.OrderGameSlide;
 import slides.PictureSlide;
 
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-import org.dom4j.io.OutputFormat;
-import org.dom4j.io.XMLWriter;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class LessonsFactory {
     //TODO: start using the name
@@ -60,24 +38,24 @@ public class LessonsFactory {
 
                     File pictureFile = item.getPictureFile();
                     String fileName = (pictureFile == null) ? "" : pictureFile.toString();
-                    String [] bits = fileName.split("\\\\");
-                    if(bits.length<2){
+                    String[] bits = fileName.split("\\\\");
+                    if (bits.length < 2) {
                         bits = fileName.split("////");
                     }
-                    String lastOne = bits[bits.length-1];
-                    pictureElement.addElement("image_file").addText("./"+lastOne);
+                    String lastOne = bits[bits.length - 1];
+                    pictureElement.addElement("image_file").addText("./" + lastOne);
                     Element soundsList = pictureElement.addElement("sounds_list");
                     for (SoundElement soundItem : item.getSoundElements()) {
                         Element soundButton = soundsList.addElement("sound_button");
-                        String soundName=soundItem.soundFile.toString();
-                        String [] bits2 = soundName.split("\\\\");
-                        if(bits2.length<2){
+                        String soundName = soundItem.soundFile.toString();
+                        String[] bits2 = soundName.split("\\\\");
+                        if (bits2.length < 2) {
                             bits2 = soundName.split("////");
                         }
-                        String lastOne2 = bits2[bits2.length-1];
+                        String lastOne2 = bits2[bits2.length - 1];
 
                         soundButton.addElement("sound_file")
-                                .addText("./"+lastOne2);
+                                .addText("./" + lastOne2);
                         soundButton.addElement("start_x")
                                 .addText(Integer.toString(soundItem.start_x));
                         soundButton.addElement("start_y")
@@ -89,7 +67,7 @@ public class LessonsFactory {
                     }
                     index++;
                 }
-                if(slide instanceof  ListenAndFindGameSlide) {
+                if (slide instanceof ListenAndFindGameSlide) {
                     ListenAndFindGameSlide item = (ListenAndFindGameSlide) slide;
                     Element GameElement = root.addElement("slide");
                     GameElement.addElement("order").addText(Integer.toString((index)));
@@ -97,7 +75,8 @@ public class LessonsFactory {
                     GameElement.addElement("gameType").addText(item.getGameType().name());
                     GameElement.addElement("game").addText(item.getGameType().name());
                     index++;
-                } if (slide instanceof  OrderGameSlide) {
+                }
+                if (slide instanceof OrderGameSlide) {
                     OrderGameSlide item = (OrderGameSlide) slide;
                     Element GameElement = root.addElement("slide");
                     GameElement.addElement("order").addText(Integer.toString((index)));
@@ -115,15 +94,15 @@ public class LessonsFactory {
             XMLWriter writer;
             //Random random = new Random();
 
-            File f = new File(".\\xmlDir\\" + name + "\\"+name+".xml");
+            File f = new File(".\\xmlDir\\" + name + "\\" + name + ".xml");
             //f.createNewFile();
             //while(f.exists()) {
             //	random = new Random();
             //	 f = new File(".\\xmlDir\\db"+Integer.toString(random.nextInt())+".xml");
             //}
             OutputStream output = new FileOutputStream(f.getPath());
-            writer = new XMLWriter( output, format );
-            writer.write( document );
+            writer = new XMLWriter(output, format);
+            writer.write(document);
         } catch (Exception e) {
             e.printStackTrace();
         }

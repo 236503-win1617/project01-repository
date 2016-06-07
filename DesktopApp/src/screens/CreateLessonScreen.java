@@ -72,9 +72,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         slideTypeToManager.put(SlideType.OrderGame, new OrderGameSlideManager(currentSlidePanel, commandsPanel));
         slideTypeToManager.put(SlideType.ListenAndFindGame, new ListenAndFindGameSlideManager(currentSlidePanel, commandsPanel));
     }
-    public void setLessonName(String name){
-        this.lessonName = name;
-    }
+
     public void loadLesson(List<AbstractSlide> slides) {
         //TODO reimplement
 //        for(Slide s: toLoad.slides){
@@ -105,7 +103,6 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
 //        }
 
     }
-
 
     //TODO: remove this method when switching to different sound selecting
     //TODO: make a nicer text display
@@ -187,7 +184,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
             jmtp.PortableDeviceFolderObject targetFolder = null;
             jmtp.PortableDeviceManager manager = new jmtp.PortableDeviceManager();
             jmtp.PortableDevice device = null;
-            if(manager.getDevices().length==0){
+            if (manager.getDevices().length == 0) {
                 showInformationMessage("The tablet is not connected properly");
                 return;
             }
@@ -271,8 +268,6 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         }
     }
 
-    //region Set Buttons
-
     private void setMenuPanelButtons() {
         setCustomInsets(DefaultSizes.DEFAULT_INSET + 13, 90, DefaultSizes.DEFAULT_INSET + 13, 90);
         setMainMenuButton();
@@ -283,6 +278,8 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         setSendToPhoneButton();
         setSquareInsets(DefaultSizes.DEFAULT_INSET);
     }
+
+    //region Set Buttons
 
     private void setCommandsPanelButtons() {
         setAddPictureSlideButton();
@@ -422,8 +419,6 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         screenMenuPanel.add(reportBugButton, constraints);
     }
 
-    //endregion
-
     //TODO: Create mail manager class
     private void sendMail(String subject) {
         if (!Desktop.isDesktopSupported()) {
@@ -440,6 +435,8 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         }
     }
 
+    //endregion
+
     private void setDynamicBounds() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         SCREEN_WIDTH = (int) screenSize.getWidth() - 250;
@@ -451,7 +448,12 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
             //TODO: implement for a small screen
         }
     }
-    public String getLessonName(){
+
+    public String getLessonName() {
         return this.lessonName;
+    }
+
+    public void setLessonName(String name) {
+        this.lessonName = name;
     }
 }

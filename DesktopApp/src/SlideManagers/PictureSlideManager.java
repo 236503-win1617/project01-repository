@@ -212,9 +212,8 @@ public class PictureSlideManager extends AbstractSlideManager {
                 loadPictureFromFile(new FileInputStream(selectedFile), Rotation.NO_ROTATION);
 
 
-
-                File NewLocation = new File(".\\xmlDir\\"+ Screens.CreateLessonScreen.getLessonName() + "\\AAImages\\" + selectedFile.getName());
-                Files.copy(selectedFile.toPath(),NewLocation.toPath());
+                File NewLocation = new File(".\\xmlDir\\" + Screens.CreateLessonScreen.getLessonName() + "\\AAImages\\" + selectedFile.getName());
+                Files.copy(selectedFile.toPath(), NewLocation.toPath());
             } catch (Exception ex) {
                 Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());
             }
