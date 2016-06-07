@@ -2,17 +2,17 @@ package com.example.ohad.dynamicex;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.pm.ActivityInfo;
+import android.os.Bundle;
 
-
-import java.io.File;
-
-/**
- * Created by Samuel on 28/03/2016.
- */
 public class GameSlide extends Slide {
+
+    private Activity activity;
     private GameFragment gameFragment;
 
-    public GameSlide(XmlParser.Game game,Activity activity){
+    public GameSlide(Activity a, XmlParser.GameType game){
+        activity = a;
+
         switch (game) {
             case NUMBERS:
                 gameFragment = new GameNumbers();
@@ -23,37 +23,37 @@ public class GameSlide extends Slide {
             case ANIMALS:
                 gameFragment = new GameAnimals();
                 break;
-            case ORDER:
-                gameFragment = new GameOrder();
-                break;
             default:
-                gameFragment = new GameNumbers();
+                System.err.println("Game type error!");
+                return;
         }
-        activity.getFragmentManager().beginTransaction().add(R.id.main_container, gameFragment).commit();
+
         FragmentManager fm = activity.getFragmentManager();
-        fm.beginTransaction()
-                .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                .hide(gameFragment)
-                .commit();
+        fm.beginTransaction().add(R.id.main_container, gameFragment).commit();
+        fm.beginTransaction().hide(gameFragment).commit();
     }
 
-    public void show(Activity activity) {
+    public GameSlide(Activity a, int maxNum){
+        activity = a;
+
+        gameFragment = new GameOrder();
+        Bundle bundle = new Bundle();
+        bundle.putInt("maxNum", maxNum);
+        gameFragment.setArguments(bundle);
+
         FragmentManager fm = activity.getFragmentManager();
-        fm.beginTransaction()
-                .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                .show(gameFragment)
-                .commit();
+        fm.beginTransaction().add(R.id.main_container, gameFragment).commit();
+        fm.beginTransaction().hide(gameFragment).commit();
     }
 
-    public void hide(Activity activity) {
+    public void show() {
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         FragmentManager fm = activity.getFragmentManager();
-        fm.beginTransaction()
-                .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
-                .hide(gameFragment)
-                .commit();
+        fm.beginTransaction().show(gameFragment).commit();
     }
 
-    public GameFragment getGameFragment(){
-        return gameFragment;
+    public void hide() {
+        FragmentManager fm = activity.getFragmentManager();
+        fm.beginTransaction().hide(gameFragment).commit();
     }
 }

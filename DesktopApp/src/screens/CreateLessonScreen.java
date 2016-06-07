@@ -4,6 +4,7 @@ import AdditionalClasses.IndexedButton;
 import AdditionalClasses.SoundElement;
 import Factories.ComponentsFactory;
 import Factories.LessonsFactory;
+import Factories.USBTransfertMain;
 import Resources.DefaultSizes;
 import Resources.FileResources;
 import Resources.MessageErrors;
@@ -71,7 +72,9 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         slideTypeToManager.put(SlideType.OrderGame, new OrderGameSlideManager(currentSlidePanel, commandsPanel));
         slideTypeToManager.put(SlideType.ListenAndFindGame, new ListenAndFindGameSlideManager(currentSlidePanel, commandsPanel));
     }
-
+    public void setLessonName(String name){
+        this.lessonName = name;
+    }
     public void loadLesson(List<AbstractSlide> slides) {
         //TODO reimplement
 //        for(Slide s: toLoad.slides){
@@ -169,24 +172,34 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
     private void onAutoSaveCurrentLesson(boolean autosave) {
         showInformationMessage("Autosave - Saving lesson");
         String name = "Default name ";
-        LessonsFactory.generateXmlFromLesson(_slides, name);
+        LessonsFactory.generate(_slides, name);
     }
 
     //TODO: Refactor
     //TODO: implement a check that lesson doesn't exists or overwrite the previous one
     private void onSaveCurrentLesson(boolean autosave) {
+        System.loadLibrary("jmtp");
         if (!autosave) {
             if (_slides.size() == 0) {
                 showInformationMessage("Cannot save empty lesson !");
                 return;
             }
-
+            jmtp.PortableDeviceFolderObject targetFolder = null;
+            jmtp.PortableDeviceManager manager = new jmtp.PortableDeviceManager();
+            jmtp.PortableDevice device = null;
+            if(manager.getDevices().length==0){
+                showInformationMessage("The tablet is not connected properly");
+                return;
+            }
             //String lessonName = showInputMessage("Insert Lesson Name:");
 
             if (lessonName != null) {
-                LessonsFactory.generateXmlFromLesson(_slides, lessonName);
+                LessonsFactory.generate(_slides, lessonName);
+
+                USBTransfertMain.jMTPeMethode(lessonName);
                 showInformationMessage("Lesson '" + lessonName + "' was saved !");
             }
+            //TODO: implement a check that lesson doesn't exists or overwrite the previous one
             return;
         }
         if (SettingScreen.a == 1) {
@@ -314,24 +327,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
     private void setAddGameSlideButton() {
         JButton addGameSlide = new JButton("Add Game Slide");
         addGameSlide.addActionListener(new ActionListener() {
-
             public void actionPerformed(ActionEvent e) {
-//                                               String[] gameTypes = { "Animals", "Colors", "Numbers"};
-//                                               String choice = (String) JOptionPane.showInputDialog(null, "What game do you want?",
-//                                                       "Choose Type of Game", JOptionPane.QUESTION_MESSAGE, null, // Use
-//                                                       gameTypes, // Array of choices
-//                                                       gameTypes[0]); // Initial choice
-//
-//                                               GameSlide.GameType type = null;
-//                                               if (choice == null) return;
-//                                               if (choice.equals("Animals")){
-//                                                   type = GameSlide.GameType.Animals;
-//                                               } else if (choice.equals("Colors")){
-//                                                   type = GameSlide.GameType.Colors;
-//                                               } else if (choice.equals("Numbers")){
-//                                                   type = GameSlide.GameType.Numbers;
-//                                               }
-//                                               GameSlide newGameSlide = new GameSlide(type);
                 String[] gameTypes = {"Listen and Order", "Listen and Find"};
                 String choice = (String) JOptionPane.showInputDialog(null, "What game do you want?",
                         "Choose Type of Game", JOptionPane.QUESTION_MESSAGE, null, // Use
@@ -454,5 +450,8 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         } else {
             //TODO: implement for a small screen
         }
+    }
+    public String getLessonName(){
+        return this.lessonName;
     }
 }

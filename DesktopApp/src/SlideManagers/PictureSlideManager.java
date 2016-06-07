@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -206,6 +207,16 @@ public class PictureSlideManager extends AbstractSlideManager {
             } catch (Exception ex) {
                 Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());
                 ex.printStackTrace();
+            }
+            try {
+                loadPictureFromFile(new FileInputStream(selectedFile), Rotation.NO_ROTATION);
+
+
+
+                File NewLocation = new File(".\\xmlDir\\"+ Screens.CreateLessonScreen.getLessonName() + "\\AAImages\\" + selectedFile.getName());
+                Files.copy(selectedFile.toPath(),NewLocation.toPath());
+            } catch (Exception ex) {
+                Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());
             }
         }
     }

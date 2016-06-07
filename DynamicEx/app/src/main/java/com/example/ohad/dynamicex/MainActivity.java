@@ -18,7 +18,7 @@ import java.io.FilenameFilter;
 public class MainActivity extends AppCompatActivity {
 
     Lesson lesson = new Lesson(MainActivity.this);
-    XmlParser parser = new XmlParser();
+    XmlParser parser = new XmlParser(MainActivity.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +43,7 @@ public class MainActivity extends AppCompatActivity {
         fab_exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-                startActivity(intent);
-                finish();
+                onBackPressed();
             }
         });
 
@@ -67,23 +65,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void sayNum(View v){
-        Slide curr = lesson.getCurrSlide();
-        if (curr instanceof GameSlide){
-            ((GameSlide)curr).getGameFragment().sayNum(v);
-        }
+    @Override
+    public void onBackPressed()  {
+        Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+        startActivity(intent);
+        finish();
     }
-    public void checkNum(View v){
-        Slide curr = lesson.getCurrSlide();
-        if (curr instanceof GameSlide){
-            ((GameSlide)curr).getGameFragment().checkNum(v);
-        }
-    }
-    public void initNums(View v){
-        Slide curr = lesson.getCurrSlide();
-        if (curr instanceof GameSlide){
-            ((GameSlide)curr).getGameFragment().initNums(v);
-        }
-    }
+
 
 }

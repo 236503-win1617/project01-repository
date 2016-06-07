@@ -22,18 +22,21 @@ import android.widget.VideoView;
 
 public class VideoSlide extends Slide {
 
+    private Activity activity;
+
     protected VideoView mPlayer = null;
     protected Button mPlayButton = null;
     private String path = null;
     protected Integer videoPosition = 500;
 
-    public VideoSlide(String path) {
+    public VideoSlide(Activity a, String path) {
+        this.activity = a;
         this.path = path;
     }
 
 
     @Override
-    public void show(Activity activity) {
+    public void show() {
 
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         RelativeLayout layout = (RelativeLayout)activity.findViewById(R.id.content_main);
@@ -76,7 +79,7 @@ public class VideoSlide extends Slide {
     }
 
     @Override
-    public void hide(Activity a) {
+    public void hide() {
         mPlayButton.setVisibility(View.INVISIBLE);
         mPlayer.setVisibility(View.INVISIBLE);
     }
@@ -88,21 +91,6 @@ public class VideoSlide extends Slide {
             //finish();
         }
     };
-
-//    private class PlayListener implements View.OnClickListener {
-//        Activity activity;
-//
-//        public PlayListener(Activity activity) {
-//            this.activity = activity;
-//        }
-//
-//        @Override
-//        public void onClick(View v) {
-//            activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-//            mPlayer.start();
-//            mPlayButton.setVisibility(View.GONE); // hide button once playback starts
-//        }
-//    }
 
     private View.OnClickListener mButtonClick = new View.OnClickListener() {
         @Override

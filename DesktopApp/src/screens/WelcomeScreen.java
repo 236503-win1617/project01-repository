@@ -2,6 +2,7 @@ package screens;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 /**
  * Created by Evgeniy on 11/21/2015.
@@ -43,6 +44,25 @@ public class WelcomeScreen extends AbstractEmptyScreen {
     private void setCreateButton() {
         JButton createButton = new JButton("Create New Lesson");
         createButton.addActionListener(e -> {
+            String lessonName = showInputMessage("Insert Lesson Name:");
+            //Screens.CreateLessonScreen.les
+            Screens.CreateLessonScreen = new CreateLessonScreen();
+            Screens.CreateLessonScreen.setLessonName(lessonName);
+
+
+            File xmlDir = new File("xmlDir");
+            // if the directory does not exist, create it
+            if (!xmlDir.exists()) {
+                xmlDir.mkdir();
+            }
+
+
+            File dir = new File("xmlDir\\" + lessonName);
+            dir.mkdir();
+            File AAImages = new File("xmlDir\\" + lessonName + "\\AAImages");
+            AAImages.mkdir();
+            File AASounds = new File("xmlDir\\" + lessonName + "\\AASounds");
+            AASounds.mkdir();
             Screens.CreateLessonScreen.setVisible(true);
             Screens.WelcomeScreen.setVisible(false);
         });
