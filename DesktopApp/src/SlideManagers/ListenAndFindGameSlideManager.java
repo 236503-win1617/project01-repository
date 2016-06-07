@@ -16,17 +16,19 @@ import java.io.IOException;
  */
 public class ListenAndFindGameSlideManager extends AbstractSlideManager {
     private boolean first;
-    public ListenAndFindGameSlideManager(JPanel currentSlide, JPanel commandsPanel){
+
+    public ListenAndFindGameSlideManager(JPanel currentSlide, JPanel commandsPanel) {
         super(currentSlide, commandsPanel);
         first = true;
     }
 
-    public void onRotateCommand() throws IOException {}
+    public void onRotateCommand() throws IOException {
+    }
 
-    public void loadSlide(AbstractSlide slide, JButton button) throws IOException{
+    public void loadSlide(AbstractSlide slide, JButton button) throws IOException {
         ListenAndFindGameSlide.GameType type = ((ListenAndFindGameSlide) slide).getGameType();
         FileInputStream fis = null;
-        switch(type){
+        switch (type) {
             case Animals:
                 fis = new FileInputStream("resources/animals.jpg");
                 break;
@@ -40,15 +42,21 @@ public class ListenAndFindGameSlideManager extends AbstractSlideManager {
         loadImageToSlidePanel(ImageIO.read(fis), Rotation.NO_ROTATION.getRotationInRadians());
     }
 
-    public void saveDataToCurrentSlide(){}
+    public void saveDataToCurrentSlide() {
+    }
 
-    protected void setSpecificCommandsButtons(){}
+    protected void setSpecificCommandsButtons() {
+    }
 
-    protected void specificClearContent(){}
+    protected void specificClearContent() {
+    }
 
-    protected void setSpecificButtonsVisibility(boolean visibility){}
+    protected void setSpecificButtonsVisibility(boolean visibility) {
+    }
 
-    public void loadPictureFile(File imageFile){}
+    public void loadPictureFile(File imageFile) {
+    }
 
-    public void addNewSoundElement(SoundElement soundElement){}
+    public void addNewSoundElement(SoundElement soundElement) {
+    }
 }

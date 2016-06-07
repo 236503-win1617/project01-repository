@@ -1,9 +1,7 @@
 package slides;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.io.File;
-import java.io.FileInputStream;
 
 /**
  * Created by dan on 16/05/2016.

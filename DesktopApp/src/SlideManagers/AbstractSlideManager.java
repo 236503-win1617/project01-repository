@@ -5,6 +5,7 @@ import AdditionalClasses.SoundElement;
 import Factories.ComponentsFactory;
 import screens.CreateLessonScreen;
 import slides.AbstractSlide;
+import slides.Rotation;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -14,7 +15,6 @@ import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import slides.Rotation;
 
 /**
  * Created by Evgeniy on 4/2/2016.
@@ -85,13 +85,14 @@ public abstract class AbstractSlideManager {
     protected void setImageOnSlideButton(BufferedImage image, double radianRotation) {
         int size = CreateLessonScreen.SLIDE_BUTTON_SIZE - 5;
         Image resizedImage = ComponentsFactory.getResizedImage(image, size, size);
-        ComponentsFactory.setButtonImage(resizedImage, slideButton, radianRotation);
+        ComponentsFactory.setImageOnButton(resizedImage, slideButton, radianRotation);
     }
 
     protected void loadSameImageToPanelAndButton(BufferedImage image, double rotationRadians) throws IOException {
         loadImageToSlidePanel(image, rotationRadians);
         setImageOnSlideButton(image, rotationRadians);
     }
+
     protected void loadPictureFromFile(InputStream imageFile, Rotation pictureRotation) throws IOException {
         currentSlidePanel.removeAll();
 
@@ -116,6 +117,7 @@ public abstract class AbstractSlideManager {
         currentSlidePanel.revalidate();
         currentSlidePanel.repaint();
     }
+
     private Image getResizedImage(BufferedImage image, int imageHeight, int imageWidth) {
         int panelHeight = currentSlidePanel.getHeight();
         int panelWidth = currentSlidePanel.getWidth();

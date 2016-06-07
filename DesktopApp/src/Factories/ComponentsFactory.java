@@ -13,8 +13,8 @@ import java.util.UUID;
  * Created by Evgeniy on 11/21/2015.
  */
 public class ComponentsFactory {
-
-    private static String DEFAULT_FONT = "Ariel";
+    private static String DEFAULT_FONT_NAME = "Ariel";
+    private static Font DEFAULT_FONT = new Font(DEFAULT_FONT_NAME, Font.PLAIN, DefaultSizes.DEFAULT_FONT_SIZE);
 
     public static GridBagConstraints getDefaultConstraints() {
         GridBagConstraints constraints = new GridBagConstraints();
@@ -25,14 +25,14 @@ public class ComponentsFactory {
 
     public static JTextPane createBasicTextPane(String text) {
         JTextPane textPane = new JTextPane();
-
-        textPane.setText(text);
-        textPane.setEditable(false);
-        textPane.setFont(new Font(DEFAULT_FONT, Font.PLAIN, DefaultSizes.DEFAULT_FONT_SIZE));
-        textPane.setForeground(Color.BLACK);
-        textPane.setBackground(SystemColor.menu);
-
+        setTextPaneDefaultParams(textPane, text);
         return textPane;
+    }
+
+    public static UniqueTextPane createUniqueTextPane(UUID uuid, String text) {
+        UniqueTextPane uniquePane = new UniqueTextPane(uuid);
+        setTextPaneDefaultParams(uniquePane, text);
+        return uniquePane;
     }
 
     public static JScrollPane createScrollPane(JPanel panel, int width, int height, int constantHorizontal, int constantVertical) {
@@ -47,21 +47,12 @@ public class ComponentsFactory {
         return scrollPane;
     }
 
-    public static UniqueTextPane createUniqueTextPane(UUID uuid, String text) {
-        UniqueTextPane uniquePane = new UniqueTextPane(uuid);
-        uniquePane.setForeground(Color.red);
-        uniquePane.setEditable(false);
-        uniquePane.setFont(new Font("Ariel", Font.BOLD, 16));
-        uniquePane.setText(text);
-        return uniquePane;
-    }
-
     public static JTextField createBasicTextField(String helperText) {
         JTextField textField = new JTextField();
         textField.setHorizontalAlignment(JTextField.CENTER);
         textField.setToolTipText(helperText);
         textField.setForeground(Color.black);
-        textField.setFont(new Font(DEFAULT_FONT, Font.PLAIN, DefaultSizes.DEFAULT_FONT_SIZE));
+        textField.setFont(DEFAULT_FONT);
         textField.setBackground(SystemColor.menu);
 
         return textField;
@@ -73,7 +64,7 @@ public class ComponentsFactory {
         element.setMinimumSize(dimension);
     }
 
-    public static void setButtonImage(Image image, JButton button, double rotationRadians) {
+    public static void setImageOnButton(Image image, JButton button, double rotationRadians) {
         button.removeAll();
         RotatedIcon rotatedIcon = new RotatedIcon(image, rotationRadians);
         button.setIcon(rotatedIcon);
@@ -97,12 +88,11 @@ public class ComponentsFactory {
         return image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
     }
 
-    public static JComboBox createComboBox(Object[] values, String helperText, int start_x, int start_y, int width, int height) {
-        JComboBox comboBox = new JComboBox();
-        comboBox.setToolTipText(helperText);
-        comboBox.setModel(new DefaultComboBoxModel(values));
-        comboBox.setBounds(start_x, start_y, width, height);
-
-        return comboBox;
+    private static void setTextPaneDefaultParams(JTextPane textPane, String text) {
+        textPane.setForeground(Color.BLACK);
+        textPane.setText(text);
+        textPane.setEditable(false);
+        textPane.setOpaque(false);
+        textPane.setFont(DEFAULT_FONT);
     }
 }

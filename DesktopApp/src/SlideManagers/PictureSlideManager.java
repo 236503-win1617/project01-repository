@@ -3,7 +3,6 @@ package SlideManagers;
 import AdditionalClasses.SoundElement;
 import AdditionalClasses.UniqueTextPane;
 import Factories.ComponentsFactory;
-import Resources.DefaultSizes;
 import Resources.FileResources;
 import Resources.MessageErrors;
 import screens.Screens;
@@ -13,6 +12,9 @@ import slides.Rotation;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -39,11 +41,21 @@ public class PictureSlideManager extends AbstractSlideManager {
     private JButton choosePictureButton;
     private JButton addSoundButton;
     private JButton removeSoundButton;
+    private CompoundBorder defaultSoundBorder;
 
     public PictureSlideManager(JPanel currentSlide, JPanel commandsPanel, JPanel soundsPanel) {
         super(currentSlide, commandsPanel);
 
         this.soundsPanel = soundsPanel;
+        setDefaultBorder();
+    }
+
+    private void setDefaultBorder() {
+        Border raised = BorderFactory.createRaisedBevelBorder();
+        Border lowered = BorderFactory.createLoweredBevelBorder();
+        Border compoundBorder = BorderFactory.createCompoundBorder(raised, lowered);
+        Border emptyBorder = new EmptyBorder(5, 2, 5, 2);
+        defaultSoundBorder = BorderFactory.createCompoundBorder(compoundBorder, emptyBorder);
     }
 
     @Override
@@ -200,45 +212,57 @@ public class PictureSlideManager extends AbstractSlideManager {
                 loadPictureFromFile(new FileInputStream(selectedFile), Rotation.NO_ROTATION);
 
 
-
-                File NewLocation = new File(".\\xmlDir\\"+ Screens.CreateLessonScreen.getLessonName() + "\\AAImages\\" + selectedFile.getName());
-                Files.copy(selectedFile.toPath(),NewLocation.toPath());
+                File NewLocation = new File(".\\xmlDir\\" + Screens.CreateLessonScreen.getLessonName() + "\\AAImages\\" + selectedFile.getName());
+                Files.copy(selectedFile.toPath(), NewLocation.toPath());
             } catch (Exception ex) {
                 Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());
             }
         }
     }
 
-    private Dimension getSoundAreaDimension() {
-        int width = soundsPanel.getWidth() - (DefaultSizes.DEFAULT_INSET * 2);
-        int height = soundsPanel.getHeight() / 5;
-
-        return new Dimension(width, height);
-    }
-
     public void addNewSoundElement(SoundElement soundElement) {
         UUID uuid = UUID.randomUUID();
         UniqueTextPane soundTextPane = ComponentsFactory.createUniqueTextPane(uuid, soundElement.toString());
-
+        soundTextPane.setFont(new Font("Ariel", Font.BOLD, 18));
+        soundTextPane.setBorder(defaultSoundBorder);
         soundTextPane.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                UUID pressedID = ((UniqueTextPane) e.getSource()).getId();
+                for (Component c : soundsPanel.getComponents()) {
+                    if (c instanceof UniqueTextPane) {
+                        UniqueTextPane textPane = (UniqueTextPane) c;
+                        if (textPane.getId().equals(pressedID)) {
+                            Border compoundWithLine = getBorderWithLine(Color.GREEN, BorderFactory.createLoweredBevelBorder());
+                            textPane.setBorder(compoundWithLine);
+                        } else {
+                            textPane.setBorder(defaultSoundBorder);
+                        }
+                    }
+                }
+            }
+
             @Override
             public void mouseReleased(MouseEvent e) {
                 UniqueTextPane textArea = (UniqueTextPane) e.getSource();
+                Border compoundWithLine = getBorderWithLine(Color.BLACK, defaultSoundBorder);
+                textArea.setBorder(compoundWithLine);
                 selectedSoundId = textArea.getId();
             }
         });
 
-        Dimension soundAreaDimension = getSoundAreaDimension();
-        ComponentsFactory.setElementConstSize(soundTextPane, soundAreaDimension);
-
-        constraints.anchor = GridBagConstraints.PAGE_START;
-        setConstraints(0, slideSoundElements.size(), 0, 0);
+        setConstraints(0, slideSoundElements.size(), 1, 0);
 
         slideSoundAreas.put(uuid, soundTextPane);
         slideSoundElements.put(uuid, soundElement);
 
         soundsPanel.add(soundTextPane, constraints);
         soundsPanel.revalidate();
+    }
+
+    private Border getBorderWithLine(Color color, Border border) {
+        Border blackLine = BorderFactory.createMatteBorder(4, 4, 4, 4, color);
+        return BorderFactory.createCompoundBorder(blackLine, border);
     }
 
     private void deleteSoundRegion(UUID soundId) {

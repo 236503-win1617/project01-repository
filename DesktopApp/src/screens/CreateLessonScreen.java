@@ -5,16 +5,22 @@ import AdditionalClasses.SoundElement;
 import Factories.ComponentsFactory;
 import Factories.LessonsFactory;
 import Factories.USBTransfertMain;
+import Resources.DefaultSizes;
+import Resources.FileResources;
 import Resources.MessageErrors;
 import SlideManagers.*;
 import slides.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,9 +72,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         slideTypeToManager.put(SlideType.OrderGame, new OrderGameSlideManager(currentSlidePanel, commandsPanel));
         slideTypeToManager.put(SlideType.ListenAndFindGame, new ListenAndFindGameSlideManager(currentSlidePanel, commandsPanel));
     }
-    public void setLessonName(String name){
-        this.lessonName = name;
-    }
+
     public void loadLesson(List<AbstractSlide> slides) {
         //TODO reimplement
 //        for(Slide s: toLoad.slides){
@@ -99,7 +103,6 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
 //        }
 
     }
-
 
     //TODO: remove this method when switching to different sound selecting
     //TODO: make a nicer text display
@@ -181,7 +184,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
             jmtp.PortableDeviceFolderObject targetFolder = null;
             jmtp.PortableDeviceManager manager = new jmtp.PortableDeviceManager();
             jmtp.PortableDevice device = null;
-            if(manager.getDevices().length==0){
+            if (manager.getDevices().length == 0) {
                 showInformationMessage("The tablet is not connected properly");
                 return;
             }
@@ -265,15 +268,18 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         }
     }
 
-    //region Set Buttons
-
     private void setMenuPanelButtons() {
+        setCustomInsets(DefaultSizes.DEFAULT_INSET + 13, 90, DefaultSizes.DEFAULT_INSET + 13, 90);
         setMainMenuButton();
         setSaveLessonButton();
         setSendFeedbackButton();
         setReportBugButton();
         setHelpButton();
+        setSendToPhoneButton();
+        setSquareInsets(DefaultSizes.DEFAULT_INSET);
     }
+
+    //region Set Buttons
 
     private void setCommandsPanelButtons() {
         setAddPictureSlideButton();
@@ -347,48 +353,71 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
     }
 
     private void setMainMenuButton() {
-        JButton backButton = new JButton("Main menu");
-        backButton.addActionListener(e -> {
+        JButton button = getButtonWithImage(FileResources.getHomeButtonImage(), "Main menu");
+        button.addActionListener(e -> {
             Screens.CreateLessonScreen.setVisible(false);
             Screens.WelcomeScreen.setVisible(true);
         });
-        setConstraints(0, 0, 1, 1);
-        screenMenuPanel.add(backButton, constraints);
+        setConstraints(0, 0, 0.5, 0.5);
+        screenMenuPanel.add(button, constraints);
+    }
+
+    private JButton getButtonWithImage(InputStream stream, String description) {
+        JButton button = new JButton();
+        try {
+            BufferedImage image = ImageIO.read(stream);
+
+            Image resized = ComponentsFactory.getResizedImage(image, 205, 205);
+            button.setHorizontalTextPosition(AbstractButton.CENTER);
+            button.setToolTipText(description);
+
+            ComponentsFactory.setElementConstSize(button, new Dimension(130, 130));
+            ComponentsFactory.setImageOnButton(resized, button, 0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return button;
     }
 
     private void setSendFeedbackButton() {
-        JButton sendFeedbackButton = new JButton("Send Feedback");
-        sendFeedbackButton.addActionListener(e -> sendMail("Send%20Feedback"));
-
-        setConstraints(2, 0, 1, 1);
-        screenMenuPanel.add(sendFeedbackButton, constraints);
+        JButton button = getButtonWithImage(FileResources.getEmailButtonImage(), "Send Feedback");
+        button.addActionListener(e -> sendMail("Send%20Feedback"));
+        setConstraints(3, 0, 0.5, 0.5);
+        screenMenuPanel.add(button, constraints);
     }
 
     private void setSaveLessonButton() {
-        JButton saveButton = new JButton("Save Lesson");
+        JButton saveButton = getButtonWithImage(FileResources.getSaveButtonImage(), "Save Lesson");
         saveButton.addActionListener(e -> onSaveCurrentLesson(false));
 
-        setConstraints(1, 0, 1, 1);
+        setConstraints(1, 0, 0.5, 0.5);
         screenMenuPanel.add(saveButton, constraints);
     }
 
     //TODO: Implement a help screen
     private void setHelpButton() {
-        JButton helpButton = new JButton("Help");
+        JButton helpButton = getButtonWithImage(FileResources.getHelpButtonImage(), "Help");
         helpButton.addActionListener(e -> showInformationMessage("Help Not supported yet"));
-        setConstraints(4, 0, 1, 1);
+        setConstraints(5, 0, 0.5, 0.5);
         screenMenuPanel.add(helpButton, constraints);
     }
 
-    private void setReportBugButton() {
-        JButton reportBugButton = new JButton("Report Bug");
-        reportBugButton.addActionListener(e -> sendMail("Report%20Bug"));
+    private void setSendToPhoneButton() {
+        JButton reportBugButton = getButtonWithImage(FileResources.getUsbButtonImage(), "Send To Phone");
+        reportBugButton.addActionListener(e -> showInformationMessage("Phone Integration is not supported yet"));
 
-        setConstraints(3, 0, 1, 1);
+        setConstraints(2, 0, 0.5, 0.5);
         screenMenuPanel.add(reportBugButton, constraints);
     }
 
-    //endregion
+    private void setReportBugButton() {
+        JButton reportBugButton = getButtonWithImage(FileResources.getBugReportButtonImage(), "Report A Bug");
+        reportBugButton.addActionListener(e -> sendMail("Report%20Bug"));
+
+        setConstraints(4, 0, 0.5, 0.5);
+        screenMenuPanel.add(reportBugButton, constraints);
+    }
 
     //TODO: Create mail manager class
     private void sendMail(String subject) {
@@ -406,18 +435,25 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         }
     }
 
+    //endregion
+
     private void setDynamicBounds() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        SCREEN_WIDTH = (int) screenSize.getWidth() - 100;
-        SCREEN_HEIGHT = (int) screenSize.getHeight() - 100;
+        SCREEN_WIDTH = (int) screenSize.getWidth() - 250;
+        SCREEN_HEIGHT = (int) screenSize.getHeight() - 150;
 
         if (SCREEN_HEIGHT > 600) {
-            setBounds(X_SCREEN_START_FROM, Y_SCREEN_START_FROM, SCREEN_WIDTH, SCREEN_HEIGHT);
+            setBounds(250 / 2, 150 / 2, SCREEN_WIDTH, SCREEN_HEIGHT);
         } else {
             //TODO: implement for a small screen
         }
     }
-    public String getLessonName(){
+
+    public String getLessonName() {
         return this.lessonName;
+    }
+
+    public void setLessonName(String name) {
+        this.lessonName = name;
     }
 }
