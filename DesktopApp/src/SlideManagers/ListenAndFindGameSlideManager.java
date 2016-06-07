@@ -33,7 +33,7 @@ public class ListenAndFindGameSlideManager extends AbstractSlideManager {
                 fis = new FileInputStream("resources/animals.jpg");
                 break;
             case Colors:
-                fis = new FileInputStream("resources/colors.jpg");
+                fis = new FileInputStream("resources/colors.png");
                 break;
             case Numbers:
                 fis = new FileInputStream("resources/numbers.jpg");
