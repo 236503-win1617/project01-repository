@@ -71,6 +71,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         slideTypeToManager.put(SlideType.Video, new VideoSlideManager(currentSlidePanel, commandsPanel));
         slideTypeToManager.put(SlideType.OrderGame, new OrderGameSlideManager(currentSlidePanel, commandsPanel));
         slideTypeToManager.put(SlideType.ListenAndFindGame, new ListenAndFindGameSlideManager(currentSlidePanel, commandsPanel));
+        slideTypeToManager.put(SlideType.MemoryGame, new MemoryGameSlideManager(currentSlidePanel, commandsPanel));
     }
 
     public void loadLesson(List<AbstractSlide> slides) {
@@ -325,7 +326,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         JButton addGameSlide = new JButton("Add Game Slide");
         addGameSlide.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String[] gameTypes = {"Listen and Order", "Listen and Find"};
+                String[] gameTypes = {"Listen and Order", "Listen and Find", "Memory Game"};
                 String choice = (String) JOptionPane.showInputDialog(null, "What game do you want?",
                         "Choose Type of Game", JOptionPane.QUESTION_MESSAGE, null, // Use
                         gameTypes, // Array of choices
@@ -337,6 +338,8 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
                     newGameSlide = new OrderGameSlide();
                 } else if (choice.equals("Listen and Find")) {
                     newGameSlide = new ListenAndFindGameSlide();
+                } else if (choice.equals("Memory Game")) {
+                    newGameSlide = new MemoryGameSlide();
                 }
                 addNewSlide(newGameSlide);
             }

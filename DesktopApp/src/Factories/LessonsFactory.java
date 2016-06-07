@@ -14,6 +14,7 @@ import slides.AbstractSlide;
 import slides.ListenAndFindGameSlide;
 import slides.OrderGameSlide;
 import slides.PictureSlide;
+import slides.MemoryGameSlide;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -83,7 +84,13 @@ public class LessonsFactory {
                     GameElement.addElement("slide_type").addText("game");
                     GameElement.addElement("max_num").addText(Integer.toString(item.getMaxNum()));
                     GameElement.addElement("gameType").addText("ORDER");
-                    //GameElement.addElement("game").addText(item.getGameType().name());
+                } if (slide instanceof MemoryGameSlide) {
+                    MemoryGameSlide item = (MemoryGameSlide) slide;
+                    Element GameElement = root.addElement("slide");
+                    GameElement.addElement("order").addText(Integer.toString((index)));
+                    GameElement.addElement("slide_type").addText("game");
+                    GameElement.addElement("table_size").addText(Integer.toString(item.getBoardSize()));
+                    GameElement.addElement("gameType").addText("MEMORY");
                 }
             }
             boolean success = (new File(".//xmlDir")).mkdirs();
