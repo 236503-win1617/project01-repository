@@ -29,13 +29,13 @@ public class ListenAndFindGameSlideManager extends AbstractSlideManager {
         ListenAndFindGameSlide.GameType type = ((ListenAndFindGameSlide) slide).getGameType();
         FileInputStream fis = null;
         switch (type) {
-            case Animals:
+            case ANIMALS:
                 fis = new FileInputStream("resources/animals.jpg");
                 break;
-            case Colors:
+            case COLORS:
                 fis = new FileInputStream("resources/colors.png");
                 break;
-            case Numbers:
+            case NUMBERS:
                 fis = new FileInputStream("resources/numbers.jpg");
                 break;
         }

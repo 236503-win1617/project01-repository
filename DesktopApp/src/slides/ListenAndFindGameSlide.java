@@ -17,11 +17,11 @@ public class ListenAndFindGameSlide extends AbstractSlide {
                 gameTypes[0]); // Initial choice
         if (choice == null) return;
         if (choice.equals("Animals")) {
-            type = ListenAndFindGameSlide.GameType.Animals;
+            type = ListenAndFindGameSlide.GameType.ANIMALS;
         } else if (choice.equals("Colors")) {
-            type = ListenAndFindGameSlide.GameType.Colors;
+            type = ListenAndFindGameSlide.GameType.COLORS;
         } else if (choice.equals("Numbers")) {
-            type = ListenAndFindGameSlide.GameType.Numbers;
+            type = ListenAndFindGameSlide.GameType.NUMBERS;
         }
     }
 
@@ -53,8 +53,8 @@ public class ListenAndFindGameSlide extends AbstractSlide {
     }
 
     public enum GameType {
-        Numbers,
-        Colors,
-        Animals
+        NUMBERS,
+        COLORS,
+        ANIMALS
     }
 }
