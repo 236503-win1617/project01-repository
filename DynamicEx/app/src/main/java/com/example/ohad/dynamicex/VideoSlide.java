@@ -39,6 +39,7 @@ public class VideoSlide extends Slide {
     public void show() {
 
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
         RelativeLayout layout = (RelativeLayout)activity.findViewById(R.id.content_main);
         layout.setBackgroundColor(Color.BLACK);
 
