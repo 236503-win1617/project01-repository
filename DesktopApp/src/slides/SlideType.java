@@ -7,5 +7,6 @@ public enum SlideType {
     Picture,
     Video,
     OrderGame,
-    ListenAndFindGame
+    ListenAndFindGame,
+    MemoryGame
 }
