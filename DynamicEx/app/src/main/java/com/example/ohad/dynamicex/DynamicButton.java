@@ -11,7 +11,6 @@ public class DynamicButton {
     private int start_x, start_y;
     private int width, height;
     private String path;
-    MediaPlayer mp;
 
     public DynamicButton(String text, int start_x, int start_y, int width, int height, String path) {
         this.text = text;
@@ -20,7 +19,6 @@ public class DynamicButton {
         this.width = width;
         this.height = height;
         this.path = path;
-        this.mp = null;
     }
 
     public String getText() {
@@ -45,9 +43,5 @@ public class DynamicButton {
 
     public String getPath() {
         return path;
-    }
-
-    public MediaPlayer getMp() {
-        return mp;
     }
 }

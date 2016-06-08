@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -70,6 +71,8 @@ public class PictureSlide extends Slide {
         if(imgFile.exists()){
             Bitmap myBitmap = decodeSampledBitmapFromFile(imgFile.getAbsolutePath(), 250, 250);
             setBackground(layout, myBitmap);
+        } else {
+            Toast.makeText(activity.getApplicationContext(), "Error! Picture file doesn't exist.", Toast.LENGTH_SHORT).show();
         }
 
         // On the first show of the slide - create the buttons and texts, otherwise - just show them
@@ -148,13 +151,11 @@ public class PictureSlide extends Slide {
         final Context context = activity;
         myButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                MediaPlayer mp = button.getMp();
-                if (mp != null) {
-                    mp.reset();
-                    mp.release();
-                }
-                mp = MediaPlayer.create(context, Uri.parse(button.getPath()));
-                mp.start();
+                if (new File(button.getPath()).exists())
+                    MediaPlayer.create(context, Uri.parse(button.getPath())).start();
+                else
+                    Toast.makeText(activity.getApplicationContext(), "Error! Sound file doesn't exist.", Toast.LENGTH_SHORT).show();
+
             }
         });
 
