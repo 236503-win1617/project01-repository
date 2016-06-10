@@ -35,7 +35,7 @@ public class GameOrder extends GameFragment {
         super.onCreate(savedInstanceState);
 
         Bundle bundle = this.getArguments();
-        int maxNum = bundle.getInt("maxNum", 10); // 10 - default maxNum
+        int maxNum = bundle.getInt("param", 10); // 10 - default maxNum
         AMOUNT_OF_OBJECTS = maxNum+1;
         alreadyChosen = new boolean[AMOUNT_OF_OBJECTS];
     }

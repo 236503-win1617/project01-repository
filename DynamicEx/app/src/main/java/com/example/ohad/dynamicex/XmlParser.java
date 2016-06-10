@@ -22,7 +22,7 @@ public class XmlParser {
     Activity activity;
 
     public enum GameType {
-		COLORS,NUMBERS,ANIMALS,ORDER
+		COLORS,NUMBERS,ANIMALS,ORDER, MEMORY
 	};
 
 	public XmlParser(Activity a) {
@@ -73,8 +73,13 @@ public class XmlParser {
 
 		if (gameType == GameType.ORDER){
 			int maxNum = Integer.parseInt(e.getElementsByTagName("max_num").item(0).getTextContent());
-            newSlide = new GameSlide(lesson.activity, maxNum);
-		} else { // GameBase (colors/numbers/animals)
+            newSlide = new GameSlide(lesson.activity,gameType, maxNum);
+		}
+		else if (gameType == GameType.MEMORY) {
+			int tableSize = Integer.parseInt(e.getElementsByTagName("table_size").item(0).getTextContent());
+			newSlide = new GameSlide(lesson.activity, gameType, tableSize);
+		}
+		else { // GameBase (colors/numbers/animals)
             newSlide = new GameSlide(lesson.activity, gameType);
         }
 

@@ -23,6 +23,9 @@ public class GameSlide extends Slide {
             case ANIMALS:
                 gameFragment = new GameAnimals();
                 break;
+            case MEMORY:
+                gameFragment = new GameMemory();
+                break;
             default:
                 System.err.println("Game type error!");
                 return;
@@ -33,18 +36,31 @@ public class GameSlide extends Slide {
         fm.beginTransaction().hide(gameFragment).commit();
     }
 
-    public GameSlide(Activity a, int maxNum){
+    public GameSlide(Activity a, XmlParser.GameType game, int param){
         activity = a;
 
-        gameFragment = new GameOrder();
+        switch (game) {
+            case ORDER:
+                gameFragment = new GameOrder();
+                break;
+            case MEMORY:
+                gameFragment = new GameMemory();
+                break;
+            default:
+                System.err.println("Game type error!");
+                return;
+        }
+
         Bundle bundle = new Bundle();
-        bundle.putInt("maxNum", maxNum);
+        bundle.putInt("param", param);
         gameFragment.setArguments(bundle);
 
         FragmentManager fm = activity.getFragmentManager();
         fm.beginTransaction().add(R.id.main_container, gameFragment).commit();
         fm.beginTransaction().hide(gameFragment).commit();
     }
+
+
 
     public void show() {
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

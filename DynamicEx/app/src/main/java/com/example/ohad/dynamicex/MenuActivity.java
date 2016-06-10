@@ -36,6 +36,11 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
 
         File mainFolder = new File(mainFolderPath);
+        if (!mainFolder.exists()) {
+            Toast.makeText(MenuActivity.this, "Error! Main lessons folder doesn't exist.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         File[] lessonsFolders = mainFolder.listFiles();
         if (lessonsFolders == null)
             lessonsFolders = new File[0];
@@ -58,20 +63,25 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        final Button button = (Button) findViewById(R.id.btn);
+        final Button button = (Button) findViewById(R.id.startBtn);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (selectedLessonName == null){
-                    Toast.makeText(MenuActivity.this, "No lesson selected!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MenuActivity.this, "Please select a lesson.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String lessonPath = mainFolderPath + "/" + selectedLessonName;
+                if (new File(lessonPath).exists() == false) {
+                    Toast.makeText(MenuActivity.this, "Error! The selected lesson's directory doesn't exist anymore.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 Intent intent = new Intent(MenuActivity.this, MainActivity.class);
                 Bundle b = new Bundle();
-                b.putString("lessonPath", mainFolderPath + "/" + selectedLessonName);
+                b.putString("lessonPath", lessonPath);
                 intent.putExtras(b);
                 startActivity(intent);
-                finish();
             }
         });
     }
@@ -118,14 +128,12 @@ public class MenuActivity extends AppCompatActivity {
                 holder = new ViewHolder();
                 holder.lessonName = (TextView) view.findViewById(R.id.text);
                 view.setTag(holder);
-            }
-            else {
+            } else {
                 view = convertView;
                 holder = (ViewHolder) view.getTag();
             }
 
             holder.lessonName.setText(data.get(position));
-
             return view;
         }
 

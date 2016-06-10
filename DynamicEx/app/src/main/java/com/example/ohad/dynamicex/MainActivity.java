@@ -1,5 +1,6 @@
 package com.example.ohad.dynamicex;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -35,7 +36,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        File xmlFile = xmlFiles[0]; // Take the first XML file in the lesson's folder
+        if (xmlFiles.length == 0) {
+            Toast.makeText(getApplicationContext(), "Error! XML file doesn't exist in the lesson's directory!", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        } else if (xmlFiles.length > 1) {
+            Toast.makeText(getApplicationContext(), "Error! Multiple XML files exist in the lesson's directory!", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        File xmlFile = xmlFiles[0];
         parser.parse(xmlFile.getAbsolutePath(), lessonPath, lesson); // Loads the data from the XML into the lesson
         lesson.showFirstSlide();
 
@@ -43,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         fab_exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                finish();
             }
         });
 
@@ -64,13 +75,5 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
-    @Override
-    public void onBackPressed()  {
-        Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
 
 }
