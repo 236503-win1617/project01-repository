@@ -19,11 +19,6 @@ public class FileResources {
     private static final String BUG_REPORT_BUTTON_IMAGE = "bug.png";
     private static final String SAVE_BUTTON_IMAGE = "save.png";
     private static final String USB_BUTTON_IMAGE = "usb.png";
-    private static final String ORDER_GAME_IMAGE = "order.png";
-    private static final String NUMBERS_GAME_IMAGE = "numbers.jpg";
-    private static final String COLORS_GAME_IMAGE = "colors.png";
-    private static final String ANIMALS_GAME_IMAGE = "animals.jpg";
-    private static final String MEMORY_GAME_IMAGE = "memory.jpg";
 
     private static InputStream getFileSource(String filename) {
         return FileResources.class.getResourceAsStream(filename);
@@ -75,25 +70,5 @@ public class FileResources {
 
     public static InputStream getUsbButtonImage() {
         return getFileSource(USB_BUTTON_IMAGE);
-    }
-
-    public static InputStream getOrderGameImage() {
-        return getFileSource(ORDER_GAME_IMAGE);
-    }
-
-    public static InputStream getColorsGameImage() {
-        return getFileSource(COLORS_GAME_IMAGE);
-    }
-
-    public static InputStream getNumbersGameImage() {
-        return getFileSource(NUMBERS_GAME_IMAGE);
-    }
-
-    public static InputStream getAnimalsGameImage() {
-        return getFileSource(ANIMALS_GAME_IMAGE);
-    }
-
-    public static InputStream getMemoryGameImage() {
-        return getFileSource(MEMORY_GAME_IMAGE);
     }
 }
