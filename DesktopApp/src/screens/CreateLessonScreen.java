@@ -176,18 +176,27 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
     //TODO: Refactor
     //TODO: implement a check that lesson doesn't exists or overwrite the previous one
     private void onSaveCurrentLesson(boolean autosave) {
-        System.loadLibrary("jmtp");
+        try {
+            System.load("C:/Windows/System32/jmtp.dll");
+        } catch (Throwable e){
+            showErrorMessage(e.getMessage());
+        }
         if (!autosave) {
-            if (_slides.size() == 0) {
-                showInformationMessage("Cannot save empty lesson !");
-                return;
+            try {
+                if (_slides.size() == 0) {
+                    showInformationMessage("Cannot save empty lesson !");
+                    return;
+                }
+                jmtp.PortableDeviceFolderObject targetFolder = null;
+                jmtp.PortableDeviceManager manager = new jmtp.PortableDeviceManager();
+                jmtp.PortableDevice device = null;
+                if (manager.getDevices().length == 0) {
+                    showInformationMessage("The tablet is not connected properly");
+                    return;
+                }
             }
-            jmtp.PortableDeviceFolderObject targetFolder = null;
-            jmtp.PortableDeviceManager manager = new jmtp.PortableDeviceManager();
-            jmtp.PortableDevice device = null;
-            if (manager.getDevices().length == 0) {
-                showInformationMessage("The tablet is not connected properly");
-                return;
+            catch(Exception e){
+                showErrorMessage(e.getMessage());
             }
             //String lessonName = showInputMessage("Insert Lesson Name:");
 
