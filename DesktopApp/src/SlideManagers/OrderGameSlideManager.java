@@ -1,6 +1,7 @@
 package SlideManagers;
 
 import AdditionalClasses.SoundElement;
+import Resources.FileResources;
 import slides.AbstractSlide;
 import slides.Rotation;
 
@@ -23,8 +24,7 @@ public class OrderGameSlideManager extends AbstractSlideManager{
     public void onRotateCommand() throws IOException {}
 
     public void loadSlide(AbstractSlide slide, JButton button) throws IOException {
-        FileInputStream fis = new FileInputStream("resources/order.png");
-        loadImageToSlidePanel(ImageIO.read(fis), Rotation.NO_ROTATION.getRotationInRadians());
+        loadImageToSlidePanel(ImageIO.read(FileResources.getOrderGameImage()), Rotation.NO_ROTATION.getRotationInRadians());
     }
 
     public void saveDataToCurrentSlide(){}

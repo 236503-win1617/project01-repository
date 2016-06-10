@@ -1,6 +1,7 @@
 package SlideManagers;
 
 import AdditionalClasses.SoundElement;
+import Resources.FileResources;
 import slides.AbstractSlide;
 import slides.ListenAndFindGameSlide;
 import slides.Rotation;
@@ -10,6 +11,7 @@ import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by dan on 17/05/2016.
@@ -27,19 +29,19 @@ public class ListenAndFindGameSlideManager extends AbstractSlideManager {
 
     public void loadSlide(AbstractSlide slide, JButton button) throws IOException {
         ListenAndFindGameSlide.GameType type = ((ListenAndFindGameSlide) slide).getGameType();
-        FileInputStream fis = null;
+        InputStream is = null;
         switch (type) {
             case ANIMALS:
-                fis = new FileInputStream("resources/animals.jpg");
+                is = FileResources.getAnimalsGameImage();
                 break;
             case COLORS:
-                fis = new FileInputStream("resources/colors.png");
+                is = FileResources.getColorsGameImage();
                 break;
             case NUMBERS:
-                fis = new FileInputStream("resources/numbers.jpg");
+                is = FileResources.getNumbersGameImage();
                 break;
         }
-        loadImageToSlidePanel(ImageIO.read(fis), Rotation.NO_ROTATION.getRotationInRadians());
+        loadImageToSlidePanel(ImageIO.read(is), Rotation.NO_ROTATION.getRotationInRadians());
     }
 
     public void saveDataToCurrentSlide() {
