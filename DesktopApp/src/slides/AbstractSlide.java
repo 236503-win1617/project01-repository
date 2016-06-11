@@ -1,6 +1,7 @@
 package slides;
 
 import java.io.File;
+import java.util.Arrays;
 
 /**
  * Created by Evgeniy on 11/26/2015.
@@ -32,12 +33,7 @@ public abstract class AbstractSlide {
     }
 
     public boolean isFileNameSupported(String filename) {
-        for (String supportedFormat : getSupportedFormats()) {
-            if (filename.endsWith(supportedFormat)) {
-                return true;
-            }
-        }
-        return false;
+        return Arrays.stream(getSupportedFormats()).anyMatch(f -> filename.toLowerCase().endsWith(f.toLowerCase()));
     }
 
     protected abstract String[] getSupportedFormats();

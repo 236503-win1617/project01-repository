@@ -14,11 +14,13 @@ import slides.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -67,6 +69,10 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         setMenuPanelButtons();
         setCommandsPanelButtons();
 
+        setSlideManagers();
+    }
+
+    private void setSlideManagers() {
         slideTypeToManager.put(SlideType.Picture, new PictureSlideManager(currentSlidePanel, commandsPanel, soundsPanel));
         slideTypeToManager.put(SlideType.Video, new VideoSlideManager(currentSlidePanel, commandsPanel));
         slideTypeToManager.put(SlideType.OrderGame, new OrderGameSlideManager(currentSlidePanel, commandsPanel));
@@ -155,6 +161,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
 
         add(slideSounds, BorderLayout.WEST);
         add(lessonSlides, BorderLayout.SOUTH);
+        currentSlidePanel.setTransferHandler(new FileTransferHandler());
     }
 
     private void setPanel(JPanel panel, int width, int height, String location) {
@@ -198,7 +205,6 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
             catch(Exception e){
                 showErrorMessage(e.getMessage());
             }
-            //String lessonName = showInputMessage("Insert Lesson Name:");
 
             if (lessonName != null) {
                 LessonsFactory.generate(_slides, lessonName);
@@ -206,16 +212,11 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
                 USBTransfertMain.jMTPeMethode(lessonName);
                 showInformationMessage("Lesson '" + lessonName + "' was saved !");
             }
-            //TODO: implement a check that lesson doesn't exists or overwrite the previous one
             return;
         }
         if (SettingScreen.a == 1) {
             int delay = 30000; //milliseconds
-            ActionListener taskPerformer = new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
-                    onAutoSaveCurrentLesson(false);
-                }
-            };
+            ActionListener taskPerformer = evt -> onAutoSaveCurrentLesson(false);
             new Timer(delay, taskPerformer).start();
         }
     }
@@ -289,8 +290,6 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         setSquareInsets(DefaultSizes.DEFAULT_INSET);
     }
 
-    //region Set Buttons
-
     private void setCommandsPanelButtons() {
         setAddPictureSlideButton();
         setAddVideoSlideButton();
@@ -298,6 +297,8 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         setDeleteCurrentSlideButton();
         setRotateSlideButton();
     }
+
+    //region Set Buttons
 
     private void setDeleteCurrentSlideButton() {
         setConstraints(0, 3, 1, 1);
@@ -447,8 +448,6 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         }
     }
 
-    //endregion
-
     private void setDynamicBounds() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         SCREEN_WIDTH = (int) screenSize.getWidth() - 250;
@@ -461,11 +460,39 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         }
     }
 
+    //endregion
+
     public String getLessonName() {
         return this.lessonName;
     }
 
     public void setLessonName(String name) {
         this.lessonName = name;
+    }
+
+    private class FileTransferHandler extends TransferHandler {
+        @Override
+        public boolean importData(TransferSupport transferSupport) {
+            try {
+                List filesDropped = (List) transferSupport.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+                if (currentSlideIndex < 0) { // No slides were created
+                    showErrorMessage("Please add a slide to drop to");
+                } else if (filesDropped.size() != 1) {
+                    showErrorMessage("Cannot drop more then one file !");
+                } else {
+                    File droppedFile = (File) filesDropped.get(0);
+                    currentSlideManager.loadDroppedFile(droppedFile);
+                }
+            } catch (Exception e) {
+                showErrorMessage(MessageErrors.UNEXPECTED_ERROR + " " + e.getMessage());
+                e.printStackTrace();
+            }
+            return true;
+        }
+
+        @Override
+        public boolean canImport(TransferSupport ts) {
+            return ts.isDataFlavorSupported(DataFlavor.javaFileListFlavor);
+        }
     }
 }

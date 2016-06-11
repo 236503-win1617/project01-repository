@@ -6,6 +6,7 @@ import Factories.ComponentsFactory;
 import Resources.FileResources;
 import Resources.MessageErrors;
 import screens.Screens;
+import screens.SoundAreaScreen;
 import slides.AbstractSlide;
 import slides.PictureSlide;
 import slides.Rotation;
@@ -194,29 +195,27 @@ public class PictureSlideManager extends AbstractSlideManager {
         JFileChooser chooser = new JFileChooser();
         if (chooser.showOpenDialog(Screens.CreateLessonScreen) == JFileChooser.APPROVE_OPTION) {
             File selectedFile = chooser.getSelectedFile();
+            loadPictureFromFile(selectedFile);
+        }
+    }
 
-            if (!currentSlide.isFileNameSupported(selectedFile.getName())) {
-                Screens.CreateLessonScreen.showErrorMessage(selectedFile.getName() + "Isn't supported picture format");
-                return;
-            }
+    //TODO: The copy should not be here - use save instead
+    private void loadPictureFromFile(File pictureFile) {
+        if (!currentSlide.isFileNameSupported(pictureFile.getName())) {
+            Screens.CreateLessonScreen.showErrorMessage(pictureFile.getName() + "Isn't supported picture format");
+            return;
+        }
 
-            currentSlide.setSlideFile(selectedFile);
-            try {
-                BufferedImage image = ImageIO.read(new FileInputStream(selectedFile));
-                loadSameImageToPanelAndButton(image, Rotation.NO_ROTATION.getRotationInRadians());
-            } catch (Exception ex) {
-                Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());
-                ex.printStackTrace();
-            }
-            try {
-                loadPictureFromFile(new FileInputStream(selectedFile), Rotation.NO_ROTATION);
+        currentSlide.setSlideFile(pictureFile);
+        try {
+            BufferedImage image = ImageIO.read(new FileInputStream(pictureFile));
+            loadSameImageToPanelAndButton(image, Rotation.NO_ROTATION.getRotationInRadians());
 
-
-                File NewLocation = new File(".\\xmlDir\\" + Screens.CreateLessonScreen.getLessonName() + "\\AAImages\\" + selectedFile.getName());
-                Files.copy(selectedFile.toPath(), NewLocation.toPath());
-            } catch (Exception ex) {
-                Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());
-            }
+            File NewLocation = new File(".\\xmlDir\\" + Screens.CreateLessonScreen.getLessonName() + "\\AAImages\\" + pictureFile.getName());
+            Files.copy(pictureFile.toPath(), NewLocation.toPath());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());
         }
     }
 
@@ -258,6 +257,17 @@ public class PictureSlideManager extends AbstractSlideManager {
 
         soundsPanel.add(soundTextPane, constraints);
         soundsPanel.revalidate();
+    }
+
+    @Override
+    public void loadDroppedFile(File droppedFile) {
+        if (SoundAreaScreen.isSoundFile(droppedFile.getAbsolutePath())) {
+            Screens.SoundAreaScreen.loadSoundFile(droppedFile);
+            Screens.SoundAreaScreen.setVisible(true);
+            Screens.CreateLessonScreen.setVisible(false);
+        } else {
+            loadPictureFromFile(droppedFile);
+        }
     }
 
     private Border getBorderWithLine(Color color, Border border) {

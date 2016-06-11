@@ -9,7 +9,6 @@ import slides.Rotation;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -56,9 +55,11 @@ public class ListenAndFindGameSlideManager extends AbstractSlideManager {
     protected void setSpecificButtonsVisibility(boolean visibility) {
     }
 
-    public void loadPictureFile(File imageFile) {
+    public void addNewSoundElement(SoundElement soundElement) {
     }
 
-    public void addNewSoundElement(SoundElement soundElement) {
+    @Override
+    public void loadDroppedFile(File droppedFile) {
+
     }
 }

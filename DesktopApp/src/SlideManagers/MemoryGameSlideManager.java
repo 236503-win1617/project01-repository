@@ -8,9 +8,7 @@ import slides.Rotation;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import slides.OrderGameSlide;
 
 /**
  * Created by dan on 17/05/2016.
@@ -36,7 +34,10 @@ public class MemoryGameSlideManager extends AbstractSlideManager{
 
     protected void setSpecificButtonsVisibility(boolean visibility){}
 
-    public void loadPictureFile(File imageFile){}
-
     public void addNewSoundElement(SoundElement soundElement){}
+
+    @Override
+    public void loadDroppedFile(File droppedFile) {
+
+    }
 }

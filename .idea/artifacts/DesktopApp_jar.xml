@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="DesktopApp:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/DesktopApp_jar</output-path>
+    <root id="archive" name="DesktopApp.jar">
+      <element id="module-output" name="DesktopApp" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/liquidlnf.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/dom4j-1.6.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/jmtp.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

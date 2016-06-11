@@ -88,6 +88,16 @@ public class ComponentsFactory {
         return image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
     }
 
+    public static JComboBox<String> createBasicComboBox(String[] values) {
+        JComboBox<String> comboBox = new JComboBox<>(values);
+        comboBox.setSelectedIndex(0);
+        comboBox.setForeground(Color.BLACK);
+        comboBox.setFont(new Font(DEFAULT_FONT_NAME, Font.BOLD, 14));
+        comboBox.setMaximumRowCount(10);
+
+        return comboBox;
+    }
+
     private static void setTextPaneDefaultParams(JTextPane textPane, String text) {
         textPane.setForeground(Color.BLACK);
         textPane.setText(text);

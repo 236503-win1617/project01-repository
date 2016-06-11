@@ -114,23 +114,28 @@ public class VideoSlideManager extends AbstractSlideManager {
 
         JFileChooser chooser = new JFileChooser();
         if (chooser.showOpenDialog(Screens.CreateLessonScreen) == JFileChooser.APPROVE_OPTION) {
-            File videoFile = chooser.getSelectedFile();
+            File selectedFile = chooser.getSelectedFile();
 
-            if (!currentSlide.isFileNameSupported(videoFile.getName())) {
-                Screens.CreateLessonScreen.showErrorMessage(videoFile.getName() + " Isn't supported video format");
-                return;
-            }
-            try {
-                currentSlide.setSlideFile(videoFile);
-                Screens.CreateLessonScreen.showInformationMessage("The video was added to the slide");
+            loadVideoFile(selectedFile);
+        }
+    }
 
-                double noRotation = Rotation.NO_ROTATION.getRotationInRadians();
-                loadImageToSlidePanel(ImageIO.read(FileResources.getOkStream()), noRotation);
-                setImageOnSlideButton(ImageIO.read(FileResources.getVideoSelectedButton()), noRotation);
-                setVideoPathTextPane(videoFile.getAbsolutePath());
-            } catch (Exception ex) {
-                Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());
-            }
+    private void loadVideoFile(File videoFile) {
+        if (!currentSlide.isFileNameSupported(videoFile.getName())) {
+            Screens.CreateLessonScreen.showErrorMessage(videoFile.getName() + " Isn't supported video format");
+            return;
+        }
+        try {
+            currentSlide.setSlideFile(videoFile);
+            Screens.CreateLessonScreen.showInformationMessage("The video was added to the slide");
+
+            double noRotation = Rotation.NO_ROTATION.getRotationInRadians();
+            loadImageToSlidePanel(ImageIO.read(FileResources.getOkStream()), noRotation);
+            setImageOnSlideButton(ImageIO.read(FileResources.getVideoSelectedButton()), noRotation);
+            setVideoPathTextPane(videoFile.getAbsolutePath());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());
         }
     }
 
@@ -146,5 +151,10 @@ public class VideoSlideManager extends AbstractSlideManager {
     }
 
     public void addNewSoundElement(SoundElement soundElement) {
+    }
+
+    @Override
+    public void loadDroppedFile(File droppedFile) {
+        loadVideoFile(droppedFile);
     }
 }
