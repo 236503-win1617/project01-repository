@@ -11,7 +11,7 @@
     tools:context="com.example.ohad.dynamicex.MenuActivity">
 
     <Button
-        android:id="@+id/btn"
+        android:id="@+id/startBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -22,7 +22,7 @@
         android:id="@+id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@id/btn"
+        android:layout_above="@id/startBtn"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
         android:cacheColorHint="@android:color/transparent"

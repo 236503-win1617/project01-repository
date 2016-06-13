@@ -132,14 +132,14 @@ public class GameOrder extends GameFragment {
             }
         });
 
-        getView().findViewById(R.id.playAgain).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.replay).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 initNums();
             }
         });
 
-        getView().findViewById(R.id.sayAgain).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.play).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sayNum();

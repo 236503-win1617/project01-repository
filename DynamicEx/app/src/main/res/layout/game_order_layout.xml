@@ -10,7 +10,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/sayAgain"
+        android:layout_below="@+id/play"
         android:layout_marginTop="69dp"
         android:background="@drawable/back"
         android:inputType="number"
@@ -21,7 +21,7 @@
         android:id="@+id/editText2"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignLeft="@+id/sayAgain"
+        android:layout_alignLeft="@+id/play"
         android:layout_alignTop="@+id/editText1"
         android:background="@drawable/back"
         android:inputType="number"
@@ -31,7 +31,7 @@
         android:id="@+id/editText3"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignRight="@+id/sayAgain"
+        android:layout_alignRight="@+id/play"
         android:layout_alignTop="@+id/editText2"
         android:background="@drawable/back"
         android:inputType="number"
@@ -51,18 +51,18 @@
     <!-- Play/say buttons -->
 
     <ImageButton
-        android:id="@+id/playAgain"
+        android:id="@+id/replay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/sayAgain"
+        android:layout_alignLeft="@+id/play"
         android:layout_alignParentTop="true"
         android:src="@drawable/playagain" />
 
     <ImageButton
-        android:id="@+id/sayAgain"
+        android:id="@+id/play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/playAgain"
+        android:layout_below="@+id/replay"
         android:layout_centerHorizontal="true"
         android:src="@drawable/sayagain" />
 

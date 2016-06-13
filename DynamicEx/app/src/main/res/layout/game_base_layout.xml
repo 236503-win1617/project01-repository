@@ -46,7 +46,7 @@
     <!-- Play again / Say again buttons-->
 
     <ImageButton
-        android:id="@+id/playAgain"
+        android:id="@+id/replay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/object1"
@@ -56,10 +56,10 @@
         android:textColor="#00f" />
 
     <ImageButton
-        android:id="@+id/sayAgain"
+        android:id="@+id/play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/playAgain"
+        android:layout_below="@id/replay"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:src="@drawable/sayagain"

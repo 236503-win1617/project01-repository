@@ -31,7 +31,7 @@ public class GameMemory extends GameFragment {
     private int[][] cards;
     private List<Drawable> images;
     private Card firstCard;
-    private Card seconedCard;
+    private Card secondCard;
     private ButtonListener buttonListener;
     int size = 1;
 
@@ -40,6 +40,7 @@ public class GameMemory extends GameFragment {
     int turns;
     private TableLayout mainTable;
     private UpdateCardsHandler handler;
+    Timer t;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,9 @@ public class GameMemory extends GameFragment {
 
 
     public void initGame() {
+        t.cancel(); // In case that the user pressed the new game button while two cards are open (so a timer task is scheduled)
+        t = new Timer(false);
+
         int x, y;
 
         switch (size) {
@@ -100,6 +104,7 @@ public class GameMemory extends GameFragment {
         }
 
         firstCard = null;
+        secondCard = null;
         loadCards();
 
         turns = 0;
@@ -192,7 +197,7 @@ public class GameMemory extends GameFragment {
         public void onClick(View v) {
 
             synchronized (lock) {
-                if (firstCard != null && seconedCard != null) {
+                if (firstCard != null && secondCard != null) {
                     return;
                 }
                 int id = v.getId();
@@ -214,11 +219,10 @@ public class GameMemory extends GameFragment {
                     return; //the user pressed the same card
                 }
 
-                seconedCard = new Card(button, x, y);
+                secondCard = new Card(button, x, y);
 
                 turns++;
                 ((TextView) getView().findViewById(R.id.tv1)).setText("Tries: " + turns);
-
 
                 TimerTask tt = new TimerTask() {
 
@@ -234,11 +238,8 @@ public class GameMemory extends GameFragment {
                     }
                 };
 
-                Timer t = new Timer(false);
                 t.schedule(tt, 1300);
             }
-
-
         }
 
     }
@@ -253,16 +254,19 @@ public class GameMemory extends GameFragment {
         }
 
         public void checkCards() {
-            if (cards[seconedCard.x][seconedCard.y] == cards[firstCard.x][firstCard.y]) {
+            if (firstCard == null || secondCard == null)
+                return;
+
+            if (cards[secondCard.x][secondCard.y] == cards[firstCard.x][firstCard.y]) {
                 firstCard.button.setVisibility(View.INVISIBLE);
-                seconedCard.button.setVisibility(View.INVISIBLE);
+                secondCard.button.setVisibility(View.INVISIBLE);
             } else {
-                seconedCard.button.setBackground(backImage);
+                secondCard.button.setBackground(backImage);
                 firstCard.button.setBackground(backImage);
             }
 
             firstCard = null;
-            seconedCard = null;
+            secondCard = null;
         }
     }
 
@@ -276,11 +280,11 @@ public class GameMemory extends GameFragment {
         super.onActivityCreated(savedInstanceState);
 
         handler = new UpdateCardsHandler();
-        loadImages();
         backImage = ContextCompat.getDrawable(getActivity(), R.drawable.icon);
         buttonListener = new ButtonListener();
         mainTable = (TableLayout) getActivity().findViewById(R.id.TableLayout03);
         context = mainTable.getContext();
+        t = new Timer(false);
         loadImages();
         initGame();
 

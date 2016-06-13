@@ -26,6 +26,9 @@ public class GameSlide extends Slide {
             case MEMORY:
                 gameFragment = new GameMemory();
                 break;
+            case MISSING:
+                gameFragment = new GameMissing();
+                break;
             default:
                 System.err.println("Game type error!");
                 return;

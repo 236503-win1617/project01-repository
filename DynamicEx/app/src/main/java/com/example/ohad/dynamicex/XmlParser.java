@@ -22,7 +22,7 @@ public class XmlParser {
     Activity activity;
 
     public enum GameType {
-		COLORS,NUMBERS,ANIMALS,ORDER, MEMORY
+		COLORS,NUMBERS,ANIMALS,ORDER, MEMORY, MISSING
 	};
 
 	public XmlParser(Activity a) {
