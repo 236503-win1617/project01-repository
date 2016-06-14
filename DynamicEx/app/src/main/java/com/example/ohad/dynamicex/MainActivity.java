@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         fab_exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                onBackPressed();
             }
         });
 
@@ -76,4 +76,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        lesson.clearSounds();
+        finish();
+    }
 }

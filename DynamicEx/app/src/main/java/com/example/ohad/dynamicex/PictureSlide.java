@@ -33,6 +33,8 @@ public class PictureSlide extends Slide {
     private boolean firstShow;
     private Rotation rotation;
 
+    private MediaPlayer mp;
+
 
     public PictureSlide(Activity a, String path, ArrayList<DynamicButton> dynamicButtons, ArrayList<DynamicText> dynamicTexts, Rotation rotation) {
         activity = a;
@@ -108,6 +110,8 @@ public class PictureSlide extends Slide {
 
 
     public void hide() {
+        clearSound();
+
         for (final TextView tv : texts)
             tv.setVisibility(View.INVISIBLE);
 
@@ -151,15 +155,28 @@ public class PictureSlide extends Slide {
         final Context context = activity;
         myButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (new File(button.getPath()).exists())
-                    MediaPlayer.create(context, Uri.parse(button.getPath())).start();
-                else
-                    Toast.makeText(activity.getApplicationContext(), "Error! Sound file doesn't exist.", Toast.LENGTH_SHORT).show();
+                clearSound();
 
+                if (new File(button.getPath()).exists()) {
+                    mp = MediaPlayer.create(context, Uri.parse(button.getPath()));
+                    mp.start();
+                } else {
+                    Toast.makeText(activity.getApplicationContext(), "Error! Sound file doesn't exist.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         return myButton;
+    }
+
+    protected void clearSound() {
+        if (mp != null) {
+            if (mp.isPlaying())
+                mp.stop();
+            mp.reset();
+            mp.release();
+            mp = null;
+        }
     }
 
 

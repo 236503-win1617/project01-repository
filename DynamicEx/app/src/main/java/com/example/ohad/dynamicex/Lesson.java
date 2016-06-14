@@ -22,16 +22,16 @@ public class Lesson {
         this.activity = activity;
     }
 
-    public void addSlide(Slide slide) {
+    protected void addSlide(Slide slide) {
         slides.add(slide);
     }
 
-    public void showFirstSlide() {
+    protected void showFirstSlide() {
         slides.get(0).show();
         updateSlideNum();
     }
 
-    public boolean showNextSlide() {
+    protected boolean showNextSlide() {
         if (currSlideIdx >= slides.size() - 1)
             return false;
 
@@ -41,7 +41,7 @@ public class Lesson {
         return true;
     }
 
-    public boolean showPrevSlide() {
+    protected boolean showPrevSlide() {
         if (currSlideIdx <= 0)
             return false;
 
@@ -49,6 +49,15 @@ public class Lesson {
         slides.get(--currSlideIdx).show();
         updateSlideNum();
         return true;
+    }
+
+    protected void clearSounds() {
+        for (Slide s : slides) {
+            if (s instanceof PictureSlide) {
+                PictureSlide ps = (PictureSlide)s;
+                ps.clearSound();
+            }
+        }
     }
 
     private void updateSlideNum() {
