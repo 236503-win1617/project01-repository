@@ -69,10 +69,12 @@ public class GameSlide extends Slide {
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         FragmentManager fm = activity.getFragmentManager();
         fm.beginTransaction().show(gameFragment).commit();
+        gameFragment.activateSound();
     }
 
     public void hide() {
         FragmentManager fm = activity.getFragmentManager();
+        gameFragment.clearSound();
         fm.beginTransaction().hide(gameFragment).commit();
     }
 }

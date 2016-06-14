@@ -59,7 +59,7 @@ public class GameBase extends GameFragment {
     }
 
     public void sayNum(){
-        MediaPlayer mp = MediaPlayer.create(getActivity(), sounds[chosenToSay]);
+        mp = MediaPlayer.create(getActivity(), sounds[chosenToSay]);
         mp.start();
     }
 
@@ -77,11 +77,20 @@ public class GameBase extends GameFragment {
         if (num == chosenToSay){
             dlgAlert.setMessage("You did it!");
             dlgAlert.setTitle("Good Job");
+            LayoutInflater factory = LayoutInflater.from(getActivity());
+            View viewAlrt = factory.inflate(R.layout.good, null);
+            dlgAlert.setView(viewAlrt);
+            mp = MediaPlayer.create(getActivity(), R.raw.whatcha_say);
         } else {
             dlgAlert.setMessage("Please try again.");
             dlgAlert.setTitle("Wrong Answer");
+            LayoutInflater factory = LayoutInflater.from(getActivity());
+            View viewAlrt = factory.inflate(R.layout.bad, null);
+            dlgAlert.setView(viewAlrt);
+            mp = MediaPlayer.create(getActivity(), R.raw.sitar);
         }
         dlgAlert.create().show();
+        mp.start();
     }
 
     @Override

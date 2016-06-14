@@ -66,7 +66,9 @@ public class GameOrder extends GameFragment {
     public void sayNum() {
         playlistPos = 0;
         mp = MediaPlayer.create(getActivity(), sounds[chosenGroup[playlistPos]]);
-        mp.start();
+        if(sound_flag==1) {
+            mp.start();
+        }
 
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -81,7 +83,9 @@ public class GameOrder extends GameFragment {
                     mp.reset();
                     mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getDeclaredLength());
                     mp.prepare();
-                    mp.start();
+                    if(sound_flag==1) {
+                        mp.start();
+                    }
                     afd.close();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -100,13 +104,19 @@ public class GameOrder extends GameFragment {
                     }
                 });
         dlgAlert.setCancelable(true);
-
         for (int i=0; i < AMOUNT_TO_CHOOSE; ++i) {
             EditText v = (EditText)getView().findViewById(editTextIds[i]);
             String val = v.getText().toString();
             if (val.equals("") || Integer.parseInt(val) != chosenGroup[i]) {
                 dlgAlert.setMessage("Please try again.");
                 dlgAlert.setTitle("Wrong Answer");
+                LayoutInflater factory = LayoutInflater.from(getActivity());
+                View viewAlrt = factory.inflate(R.layout.bad, null);
+                mp = MediaPlayer.create(getActivity(), R.raw.sitar);
+                dlgAlert.setView(viewAlrt);
+                if(sound_flag==1) {
+                    mp.start();
+                }
                 dlgAlert.create().show();
                 return;
             }
@@ -114,6 +124,13 @@ public class GameOrder extends GameFragment {
 
         dlgAlert.setMessage("You did it!");
         dlgAlert.setTitle("Good Job");
+        LayoutInflater factory = LayoutInflater.from(getActivity());
+        View viewAlrt = factory.inflate(R.layout.good, null);
+        mp = MediaPlayer.create(getActivity(), R.raw.whatcha_say);
+        dlgAlert.setView(viewAlrt);
+        if(sound_flag==1) {
+            mp.start();
+        }
         dlgAlert.create().show();
     }
 

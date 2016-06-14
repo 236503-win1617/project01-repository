@@ -89,8 +89,10 @@ public class GameMissing extends GameFragment {
         getView().findViewById(R.id.play).setVisibility(View.INVISIBLE);
         getView().findViewById(R.id.replay).setVisibility(View.INVISIBLE);
 
-        MediaPlayer mp = MediaPlayer.create(getActivity(), R.raw.close_your_eyes);
-        mp.start();
+        mp = MediaPlayer.create(getActivity(), R.raw.close_your_eyes);
+        if(sound_flag==1) {
+            mp.start();
+        }
 
         new Thread() {
             public void run() {
@@ -115,8 +117,10 @@ public class GameMissing extends GameFragment {
 
                                 getView().findViewById(R.id.replay).setVisibility(View.VISIBLE);
 
-                                MediaPlayer mp = MediaPlayer.create(getActivity(), R.raw.open_your_eyes);
-                                mp.start();
+                                mp = MediaPlayer.create(getActivity(), R.raw.open_your_eyes);
+                                if(sound_flag==1) {
+                                    mp.start();
+                                }
                             }
                         });
                     }
@@ -139,15 +143,23 @@ public class GameMissing extends GameFragment {
                     }
                 });
         dlgAlert.setCancelable(true);
-
         int num = (Integer)view.getTag();
         if (num == chosenToHide){
             dlgAlert.setMessage("You did it!");
             dlgAlert.setTitle("Good Job");
+            LayoutInflater factory = LayoutInflater.from(getActivity());
+            View viewAlrt = factory.inflate(R.layout.good, null);
+            dlgAlert.setView(viewAlrt);
+            mp = MediaPlayer.create(getActivity(), R.raw.whatcha_say);
         } else {
             dlgAlert.setMessage("Please try again.");
             dlgAlert.setTitle("Wrong Answer");
+            LayoutInflater factory = LayoutInflater.from(getActivity());
+            View viewAlrt = factory.inflate(R.layout.bad, null);
+            dlgAlert.setView(viewAlrt);
+            mp = MediaPlayer.create(getActivity(), R.raw.sitar);
         }
+        mp.start();
         dlgAlert.create().show();
     }
 
