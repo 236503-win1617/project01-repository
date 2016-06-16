@@ -8,5 +8,6 @@ public enum SlideType {
     Video,
     OrderGame,
     ListenAndFindGame,
-    MemoryGame
+    MemoryGame,
+    MissingGame
 }

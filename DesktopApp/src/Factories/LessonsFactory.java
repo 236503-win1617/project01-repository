@@ -15,6 +15,7 @@ import slides.ListenAndFindGameSlide;
 import slides.OrderGameSlide;
 import slides.PictureSlide;
 import slides.MemoryGameSlide;
+import slides.MissingGameSlide;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -91,6 +92,12 @@ public class LessonsFactory {
                     GameElement.addElement("slide_type").addText("game");
                     GameElement.addElement("table_size").addText(Integer.toString(item.getBoardSize()));
                     GameElement.addElement("gameType").addText("MEMORY");
+                } if (slide instanceof MissingGameSlide) {
+                    MissingGameSlide item = (MissingGameSlide) slide;
+                    Element GameElement = root.addElement("slide");
+                    GameElement.addElement("order").addText(Integer.toString((index)));
+                    GameElement.addElement("slide_type").addText("game");
+                    GameElement.addElement("gameType").addText("MISSING");
                 }
             }
             boolean success = (new File(".//xmlDir")).mkdirs();

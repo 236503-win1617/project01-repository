@@ -24,6 +24,7 @@ public class FileResources {
     private static final String COLORS_GAME_IMAGE = "colors.png";
     private static final String ANIMALS_GAME_IMAGE = "animals.jpg";
     private static final String MEMORY_GAME_IMAGE = "memory.jpg";
+    private static final String MISSING_GAME_IMAGE = "missing.jpg";
 
     private static InputStream getFileSource(String filename) {
         return FileResources.class.getResourceAsStream(filename);
@@ -95,5 +96,9 @@ public class FileResources {
 
     public static InputStream getMemoryGameImage() {
         return getFileSource(MEMORY_GAME_IMAGE);
+    }
+
+    public static InputStream getMissingGameImage() {
+        return getFileSource(MISSING_GAME_IMAGE);
     }
 }

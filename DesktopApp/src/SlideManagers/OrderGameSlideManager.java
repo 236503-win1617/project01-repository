@@ -14,16 +14,15 @@ import java.io.IOException;
  * Created by dan on 17/05/2016.
  */
 public class OrderGameSlideManager extends AbstractSlideManager{
-    private boolean first;
     public OrderGameSlideManager(JPanel currentSlide, JPanel commandsPanel){
         super(currentSlide, commandsPanel);
-        first = true;
     }
 
     public void onRotateCommand() throws IOException {}
 
     public void loadSlide(AbstractSlide slide, JButton button) throws IOException {
-        loadImageToSlidePanel(ImageIO.read(FileResources.getOrderGameImage()), Rotation.NO_ROTATION.getRotationInRadians());
+        this.slideButton = button;
+        loadSameImageToPanelAndButton(ImageIO.read(FileResources.getOrderGameImage()), Rotation.NO_ROTATION.getRotationInRadians());
     }
 
     public void saveDataToCurrentSlide(){}

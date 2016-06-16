@@ -27,6 +27,7 @@ public class ListenAndFindGameSlideManager extends AbstractSlideManager {
     }
 
     public void loadSlide(AbstractSlide slide, JButton button) throws IOException {
+        this.slideButton = button;
         ListenAndFindGameSlide.GameType type = ((ListenAndFindGameSlide) slide).getGameType();
         InputStream is = null;
         switch (type) {
@@ -40,7 +41,7 @@ public class ListenAndFindGameSlideManager extends AbstractSlideManager {
                 is = FileResources.getNumbersGameImage();
                 break;
         }
-        loadImageToSlidePanel(ImageIO.read(is), Rotation.NO_ROTATION.getRotationInRadians());
+        loadSameImageToPanelAndButton(ImageIO.read(is), Rotation.NO_ROTATION.getRotationInRadians());
     }
 
     public void saveDataToCurrentSlide() {

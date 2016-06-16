@@ -23,7 +23,8 @@ public class MemoryGameSlideManager extends AbstractSlideManager{
     public void onRotateCommand() throws IOException {}
 
     public void loadSlide(AbstractSlide slide, JButton button) throws IOException{
-        loadImageToSlidePanel(ImageIO.read(FileResources.getMemoryGameImage()), Rotation.NO_ROTATION.getRotationInRadians());
+        this.slideButton = button;
+        loadSameImageToPanelAndButton(ImageIO.read(FileResources.getMemoryGameImage()), Rotation.NO_ROTATION.getRotationInRadians());
     }
 
     public void saveDataToCurrentSlide(){}
