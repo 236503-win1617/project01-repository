@@ -215,7 +215,7 @@ public class PictureSlideManager extends AbstractSlideManager {
             Files.copy(pictureFile.toPath(), NewLocation.toPath());
         } catch (Exception ex) {
             ex.printStackTrace();
-            Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());
+            //Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());
         }
     }
 
