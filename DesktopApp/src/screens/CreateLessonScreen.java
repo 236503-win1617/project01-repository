@@ -2,9 +2,7 @@ package screens;
 
 import AdditionalClasses.IndexedButton;
 import AdditionalClasses.SoundElement;
-import Factories.ComponentsFactory;
-import Factories.LessonsFactory;
-import Factories.USBTransfertMain;
+import Factories.*;
 import Resources.DefaultSizes;
 import Resources.FileResources;
 import Resources.MessageErrors;
@@ -72,6 +70,102 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
         setSlideManagers();
     }
 
+    public void loadExistingLesson(Lesson toLoad, String lessonName){
+        for(Slide s: toLoad.slides){
+
+            if(s instanceof Factories.PictureSlide){
+                slides.PictureSlide picSlide = new slides.PictureSlide();
+
+                addNewSlide(picSlide);
+                try {
+                    SlideType slideType = picSlide.getType();
+                    currentSlideManager = slideTypeToManager.get(slideType);
+                    String toLoadPath = s.getPath();
+
+                    currentSlideManager.loadPictureFile(new File(s.getPath()));
+                    for(DynamicButton b: s.getDynamicButtons()){
+                        SoundElement soundElement = new SoundElement(new File(b.getPath()),b.getStartX(), b.getStartY(), b.getHeight(), b.getWidth());
+                        currentSlideManager.addNewSoundElement(soundElement);
+                    }
+//                    s.getDynamicButtons();
+
+
+
+                    //Screens.CreateLessonScreen.addNewSoundElement(soundElement);
+                    this.lessonName = lessonName;
+                } catch (Exception ex) {
+                    showErrorMessage(MessageErrors.UNEXPECTED_ERROR + ex.getMessage());
+                }
+            }
+            if(s instanceof Factories.videoSlide){
+                System.out.println("videoSlide");
+                slides.VideoSlide vidSlide = new slides.VideoSlide();
+
+                addNewSlide(vidSlide);
+                try {
+                    SlideType slideType = vidSlide.getType();
+                    currentSlideManager = slideTypeToManager.get(slideType);
+                    System.out.println("videoSlide type: "+ slideType);
+
+                    String toLoadPath = s.getPath();
+                    System.out.println("videoSlide path: "+ toLoadPath);
+
+                    currentSlideManager.loadVideoFile(new File(s.getPath()));
+//                    s.getDynamicButtons();
+
+
+
+                    //Screens.CreateLessonScreen.addNewSoundElement(soundElement);
+                    this.lessonName = lessonName;
+                } catch (Exception ex) {
+                    showErrorMessage(MessageErrors.UNEXPECTED_ERROR + ex.getMessage());
+                }
+            }
+            if(s instanceof Factories.gameSlide){
+                System.out.println("game slide: " + ((gameSlide)s).typeOfGame);
+
+                if(((gameSlide)s).typeOfGame.equals("MEMORY") ){
+                    addNewSlide(new MemoryGameSlide(((gameSlide)s).table_size));
+                }
+                if(((gameSlide)s).typeOfGame.equals("ORDER") ){
+                    addNewSlide(new OrderGameSlide(((gameSlide)s).max_num));
+                }
+                if(((gameSlide)s).typeOfGame.equals("ANIMALS") ){
+                    addNewSlide(new ListenAndFindGameSlide(ListenAndFindGameSlide.GameType.ANIMALS));
+                }
+                if(((gameSlide)s).typeOfGame.equals("COLORS")){
+                    addNewSlide(new ListenAndFindGameSlide(ListenAndFindGameSlide.GameType.COLORS));
+                }
+                if( ((gameSlide)s).typeOfGame.equals("NUMBERS") ){
+                    addNewSlide(new ListenAndFindGameSlide(ListenAndFindGameSlide.GameType.NUMBERS));
+                }
+                //slides.VideoSlide vidSlide = new slides.VideoSlide();
+
+                try {
+                    /*
+                    SlideType slideType = vidSlide.getType();
+                    currentSlideManager = slideTypeToManager.get(slideType);
+                    System.out.println("videoSlide type: "+ slideType);
+
+                    String toLoadPath = s.getPath();
+                    System.out.println("videoSlide path: "+ toLoadPath);
+
+                    currentSlideManager.loadVideoFile(new File(s.getPath()));
+//                    s.getDynamicButtons();
+
+
+
+                    //Screens.CreateLessonScreen.addNewSoundElement(soundElement);
+                    this.lessonName = lessonName;
+                    */
+                } catch (Exception ex) {
+                    showErrorMessage(MessageErrors.UNEXPECTED_ERROR + ex.getMessage());
+                }
+            }
+        }
+
+    }
+//gameSlide
     private void setSlideManagers() {
         slideTypeToManager.put(SlideType.Picture, new PictureSlideManager(currentSlidePanel, commandsPanel, soundsPanel));
         slideTypeToManager.put(SlideType.Video, new VideoSlideManager(currentSlidePanel, commandsPanel));
@@ -185,7 +279,10 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
     //TODO: implement a check that lesson doesn't exists or overwrite the previous one
     private void onSaveCurrentLesson(boolean autosave) {
         try {
+            LessonsFactory.generate(_slides, lessonName);
+            //System.load("C:\\Windows\\System32\\jmtp.dll");
             System.load("C:/Windows/System32/jmtp.dll");
+            //System.load("C:\\Users\\apluda\\Desktop\\לימודים\\פרויקט שנתי\\סמסטר אביב\\_6.18\\1500\\5776-234311-2-t06\\jmtp.dll");
         } catch (Throwable e){
             showErrorMessage(e.getMessage());
         }
@@ -328,7 +425,7 @@ public class CreateLessonScreen extends AbstractEmptyScreen {
 
     private void setAddPictureSlideButton() {
         JButton addPictureSlide = new JButton("Add Picture Slide");
-        addPictureSlide.addActionListener(e -> addNewSlide(new PictureSlide()));
+        addPictureSlide.addActionListener(e -> addNewSlide(new slides.PictureSlide()));
         setConstraints(0, 0, 1, 1);
         commandsPanel.add(addPictureSlide, constraints);
     }

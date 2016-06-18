@@ -146,7 +146,7 @@ public class SoundAreaScreen extends AbstractEmptyScreen {
         String fileIsSelected = "Selected Audio File";
         Color selectedColor = Color.GREEN;
         try {
-            File NewLocation = new File(".\\xmlDir\\" + Screens.CreateLessonScreen.getLessonName() + "\\AASounds\\" + selectedFile.getName());
+            File NewLocation = new File(".\\xmlDir\\" + Screens.CreateLessonScreen.getLessonName()+ "\\AAImages\\"  + selectedFile.getName());
             Files.copy(selectedFile.toPath(), NewLocation.toPath());
         } catch (Exception ex) {
             Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());

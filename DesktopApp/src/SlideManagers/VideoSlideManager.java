@@ -14,6 +14,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 /**
  * Created by Evgeniy on 4/2/2016.
@@ -120,7 +121,7 @@ public class VideoSlideManager extends AbstractSlideManager {
         }
     }
 
-    private void loadVideoFile(File videoFile) {
+    public void loadVideoFile(File videoFile) {
         if (!currentSlide.isFileNameSupported(videoFile.getName())) {
             Screens.CreateLessonScreen.showErrorMessage(videoFile.getName() + " Isn't supported video format");
             return;
@@ -128,6 +129,9 @@ public class VideoSlideManager extends AbstractSlideManager {
         try {
             currentSlide.setSlideFile(videoFile);
             Screens.CreateLessonScreen.showInformationMessage("The video was added to the slide");
+
+            File NewLocation = new File(".\\xmlDir\\" + Screens.CreateLessonScreen.getLessonName() + "\\AAImages\\" + videoFile.getName());
+            Files.copy(videoFile.toPath(), NewLocation.toPath());
 
             double noRotation = Rotation.NO_ROTATION.getRotationInRadians();
             loadImageToSlidePanel(ImageIO.read(FileResources.getOkStream()), noRotation);

@@ -47,6 +47,15 @@ public abstract class AbstractSlideManager {
 
     public abstract void loadDroppedFile(File droppedFile);
 
+    public void loadPictureFile(File PictureToLoad){
+
+    }
+
+    public void loadVideoFile(File PictureToLoad){
+
+    }
+
+
     //endregion
 
     public void clearContent() {

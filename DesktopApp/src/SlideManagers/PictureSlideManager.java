@@ -198,7 +198,15 @@ public class PictureSlideManager extends AbstractSlideManager {
             loadPictureFromFile(selectedFile);
         }
     }
-
+    //new
+    public void loadPictureFile(File PictureToLoad){
+        currentSlide.setSlideFile(PictureToLoad);
+        try {
+            loadPictureFromFile(PictureToLoad);
+        } catch (Exception ex) {
+            Screens.CreateLessonScreen.showErrorMessage(ex.getMessage());
+        }
+    }
     //TODO: The copy should not be here - use save instead
     private void loadPictureFromFile(File pictureFile) {
         if (!currentSlide.isFileNameSupported(pictureFile.getName())) {

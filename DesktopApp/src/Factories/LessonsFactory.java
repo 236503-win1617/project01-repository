@@ -14,8 +14,11 @@ import slides.AbstractSlide;
 import slides.ListenAndFindGameSlide;
 import slides.OrderGameSlide;
 import slides.PictureSlide;
+import slides.VideoSlide;
 import slides.MemoryGameSlide;
 import slides.MissingGameSlide;
+
+
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -67,6 +70,24 @@ public class LessonsFactory {
                         soundButton.addElement("height")
                                 .addText(Integer.toString(soundItem.width));
                     }
+                    index++;
+                }
+                if (slide instanceof VideoSlide) {
+                    VideoSlide item = (VideoSlide) slide;
+                    Element pictureElement = root.addElement("slide");
+
+                    pictureElement.addElement("order").addText(Integer.toString((index)));
+                    pictureElement.addElement("slide_type").addText("Video");
+
+                    File pictureFile = item.getVideoFile();
+                    String fileName = (pictureFile == null) ? "" : pictureFile.toString();
+                    String[] bits = fileName.split("\\\\");
+                    if (bits.length < 2) {
+                        bits = fileName.split("////");
+                    }
+                    String lastOne = bits[bits.length - 1];
+                    pictureElement.addElement("video_file").addText("./" + lastOne);
+                    Element soundsList = pictureElement.addElement("sounds_list");
                     index++;
                 }
                 if (slide instanceof ListenAndFindGameSlide) {
